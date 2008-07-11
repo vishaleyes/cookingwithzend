@@ -90,6 +90,12 @@ class Recipe extends Zend_Db_Table_Abstract {
 		
 		return parent::insert( $params );
 	}
+
+	public function update( $params, $where )
+	{
+		$params['updated'] = new Zend_Db_Expr('NOW()');
+		return parent::update( $params, $where );
+	}
 	
 	public function getIngredients( $id )
 	{

@@ -24,13 +24,18 @@ class UserController extends DefaultController
 		$this->renderModelForm( '/user/create', 'Signup' );
 	}
 	
+	/**
+	 * Create a new user
+	 * @todo Pass form params back to /user/new
+	 */
+
 	public function createAction()
 	{
 		$this->view->title = 'Create an account';
 		$this->view->pageContent = $this->pagesFolder.'/user/new.phtml';
 		
 		if (! $this->form->isValid($_POST)) {
-			$this->renderModelForm( '/user/create', 'Signup' );
+			$this->_redirect( '/user/new' );
 		}
 
 		$values = $this->form->getValues();
@@ -49,11 +54,16 @@ class UserController extends DefaultController
 			$this->_redirect( '/' );
 			exit;
 		} catch(Exception $e) {
-			$this->view->notice = 'Email address already exists';
-			$this->renderModelForm( '/user/create', 'Signup' );
+			$this->session->error = 'Email address already exists';
+			$this->_redirect( '/user/new' );
 		}
 
 	}
+
+	/**
+	 * Log the user into the system
+	 * @todo Sort out redirect/forward? if coming from another page
+	 */
 
 	public function loginAction() {
 		
@@ -74,15 +84,18 @@ class UserController extends DefaultController
 		           ->setCredential( $values['password'] );
 
 		$result = $this->auth->authenticate();
+
 		if( $result->isValid() )
 		{
 			$u = new User();
-			if ( $user = $u->getByEmail( $values['email'] ) )
+			if ( $user = $u->getByEmail( $values['email'] ) ) {
 				$this->session->user = $user->toArray();
-			$this->_redirect( '/' );
-		} else {
-			$this->_redirect( '/' );
+			}
+
+			$this->log->info( 'User '.sq_brackets( $this->session->user['name'] ).' logged in' );
 		}
+	
+		$this->_redirect( '/' );
 		
 		/*
 		if ( ! empty( $this->session->referrer ) ) {
