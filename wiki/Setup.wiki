@@ -38,4 +38,6 @@ Everybody runs linux/apache/whatever differently so I thought it would be wise f
 
   * Edit the config.xml
   * Change the <local> set of entries so they correspond with your dev environment
-  * For *nix/mac chmod 777 the cache dir
+  * For linix/mac chmod 777 the cache dir
+  * Create a log file in accordance with what you set in the config
+  * For linix/mac chmod 777 the log file
