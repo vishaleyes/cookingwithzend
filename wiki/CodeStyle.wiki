@@ -1,0 +1,9 @@
+#summary A rough guide to coding style for this project.
+#labels Featured,Phase-Implementation
+
+= Guidelines =
+
+At time of writing I am sure that not all the files adhere to these rules but I will try to make any new files added to to the project and any current files convert over to the following guidelines
+
+    * Indents are tabs not spaces
+    * Indents are set to 4 (for my editor)
