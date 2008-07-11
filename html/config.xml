@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<data>
+	<production>
+		<hosts>partsfinder.ebaydevelopment.co.uk</hosts>
+		<database>
+			<type>pdo_mysql</type>
+			<host>localhost</host>
+			<username>root</username>
+			<password></password>
+			<name>motorsfinder</name>
+			<profiler>false</profiler>
+		</database>
+		<authentication>
+			<tableName>users</tableName>
+			<identityColumn>email</identityColumn>
+			<credentialColumn>password</credentialColumn>
+			<credentialTreatment>MD5(?)</credentialTreatment>
+		</authentication>
+		<compressed_js>false</compressed_js>
+		<upload_path>uploads</upload_path>
+		<session>
+			<remember_me_seconds>2592000</remember_me_seconds>
+		</session>
+		<logs>
+			<application>/www/image/partsfinder/logs/application_log.txt</application>
+		</logs>
+		<locale>en_UK</locale>			
+	</production>
+	
+	<staging extends="production">
+		<database>
+			<host>localhost</host>
+			<username>root</username>
+			<password></password>
+			<name>motorsfinder</name>
+		</database>
+	</staging>
+
+	<qa extends="production">
+		<database>
+			<host>localhost</host>
+			<username>root</username>
+			<password></password>
+			<name>ebay_partsfinder</name>
+		</database>
+		<logs>
+			 <application>/www/image/partsfinder/logs/application.log</application>
+		</logs>
+	</qa>
+
+	<development extends="staging">
+		<database>
+			<host>localhost</host>
+			<username>root</username>
+			<password>bdnetwork</password>
+			<name>motorsfinder</name>
+			<profiler>true</profiler>
+		</database>
+		<logs>
+			<application>/Users/cathar/code/recipeszend/logs/application_log</application>
+		</logs>
+	</development>
+
+	<local extends="development">
+		<database>
+			<host>10.0.3.62</host>
+			<username>root</username>
+			<password></password>
+			<name>recipe_development</name>
+			<profiler>true</profiler>
+		</database>
+		<upload_path>uploads</upload_path>
+		<logs>
+			<!--
+			<application>/Users/cathar/code/recipeszend/logs/application_log</application>
+			-->
+			<application>/home/clock/recipeszend/logs/application_log</application>
+		</logs>
+	</local>	
+</data>
