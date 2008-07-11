@@ -6,7 +6,8 @@ class RecipeController extends DefaultController
 	public function preDispatch()
 	{
 		// Held in DefaultController
-		$this->loggedIn();
+		$this->loggedIn( array( 'view', 'index' ) );
+		$this->authorised( array( 'edit' ) );
 	}
 
 	public function init()
@@ -23,14 +24,19 @@ class RecipeController extends DefaultController
 		$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
 		$this->renderModelForm( '/recipe/create', 'Add' );
 	}
-	
+
+	/**
+	 * Put a new recipe in the database
+	 * @todo Pass form params back to /recipe/new
+	 */
+
 	public function createAction()
 	{
 		$this->view->title = 'Create a recipe';
 		$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
 		
 		if (! $this->form->isValid($_POST)) {
-			$this->renderModelForm( '/recipe/create', 'Add' );
+			$this->_redirect( '/recipe/new' );
 		}
 
 		$params = $this->form->getValues();
@@ -55,7 +61,7 @@ class RecipeController extends DefaultController
 		} catch (Exception $e) {
 			$this->log->info( $e->getMessage() );
 			$this->db->rollBack();
-			$this->_redirect( '/recipe/create/' );
+			$this->_redirect( '/recipe/new' );
 		}
 		
 		$this->_redirect( '/ingredient/new/recipe_id/' . $row->id );
@@ -79,7 +85,12 @@ class RecipeController extends DefaultController
 		if ( ! $this->form->isValid($_POST) ) {
 			$this->_redirect( '/recipe/edit/recipe_id/' . $this->recipe->id );	
 		}
-
+	
+		$params = $this->form->getValues();
+		$r = new Recipe();
+		$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
+		$r->update( $params, $where );
+		
 		$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );	
 	}
 

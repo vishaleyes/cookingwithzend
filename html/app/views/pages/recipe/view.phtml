@@ -1,5 +1,9 @@
 <h2><?php echo $this->recipe['name'] ?> (<?php echo $this->recipe['view_count'] ?>)</h2>
 
+<?php if ( $this->session->user['id'] == $this->recipe['creator_id'] ): ?>
+<p><a href="<?php echo '/recipe/edit/recipe_id/'. $this->recipe['id']; ?>"></a></p>
+<?php endif ?>
+
 <?php if ( count( $this->ingredients ) > 0 ): ?>
 	<h3>Ingredients</h3>
 	<ul>

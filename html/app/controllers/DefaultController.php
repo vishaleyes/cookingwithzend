@@ -118,6 +118,13 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->getRecipe();
 	}
 
+	/**
+	 * Checks to ensure that a user is logged in to perform the action requested.
+	 * If they are not they are re-directed to the login page
+	 *
+	 * @param $exclusions array() The pages you don't want to check
+	 */
+
 	protected function loggedIn( $exclusions = array() )
 	{
 		// figure out whats being requested
@@ -125,7 +132,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 
 		if ( ! in_array( $action, $exclusions ) )
 		{
-			// Were not ecluded so are we logged in?
+			// Were not excluded so are we logged in?
 			if ( ! $this->session->user ) {
 				// Nope, keep hold of where we were asking for
 				$this->session->referrer = '/'.$this->_request->getControllerName().'/'.$this->_request->getActionName();
@@ -133,6 +140,34 @@ abstract class DefaultController extends Zend_Controller_Action {
 				// and forward the request to the login page
 				$this->_forward( 'login', 'user' );
 			}
+		}
+	}
+
+	/**
+	 * Checks to ensure that the correct user is logged to perform the
+	 * action requested.  If they are not they are re-directed to either the
+	 * page they came from or '/'
+	 *
+	 * @param $exclusions array() The pages you don't want to check
+	 */
+
+	protected function authorised( array $inclusions )
+	{
+		// figure out whats being requested
+		$action = $this->_request->getActionName();
+	
+		// If this is an action we need to worry about
+		if ( in_array( $action, $exclusions ) )
+		{
+			// Is the user allowed to access this?
+			if ( $this->session->user['id'] != $this->recipe->creator_id ) {
+
+				// Nope, keep hold of where we came from
+				print_r( $this->_request );
+				// Redirect to there or
+				// Redirect to /
+				$this->_redirect( '/' );
+			}			
 		}
 	}
 
@@ -144,6 +179,10 @@ abstract class DefaultController extends Zend_Controller_Action {
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 		exit;
 	}
+
+	/**
+	 * Retireves the currently requested recipe (if there is one being requested)
+	 */
 
 	protected function getRecipe()
 	{
