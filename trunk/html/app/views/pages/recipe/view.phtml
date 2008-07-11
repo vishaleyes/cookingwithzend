@@ -1,0 +1,34 @@
+<h2><?php echo $this->recipe['name'] ?> (<?php echo $this->recipe['view_count'] ?>)</h2>
+
+<?php if ( count( $this->ingredients ) > 0 ): ?>
+	<h3>Ingredients</h3>
+	<ul>
+	<?php foreach( $this->ingredients as $ingredient ): ?>
+		<li>
+		<?php if ( $ingredient['quantity'] > 0 ): ?>
+		<?php echo $ingredient['quantity'] ?>
+		<?php endif ?>
+		<?php if ( $ingredient['amount'] > 0 ): ?>
+		<?php echo $ingredient['amount'] ?>
+		<?php endif ?>
+		<?php echo $ingredient['name'] ?></li>
+	<?php endforeach ?>
+	</ul>
+	<p><a href="<?php echo '/ingredient/new/recipe_id/' . $this->recipe['id'] ?>">Add ingredients</a></p>
+<?php else: ?>
+	<p>No ingredients, why not <a href="<?php echo '/ingredient/new/recipe_id/' . $this->recipe['id'] ?>">Add one</a></p>
+<?php endif ?>
+
+<!-- Method Items -->
+<?php if ( count( $this->methods ) > 0 ): ?>
+	<h3>Method</h3>
+	<ol>
+	<?php foreach( $this->methods as $method ): ?>
+		<li><?php echo $method['description'] ?></li>
+	<?php endforeach ?>
+	</ol>
+	<p><a href="<?php echo '/method/new/recipe_id/' . $this->recipe['id'] ?>">Add more instructions</a></p>
+<?php else: ?>
+	<p>Well I can't tell you how to make it, why not add some <a href="<?php echo '/method/new/recipe_id/' . $this->recipe['id'] ?>">Instructions</a></p>
+<?php endif ?>
+<!-- End of Method Items -->

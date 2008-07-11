@@ -1,0 +1,20 @@
+<script type="text/javascript">
+$().ready(function(){
+	$("#ingredient-name").autocomplete("/ajax/getingredients", {
+		parse: function(data) {
+			return $.map(eval(data), function(row) {
+				return {
+					data: row,
+					value: row.id,
+					result: row.name
+				}
+			});
+		},
+		formatItem: function(item) {
+			return item.name;
+		}
+	});
+});
+</script>
+
+<?php echo $this->form ?>

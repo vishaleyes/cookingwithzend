@@ -1,0 +1,106 @@
+<?php
+
+class UserController extends DefaultController  
+{
+	
+	public function preDispatch()
+	{
+		// Held in DefaultController
+		$this->loggedIn( array( 'login', 'new', 'create', 'logout' ) );
+	}
+	
+	public function init()
+	{
+		$u = new User();
+		$this->form = new Zend_Form;
+		$this->form->addElements( $u->_form_fields_config );
+		parent::init();
+	}
+
+	public function newAction()
+	{
+		$this->view->title = 'Create an account';
+		$this->view->pageContent = $this->pagesFolder.'/user/new.phtml';
+		$this->renderModelForm( '/user/create', 'Signup' );
+	}
+	
+	public function createAction()
+	{
+		$this->view->title = 'Create an account';
+		$this->view->pageContent = $this->pagesFolder.'/user/new.phtml';
+		
+		if (! $this->form->isValid($_POST)) {
+			$this->renderModelForm( '/user/create', 'Signup' );
+		}
+
+		$values = $this->form->getValues();
+		$params = array(
+			'name'       => $values['name'],
+			'email'      => $values['email'],
+			'password'   => new Zend_Db_Expr('PASSWORD("'.$values['password'].'")')
+		);
+		
+		try {
+			$u = new User();
+			$u->insert( $params );
+			$this->log->info( 'Inserted user ' . $params['email'] . ' user id : ' . $user->id );
+			if ( $user = $u->getByEmail( $params['email'] ) )
+				$this->session->user = $user->toArray();
+			$this->_redirect( '/' );
+			exit;
+		} catch(Exception $e) {
+			$this->view->notice = 'Email address already exists';
+			$this->renderModelForm( '/user/create', 'Signup' );
+		}
+
+	}
+
+	public function loginAction() {
+		
+		// Dont need the username
+		$this->form->removeElement( 'name' );
+		$this->form->addElement( 'submit', 'Login' );
+		$this->view->form = $this->form;
+		
+		if (! $this->form->isValid($_POST)) {
+			$this->view->title = 'Login';
+			$this->view->pageContent = $this->pagesFolder.'/user/login.phtml';
+			echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
+			exit;
+		}
+		
+		$values = $this->form->getValues();
+		$this->auth->setIdentity( $values['email'] )
+		           ->setCredential( $values['password'] );
+
+		$result = $this->auth->authenticate();
+		if( $result->isValid() )
+		{
+			$u = new User();
+			if ( $user = $u->getByEmail( $values['email'] ) )
+				$this->session->user = $user->toArray();
+			$this->_redirect( '/' );
+		} else {
+			$this->_redirect( '/' );
+		}
+		
+		/*
+		if ( ! empty( $this->session->referrer ) ) {
+            $redirect = $this->session->referrer;
+            $this->session->referrer = null;
+            $this->log->debug( 'Redirecting to : ' . $redirect );
+            $this->_redirect( $redirect );
+            exit;
+        }*/
+	}
+	
+	public function logoutAction()
+	{
+		$this->session = null;
+		$this->_redirect( '/' );
+	}
+	
+	public function postDispatch() {
+		exit;
+	}
+}
