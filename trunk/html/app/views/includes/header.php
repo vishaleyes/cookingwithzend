@@ -13,8 +13,15 @@
 </head>
 
 <body id="body">
-<?php if ( $this->notice ): ?>
+
+<?php if ( ! empty($this->session->error) ): ?>
+<div id="error">
+	<?php echo $this->session->error; ?>
+</div>
+<?php endif ?>
+
+<?php if ( ! empty($this->session->notice) ): ?>
 <div id="notice">
-	<?php echo $this->notice ?>;
+	<?php echo $this->session->notice; ?>
 </div>
 <?php endif ?>

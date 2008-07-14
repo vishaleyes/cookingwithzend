@@ -6,7 +6,7 @@ class UserController extends DefaultController
 	public function preDispatch()
 	{
 		// Held in DefaultController
-		$this->loggedIn( array( 'login', 'new', 'create', 'logout' ) );
+		//$this->loggedIn( array( 'login', 'new', 'create', 'logout' ) );
 	}
 	
 	public function init()
@@ -48,9 +48,9 @@ class UserController extends DefaultController
 		try {
 			$u = new User();
 			$u->insert( $params );
-			$this->log->info( 'Inserted user ' . $params['email'] . ' user id : ' . $user->id );
 			if ( $user = $u->getByEmail( $params['email'] ) )
 				$this->session->user = $user->toArray();
+			$this->log->info( 'Inserted user ' . $user->name . ' user id : ' . $user->id );
 			$this->_redirect( '/' );
 			exit;
 		} catch(Exception $e) {
@@ -66,15 +66,18 @@ class UserController extends DefaultController
 	 */
 
 	public function loginAction() {
+
+		$this->view->pageContent = $this->pagesFolder.'/user/login.phtml';
+		$this->view->title = 'Login';
 		
 		// Dont need the username
 		$this->form->removeElement( 'name' );
 		$this->form->addElement( 'submit', 'Login' );
-		$this->view->form = $this->form;
-		
+
 		if (! $this->form->isValid($_POST)) {
-			$this->view->title = 'Login';
-			$this->view->pageContent = $this->pagesFolder.'/user/login.phtml';
+			$this->view->form = $this->form;
+			$this->log->info( var_export( $_POST, true ) );
+			$this->log->info( 'Form is not valid '.var_export( $this->form->getMessages(), true ) );
 			echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 			exit;
 		}
@@ -94,9 +97,7 @@ class UserController extends DefaultController
 
 			$this->log->info( 'User '.sq_brackets( $this->session->user['name'] ).' logged in' );
 		}
-	
 		$this->_redirect( '/' );
-		
 		/*
 		if ( ! empty( $this->session->referrer ) ) {
             $redirect = $this->session->referrer;
@@ -109,7 +110,7 @@ class UserController extends DefaultController
 	
 	public function logoutAction()
 	{
-		$this->session = null;
+		$this->session->user = null;
 		$this->_redirect( '/' );
 	}
 	

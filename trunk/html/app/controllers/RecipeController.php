@@ -131,6 +131,7 @@ class RecipeController extends DefaultController
 	 *
 	 */
 	public function postDispatch() {
+		parent::postDispatch();
 		exit;
 	}
 	
