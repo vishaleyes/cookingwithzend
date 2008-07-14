@@ -61,7 +61,7 @@ class RecipeController extends DefaultController
 			            
 			$row = $r->fetchRow( $select );
 			$t = new Tag();
-			$t->splitTags( $tags );
+			$t->splitTags( $tags, $row );
 
 			$this->db->commit();
 			$this->log->info( 'Added Recipe ' . sq_brackets( $params['name'] ) . ' by User ' . sq_brackets( $this->session->user['name'] ) ); 
