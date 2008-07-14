@@ -2,9 +2,6 @@
 
 /**
  * Default Controller - An Abstract class that extends Zend_Controller_Action and should be used as a parent class for all other controllers
- * @author Marcin Dominas : marcin.dominas@bd-ntwk.com
- * @package Generic Framework
- * @see : http://digitalwiki.bd-ntwk.com/index.php?title=BD_Network_PHP_Application_Framework 
  */
 
 abstract class DefaultController extends Zend_Controller_Action {
@@ -157,17 +154,18 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$action = $this->_request->getActionName();
 	
 		// If this is an action we need to worry about
-		if ( in_array( $action, $exclusions ) )
+		if ( in_array( $action, $inclusions ) )
 		{
 			// Is the user allowed to access this?
 			if ( $this->session->user['id'] != $this->recipe->creator_id ) {
-
+				// $this->session->error = 'You cannot change a recipe owned by someone else';
 				// Nope, keep hold of where we came from
-				print_r( $this->_request );
+				$this->log->info( var_export($this->_request, true) );
 				// Redirect to there or
+				
 				// Redirect to /
 				$this->_redirect( '/' );
-			}			
+			}
 		}
 	}
 
@@ -186,7 +184,8 @@ abstract class DefaultController extends Zend_Controller_Action {
 
 	protected function getRecipe()
 	{
-		if ( $this->_getParam( 'recipe_id' ) ) {
+
+		if ( $this->_getParam( 'recipe_id' ) > 0 ) {
 			
 			$r = new Recipe();
 			$rowset = $r->find( $this->_getParam( 'recipe_id' ) );

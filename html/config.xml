@@ -14,7 +14,7 @@
 			<tableName>users</tableName>
 			<identityColumn>email</identityColumn>
 			<credentialColumn>password</credentialColumn>
-			<credentialTreatment>MD5(?)</credentialTreatment>
+			<credentialTreatment>PASSWORD(?)</credentialTreatment>
 		</authentication>
 		<compressed_js>false</compressed_js>
 		<upload_path>uploads</upload_path>
@@ -63,7 +63,7 @@
 
 	<local extends="development">
 		<database>
-			<host>10.0.3.62</host>
+			<host>localhost</host>
 			<username>root</username>
 			<password></password>
 			<name>recipe_development</name>
@@ -72,9 +72,10 @@
 		<upload_path>uploads</upload_path>
 		<logs>
 			<!--
-			<application>/Users/cathar/code/recipeszend/logs/application_log</application>
-			-->
+			
 			<application>/home/clock/cookingwithzend/logs/application_log</application>
+			-->
+			<application>/Users/cathar/code/cookingwithzend/logs/application_log</application>
 		</logs>
 	</local>	
 </data>
