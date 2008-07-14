@@ -13,8 +13,10 @@ class RecipeController extends DefaultController
 	public function init()
 	{
 		$r = new Recipe();
+		$t = new Tag();
 		$this->form = new Zend_Form;
 		$this->form->addElements( $r->_form_fields_config );
+		$this->form->addElements( $t->_form_fields_config );
 		parent::init();
 	}
 	
@@ -40,6 +42,8 @@ class RecipeController extends DefaultController
 		}
 
 		$params = $this->form->getValues();
+		$tags = $params['tag_name'];
+		unset( $params['tag_name'] );
 		
 		$r = new Recipe();
 		$row = null;
@@ -56,6 +60,9 @@ class RecipeController extends DefaultController
 			            ->limit(1);
 			            
 			$row = $r->fetchRow( $select );
+			$t = new Tag();
+			$t->splitTags( $tags );
+
 			$this->db->commit();
 			$this->log->info( 'Added Recipe ' . sq_brackets( $params['name'] ) . ' by User ' . sq_brackets( $this->session->user['name'] ) ); 
 		} catch (Exception $e) {

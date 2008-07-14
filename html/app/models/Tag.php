@@ -8,6 +8,8 @@ class Tag extends Zend_Db_Table_Abstract {
 	# Primary does Auto Inc
 	protected $_sequence = true;
 
+	public $DELIMETER = ' ';
+
 	// Form elements for add/edit
 	// field name => array(type, required, validatorArray, filtersArray);
 	public $_form_fields_config = array(
@@ -17,8 +19,7 @@ class Tag extends Zend_Db_Table_Abstract {
 			'label' => 'Tags',
 			'validators' => array(
 				array( 'NotEmpty', true ),
-				array( 'alnum', true, true ),
-				array( 'stringLength', false, array( 3, 255 ) ),
+				array( 'alnum', true, true )
 			),
 		) )
 	);
@@ -34,6 +35,38 @@ class Tag extends Zend_Db_Table_Abstract {
 		$this->log = Zend_Registry::get('log');
 		
 		$this->_setup();
+	}
+
+	public function splitTags( $text, Zend_Db_Table_Row $row ) 
+	{
+		if ( empty( $text ) )
+			return;
+
+		$tags = explode( $this->DELIMETER, $text );
+		foreach ( $tags as $tag ) {
+			try {
+				$this->insert( array( 'name' => $tag ) );
+			} catch (Exception $e) {
+				// Do nothing?
+			}
+
+			$select = $this->select()->where( 'name = ?', $tag );
+			$tag = $this->fetchRow( $select );
+			
+			$params = array(
+				'tag_id'        => $tag->id,
+				'taggable_id'   => $row->id,
+				'taggable_type' => $row->getTableClass()
+			);
+			
+			$tg = new Taggable();
+			try {
+				$tg->insert( $params );
+			} catch (Exception $e) {
+				// Taggable insert fauils, dont really worry
+			}
+
+		}
 	}
 
 }
