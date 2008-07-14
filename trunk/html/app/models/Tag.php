@@ -37,7 +37,7 @@ class Tag extends Zend_Db_Table_Abstract {
 		$this->_setup();
 	}
 
-	public function splitTags( $text, Zend_Db_Table_Row $row ) 
+	public function splitTags( $text, $row ) 
 	{
 		if ( empty( $text ) )
 			return;
@@ -59,7 +59,7 @@ class Tag extends Zend_Db_Table_Abstract {
 				'taggable_type' => $row->getTableClass()
 			);
 			
-			$tg = new Taggable();
+			$tg = new Tagging();
 			try {
 				$tg->insert( $params );
 			} catch (Exception $e) {
