@@ -36,3 +36,14 @@
 	<p>Well I can't tell you how to make it, why not add some <a href="<?php echo '/method/new/recipe_id/' . $this->recipe['id'] ?>">Instructions</a></p>
 <?php endif ?>
 <!-- End of Method Items -->
+
+<!-- Tags -->
+<?php if ( count( $this->tags ) > 0 ): ?>
+	<h3>Tags</h3>
+	<ol>
+	<?php foreach( $this->tags as $tag ): ?>
+		<li><a href="<?php echo '/tag/name/'.$tag['name'] ?>"><?php echo $tag['name'] ?></li>
+	<?php endforeach ?>
+	</ol>
+<?php endif ?>
+<!-- End of Tags -->
