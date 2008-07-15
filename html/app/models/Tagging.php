@@ -7,6 +7,14 @@ class Tagging extends Zend_Db_Table_Abstract {
 	
 	# Primary does Auto Inc
 	protected $_sequence = true;
+
+	protected $_referenceMap = array(
+		'Tag' => array(
+			'columns'		=> 'tag_id',
+			'refTableClass' => 'Tag',
+			'refColumns'	=> 'id'
+		)
+	);
 	
 	// May be able to delete this
 	function __construct( $prefetch = true )

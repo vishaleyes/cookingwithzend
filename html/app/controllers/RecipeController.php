@@ -112,6 +112,10 @@ class RecipeController extends DefaultController
 		$methods     = $this->recipe->findMethodItem();
 		if ( $methods )
 			$this->view->methods = $methods->toArray();
+
+		$tag = new Tag();
+		$tags = $tag->getTags( $this->recipe );
+		$this->view->tags = $tags;
 		
 		$this->view->title = $this->recipe->name;
 		$this->view->pageContent = $this->pagesFolder.'/recipe/view.phtml';
