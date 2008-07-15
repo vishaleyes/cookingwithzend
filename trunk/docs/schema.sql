@@ -162,11 +162,11 @@ CREATE TABLE `taggings` (
 --
 
 DROP TABLE IF EXISTS `tags`;
-CREATE TABLE `tags` (
+CREATE TABLE IF NOT EXISTS `tags` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `index_tags_on_name` (`name`)
+  UNIQUE KEY `unique_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
