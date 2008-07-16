@@ -3,8 +3,7 @@
 class Recipe extends Zend_Db_Table_Abstract {
 	
 	protected $_name = "recipes";
-	protected $_primary = "id";	   
-	protected $_rowClass = 'RecipeRow';
+	protected $_primary = "id";
 
 	# Primary does Auto Inc
 	protected $_sequence = true;
@@ -95,13 +94,6 @@ class Recipe extends Zend_Db_Table_Abstract {
 	{
 		$params['updated'] = new Zend_Db_Expr('NOW()');
 		return parent::update( $params, $where );
-	}
-	
-	public function getIngredients( $id )
-	{
-		$select = $this->select()->where( 'id = ?', $id );
-		$recipe = $this->fetchRow( $select );
-		return $recipe->findRecipeIngredient();
 	}
 
 }

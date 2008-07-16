@@ -26,11 +26,8 @@ class Tag extends Zend_Db_Table_Abstract {
 		) )
 	);
 
-
-	// May be able to delete this
-	function __construct( $prefetch = true )
+	function __construct()
 	{
-		if ( ! $prefetch === false ) unset( $_rowClass );
 		$this->db = Zend_Registry::get("db");
 		Zend_Db_Table_Abstract::setDefaultAdapter($this->db);
 		
@@ -85,6 +82,7 @@ class Tag extends Zend_Db_Table_Abstract {
 				$this->insert( array( 'name' => $tag ) );
 			} catch (Exception $e) {
 				// Do nothing?
+				$this->log->info( 'Inserting Tag failed, tag was '.$tag );
 			}
 
 			$select = $this->select()->where( 'name = ?', strtolower( $tag ) );
@@ -101,6 +99,7 @@ class Tag extends Zend_Db_Table_Abstract {
 				$tg->insert( $params );
 			} catch (Exception $e) {
 				// Taggable insert fauils, dont really worry
+				$this->log->info( 'Inserting Taggable failed, params were '.var_export( $params, true ) );
 			}
 
 		}

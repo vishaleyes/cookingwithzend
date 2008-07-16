@@ -1,9 +1,10 @@
 <h2><?php echo $this->recipe['name'] ?> (<?php echo $this->recipe['view_count'] ?>)</h2>
 
 <?php if ( $this->session->user['id'] == $this->recipe['creator_id'] ): ?>
-<p><a href="<?php echo '/recipe/edit/recipe_id/'. $this->recipe['id']; ?>"></a></p>
+<p><a href="<?php echo '/recipe/edit/recipe_id/'. $this->recipe['id']; ?>">Edit Recipe</a></p>
 <?php endif ?>
 
+<!-- Ingredients -->
 <?php if ( count( $this->ingredients ) > 0 ): ?>
 	<h3>Ingredients</h3>
 	<ul>
@@ -15,13 +16,18 @@
 		<?php if ( $ingredient['amount'] > 0 ): ?>
 		<?php echo $ingredient['amount'] ?>
 		<?php endif ?>
-		<?php echo $ingredient['name'] ?></li>
+		<?php if ( !empty( $ingredient['measurement'] ) ): ?>
+		<?php echo $ingredient['measurement_abbr'] ?>
+		<?php endif ?>
+		<?php echo $ingredient['name'] ?>
+		</li>
 	<?php endforeach ?>
 	</ul>
 	<p><a href="<?php echo '/ingredient/new/recipe_id/' . $this->recipe['id'] ?>">Add ingredients</a></p>
 <?php else: ?>
 	<p>No ingredients, why not <a href="<?php echo '/ingredient/new/recipe_id/' . $this->recipe['id'] ?>">Add one</a></p>
 <?php endif ?>
+<!-- End of Ingredients -->
 
 <!-- Method Items -->
 <?php if ( count( $this->methods ) > 0 ): ?>

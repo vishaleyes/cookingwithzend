@@ -46,9 +46,6 @@ class RecipeController extends DefaultController
 
 	public function createAction()
 	{
-		$this->view->title = 'Create a recipe';
-		$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
-		
 		if (! $this->form->isValid($_POST)) {
 			$this->_redirect( '/recipe/new' );
 		}
@@ -63,8 +60,8 @@ class RecipeController extends DefaultController
 		
 		// Put the insert into a transaction
 		try {
-//			$this->log->info( var_export( $params, true ) );
 			$r->insert( $params );
+			// grab the last recipe inserted by this user
 			$select = $r->select()
 			            ->where( 'name = ?', $params['name'] )
 			            ->where( 'creator_id = ?', $this->session->user['id'] )
@@ -72,6 +69,7 @@ class RecipeController extends DefaultController
 			            ->limit(1);
 			            
 			$row = $r->fetchRow( $select );
+
 			$t = new Tag();
 			$t->splitTags( $tags, $row );
 
@@ -127,13 +125,28 @@ class RecipeController extends DefaultController
 
 	public function viewAction()
 	{
-		$this->recipe->view_count++;
-		$this->recipe->save();
+		// If the person viewing it is not the creator
+		if ( $this->session->user['id'] != $this->recipe->creator_id )
+		{
+			// Increment the view counter
+			$this->recipe->view_count++;
+			$this->recipe->save();
+		}
 
-		$ingredients = $this->recipe->getIngredients();
-		$this->view->ingredients = $ingredients;
+		// Fetch things
+		$this->view->ingredients = array();
+		$this->view->title       = $this->recipe->name;
+		$ingredients = $this->recipe->findRecipeIngredient();
+
+		if ( $ingredients )
+		{
+			foreach( $ingredients as $ingredient ) {
+				$this->view->ingredients[] = $ingredient->toArray();
+			}
+		}
+			
 		$this->view->recipe      = $this->recipe->toArray();
-		$methods     = $this->recipe->findMethodItem();
+		$methods                 = $this->recipe->findMethodItem();
 		if ( $methods )
 			$this->view->methods = $methods->toArray();
 
@@ -141,9 +154,7 @@ class RecipeController extends DefaultController
 		$tags = $tag->getTags( $this->recipe );
 		$this->view->tags = $tags;
 		
-		$this->view->title = $this->recipe->name;
 		$this->view->pageContent = $this->pagesFolder.'/recipe/view.phtml';
-
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 
 	}
