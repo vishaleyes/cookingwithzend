@@ -61,10 +61,19 @@ CREATE TABLE `ingredients` (
 DROP TABLE IF EXISTS `measurements`;
 CREATE TABLE `measurements` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) default NULL,
-  `abbreviation` varchar(255) default NULL,
-  PRIMARY KEY  (`id`)
+  `name` varchar(255) NOT NULL,
+  `abbreviation` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `abbreviation` (`abbreviation`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `measurements`
+--
+
+INSERT INTO `measurements` (`id`, `name`, `abbreviation`) VALUES
+(1, 'Tablespoon', 'tbsp'),(2, 'Teaspoon', 'tsp'),(3, 'Grams', 'g'),(4, 'Kilograms', 'kg'),(5, 'Litre', 'l'),(6, 'Millilitre', 'ml'),(7, 'Centimetre', 'cm'),(8, 'Quarter', '&frac14;'),(9, 'Half', '&frac12;');
 
 --
 -- Table structure for table `method_items`
@@ -89,7 +98,8 @@ CREATE TABLE `ratings` (
   `recipe_id` int(11) default NULL,
   `value` int(11) default NULL,
   `user_id` int(11) default NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `recipe_id` (`recipe_id`,`user_id`),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
