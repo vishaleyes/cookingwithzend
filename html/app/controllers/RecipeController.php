@@ -3,12 +3,20 @@
 class RecipeController extends DefaultController  
 {
 
+	/**
+	 * This happens before the page is dispatch
+	 */
+
 	public function preDispatch()
 	{
 		// Held in DefaultController
 		$this->loggedIn( array( 'view', 'index' ) );
 		$this->authorised( array( 'edit' ) );
 	}
+
+	/**
+	 * Setup this controller specifically and then call the parent
+	 */
 
 	public function init()
 	{
@@ -19,6 +27,10 @@ class RecipeController extends DefaultController
 		$this->form->addElements( $t->_form_fields_config );
 		parent::init();
 	}
+
+	/**
+	 * Display the build a new recipe page
+	 */
 	
 	public function newAction()
 	{
@@ -29,7 +41,7 @@ class RecipeController extends DefaultController
 
 	/**
 	 * Put a new recipe in the database
-	 * @todo Pass form params back to /recipe/new
+	 * @todo Pass form params back to /recipe/new if fail
 	 */
 
 	public function createAction()
@@ -74,6 +86,10 @@ class RecipeController extends DefaultController
 		$this->_redirect( '/ingredient/new/recipe_id/' . $row->id );
 	}
 
+	/**
+	 * Display the edit form
+	 */
+
 	public function editAction()
 	{
 		$this->view->title = 'Edit a recipe';
@@ -86,6 +102,10 @@ class RecipeController extends DefaultController
 		}
 		$this->renderModelForm( '/recipe/update/recipe_id/'.$this->recipe->id, 'edit' );
 	}
+
+	/**
+	 * Actually update the record
+	 */
 
 	public function updateAction()
 	{
@@ -100,6 +120,10 @@ class RecipeController extends DefaultController
 		
 		$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );	
 	}
+
+	/**
+	 * View the recipe in all its wonderful glory
+	 */
 
 	public function viewAction()
 	{
@@ -142,7 +166,6 @@ class RecipeController extends DefaultController
 	 *
 	 */
 	public function postDispatch() {
-		parent::postDispatch();
 		exit;
 	}
 	
