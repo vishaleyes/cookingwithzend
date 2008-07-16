@@ -99,7 +99,7 @@ CREATE TABLE `ratings` (
   `value` int(11) default NULL,
   `user_id` int(11) default NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `recipe_id` (`recipe_id`,`user_id`),
+  UNIQUE KEY `recipe_id` (`recipe_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
