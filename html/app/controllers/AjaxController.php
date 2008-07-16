@@ -21,7 +21,7 @@ class AjaxController extends DefaultController
 			->where( 'LOWER(name) LIKE ?', '%'.strtolower($text).'%' )
 			->limit(5);
 		
-		$rowset = $i->fetchAll();
+		$rowset = $i->fetchAll( $select );
 		if ( $rowset )
 			echo json_encode( $rowset->toArray() );
 	}
@@ -39,8 +39,8 @@ class AjaxController extends DefaultController
 			->where( 'LOWER(name) LIKE ?', '%'.strtolower($text).'%' )
 			->orWhere( 'LOWER(abbreviation) LIKE ?', '%'.strtolower($text).'%' )
 			->limit(5);
-		
-		$rowset = $m->fetchAll();
+
+		$rowset = $m->fetchAll( $select );
 		if ( $rowset )
 			echo json_encode( $rowset->toArray() );
 	}

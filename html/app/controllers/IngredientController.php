@@ -13,9 +13,11 @@ class IngredientController extends DefaultController
 	{
 		$i = new Ingredient();
 		$ri = new RecipeIngredient();
+		$m = new Measurement();
 		$form = new Zend_Form();
 		$form->addElements( $i->_form_fields_config );
 		$form->addElements( $ri->_form_fields_config );
+		$form->addElements( $m->_form_fields_config );
 		return $form;
 	}
 	
@@ -26,6 +28,7 @@ class IngredientController extends DefaultController
 		
 		$form = $this->ingredientForm();
 		$form->setAction( '/ingredient/create/recipe_id/' . $this->recipe->id );
+		$form->removeElement( 'measurement_abbr' );
 		$form->addElement( 'submit', 'Add' );
 		$this->view->form = $form;
 		
