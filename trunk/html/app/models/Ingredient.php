@@ -23,10 +23,8 @@ class Ingredient extends Zend_Db_Table_Abstract {
 		) )
 	);
 
-	// May be able to delete this
-	function __construct( $prefetch = true )
+	function __construct()
 	{
-		if ( ! $prefetch === false ) unset( $_rowClass );
 		$this->db = Zend_Registry::get("db");
 		Zend_Db_Table_Abstract::setDefaultAdapter($this->db);
 		
@@ -35,10 +33,35 @@ class Ingredient extends Zend_Db_Table_Abstract {
 		$this->_setup();
 	}
 
-	function getByName( $name ) {
+	/**
+	 * Fetch the row in the database that fits this particular name
+	 * @param $name string The name of the ingredient you want to fetch
+	 * @return $row Zend_Db_Table_Row the row of the Ingredient table
+	 */
+
+	function getByName( $name )
+	{
 		$ingredient = null;
 		$select = $this->select()->where( 'name = ?', $name );
-		$ingredient = $this->fetchRow( $select );
-		return $ingredient;
+		return $this->fetchRow( $select );
+	}
+
+	/**
+	 * Override the insert to try and not throw an exception back if it fails, also re-using
+	 * getByName code
+	 * @param $data array associative array of vars to go in the db
+	 * @return $row Zend_Db_Table_Row the row of the Ingredient table
+	 */
+
+	function insert( $data )
+	{
+		try {
+			$parent::insert( $data );
+		} catch (Exception $e) {
+			// Doesnt matter if we cannot insert the ingredient
+			$this->log->info( 'Ingredient ' . sq_brackets( $data['name'] ) . ' already exists' );
+		}
+
+		return $this->getByName( $data['name'] );
 	}
 }
