@@ -88,7 +88,7 @@ $controller->setControllerDirectory('app/controllers');
 $router = $controller->getRouter();
 
 $route = new Zend_Controller_Router_Route(
-	'tag/:name', 
+	'tag/:name/*', 
 	array( 
 		'controller' => 'tag',
 		'action'     => 'index'
