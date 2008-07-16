@@ -39,11 +39,7 @@ class IngredientController extends DefaultController
 		
 		$form = $this->ingredientForm();
 		if (! $form->isValid($_POST)) {
-			$form->setAction( '/ingredient/create/recipe_id/' . $this->recipe->id );
-			$form->addElement( 'submit', 'Add' );
-			$this->view->form = $form;
-			echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
-			exit;
+			$this->_redirect( '/ingredient/new' );
 		}
 		
 		$values = $form->getValues();
@@ -53,16 +49,7 @@ class IngredientController extends DefaultController
 		
 		try {
 			// Insert into Ingredient
-			try {
-				$i->insert( array( 'name' => $values['ingredient_name'] ) );
-			} catch (Exception $e) {
-				// Doesnt matter if we cannot insert the ingredient
-				$this->log->info( 'Ingredient ' . sq_brackets( $values['ingredient_name'] ) . ' already exists' );
-			}
-			
-			// Select the Ingredient we just inserted
-			$select = $i->select()->where( 'name = ?', $values['ingredient_name'] );
-			$row = $i->fetchRow( $select );
+			$row = $i->insert( array( 'name' => $values['ingredient_name'] ) );
 			
 			// Insert into RecipeIngredient
 			$ri->insert(

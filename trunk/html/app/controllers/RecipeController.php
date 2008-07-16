@@ -51,7 +51,7 @@ class RecipeController extends DefaultController
 		
 		// Put the insert into a transaction
 		try {
-			$this->log->info( var_export( $params, true ) );
+//			$this->log->info( var_export( $params, true ) );
 			$r->insert( $params );
 			$select = $r->select()
 			            ->where( 'name = ?', $params['name'] )
