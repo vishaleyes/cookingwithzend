@@ -63,7 +63,8 @@
 
 	<local extends="development">
 		<database>
-			<host>localhost</host>
+			<!-- <host>localhost</host> -->
+			<host>10.0.3.62</host>
 			<username>root</username>
 			<password></password>
 			<name>recipe_development</name>
@@ -72,10 +73,9 @@
 		<upload_path>uploads</upload_path>
 		<logs>
 			<!--
-			
-			<application>/home/clock/cookingwithzend/logs/application_log</application>
-			-->
 			<application>/Users/cathar/code/cookingwithzend/logs/application_log</application>
+			-->
+			<application>/home/clock/cookingwithzend/logs/application_log</application>
 		</logs>
 	</local>	
 </data>
