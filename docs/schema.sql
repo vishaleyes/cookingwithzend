@@ -32,15 +32,15 @@ CREATE TABLE `comments` (
 --
 -- Table structure for table `ingredient_measurements`
 --
-
-DROP TABLE IF EXISTS `ingredient_measurements`;
-CREATE TABLE `ingredient_measurements` (
-  `id` int(11) NOT NULL auto_increment,
-  `ingredient_id` int(11) default NULL,
-  `measurement_id` int(11) default NULL,
-  `position` int(11) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- Removed for the time being - CL 16/07/08
+--DROP TABLE IF EXISTS `ingredient_measurements`;
+--CREATE TABLE `ingredient_measurements` (
+--  `id` int(11) NOT NULL auto_increment,
+--  `ingredient_id` int(11) default NULL,
+--  `measurement_id` int(11) default NULL,
+--  `position` int(11) default NULL,
+--  PRIMARY KEY  (`id`)
+--) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `ingredients`
@@ -53,6 +53,13 @@ CREATE TABLE `ingredients` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `ingredients`
+--
+
+INSERT INTO `ingredients` (`id`, `name`) VALUES
+(1, 'Eggs'),(2, 'Self Raising Flour'),(3, 'Plain Flour'),(4, 'Caster Sugar'),(5, 'Icing Sugar'),(6, 'Tinned Plum Tomatoes');
 
 --
 -- Table structure for table `measurements`
@@ -110,6 +117,7 @@ DROP TABLE IF EXISTS `recipe_ingredients`;
 CREATE TABLE `recipe_ingredients` (
   `recipe_id` int(11) NOT NULL,
   `ingredient_id` int(11) NOT NULL,
+  `measurement_id` int(11) default NULL,
   `quantity` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
   PRIMARY KEY  (`recipe_id`,`ingredient_id`)
