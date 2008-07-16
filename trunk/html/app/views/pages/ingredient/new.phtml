@@ -14,6 +14,21 @@ $().ready(function(){
 			return item.name;
 		}
 	});
+	$("#measurement-name").autocomplete("/ajax/getmeasurements", {
+		parse: function(data) {
+			return $.map(eval(data), function(row) {
+				return {
+					data: row,
+					value: row.id,
+					result: row.name
+				}
+			});
+		},
+		formatItem: function(item) {
+			return item.name + " (" + item.abbreviation + ")";
+		}
+	});
+
 });
 </script>
 
