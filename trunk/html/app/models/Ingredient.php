@@ -41,7 +41,6 @@ class Ingredient extends Zend_Db_Table_Abstract {
 
 	function getByName( $name )
 	{
-		$ingredient = null;
 		$select = $this->select()->where( 'name = ?', $name );
 		return $this->fetchRow( $select );
 	}

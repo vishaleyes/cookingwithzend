@@ -3,6 +3,10 @@
 class IngredientController extends DefaultController  
 {
 
+	/**
+	 * This happens before the page is dispatch
+	 */
+
 	public function preDispatch()
 	{
 		// Held in DefaultController
@@ -21,6 +25,10 @@ class IngredientController extends DefaultController
 		return $form;
 	}
 	
+	/**
+	 * Display the build a new ingredient page
+	 */
+	
 	public function newAction()
 	{
 		$this->view->title = 'Add an ingredient';
@@ -35,6 +43,11 @@ class IngredientController extends DefaultController
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 	}
 	
+	/**
+	 * Put a new ingredient in the database
+	 * @todo Pass form params back to /recipe/new if fail
+	 */
+	
 	public function createAction()
 	{
 		$this->view->title = 'Add an ingredient';
@@ -42,25 +55,34 @@ class IngredientController extends DefaultController
 		
 		$form = $this->ingredientForm();
 		if (! $form->isValid($_POST)) {
-			$this->_redirect( '/ingredient/new' );
+			$this->_redirect( '/ingredient/new/recipe_id/'.$this->recipe->id );
 		}
 		
 		$values = $form->getValues();
 		$i = new Ingredient();
 		$ri = new RecipeIngredient();
+		$m = new Measurement();
 		$this->db->beginTransaction();
 		
 		try {
 			// Insert into Ingredient
 			$row = $i->insert( array( 'name' => $values['ingredient_name'] ) );
 			
+			$measurement = null;
+			if ( ! empty( $values['measurement_name'] ) )
+				$measurement = $m->getByName( $values['measurement_name'] );
+				
+			if ( $measurement instanceof Zend_Db_Table_Row )
+				$measurement = $measurement->id;
+			
 			// Insert into RecipeIngredient
 			$ri->insert(
 				array(
-					'quantity' => $values['quantity'],
-					'amount' => $values['amount'],
-					'recipe_id' => $this->recipe->id,
-					'ingredient_id' => $row->id
+					'quantity'       => $values['quantity'],
+					'amount'         => $values['amount'],
+					'recipe_id'      => $this->recipe->id,
+					'measurement_id' => $measurement,
+					'ingredient_id'  => $row->id
 				)
 			);
 

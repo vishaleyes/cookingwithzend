@@ -4,6 +4,7 @@ class RecipeIngredient extends Zend_Db_Table_Abstract {
 	
 	protected $_name = "recipe_ingredients";
 	protected $_primary = array( "recips_id", "ingredient_id" );
+	protected $_rowClass = 'RecipeIngredientRow';
 
 	# Primary does Auto Inc
 	protected $_sequence = true;
@@ -17,6 +18,11 @@ class RecipeIngredient extends Zend_Db_Table_Abstract {
 		'Ingredient' => array(
 			'columns'		=> 'ingredient_id',
 			'refTableClass' => 'Ingredient',
+			'refColumns'	=> 'id'
+		),
+		'Measurement' => array(
+			'columns'		=> 'measurement_id',
+			'refTableClass' => 'Measurement',
 			'refColumns'	=> 'id'
 		)
 	);
