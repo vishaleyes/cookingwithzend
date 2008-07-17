@@ -25,6 +25,7 @@ class RecipeController extends DefaultController
 		$this->form = new Zend_Form;
 		$this->form->addElements( $r->_form_fields_config );
 		$this->form->addElements( $t->_form_fields_config );
+		
 		parent::init();
 	}
 
@@ -154,8 +155,32 @@ class RecipeController extends DefaultController
 		$tags = $tag->getTags( $this->recipe );
 		$this->view->tags = $tags;
 		
+		
+		/*	Submit rating form	*/
+		$this->view->submit_rating_form = new Zend_Form();
+		$this->view->submit_rating_form->setAction('/rating/add/recipe_id/' . $this->recipe->id);
+     	$this->view->submit_rating_form->setMethod('post');
+     	$this->view->submit_rating_form->setAttrib('name','submit_rating');
+     	$this->view->submit_rating_form->setAttrib('id','submit-rating');
+     	$this->view->submit_rating_form->addElement('select','rating_value');
+     	
+     	for ($i = 1;$i <= Rating::MAX_RATING;$i++)
+     	{
+     		$this->view->submit_rating_form->rating_value->addMultiOption($i,$i . " out of " . Rating::MAX_RATING);
+     	}
+     	
+     	$submit_button = new Zend_Form_Element_Submit('submit','submit_rating');
+     	$submit_button->setLabel('Submit your rating');
+     	$this->view->submit_rating_form->addElement($submit_button);
+     	
+     	//$this->view->submit_rating_form->addElement('submit','submit_rating')->setValue('Submit your rating.');
+		
+		
+		
 		$this->view->pageContent = $this->pagesFolder.'/recipe/view.phtml';
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
+		
+
 
 	}
 	

@@ -69,7 +69,9 @@
 
 <!-- Rating -->
 <h3>Rating</h3>
-<p><?php $r = new Rating(); echo "This recipe is rated: " . $r->getRating($this->recipe['id']) . " / 5"; ?></p>
+<p><?php $r = new Rating(); echo ("This recipe is rated: " . $r->getRating($this->recipe['id']) . " / " . Rating::MAX_RATING); ?></p>
+
+<?php echo $this->submit_rating_form; ?>
 
 <!--
 <p>Submit yours:</p>

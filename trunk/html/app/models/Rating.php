@@ -20,6 +20,12 @@ class Rating extends Zend_Db_Table_Abstract {
 			'refColumns'    => 'id'
 		)
 	);
+	
+
+	
+	
+	/*	Definite max rating allowed */
+	const MAX_RATING = 5;
 
 	// May be able to delete this
 	function __construct( $prefetch = true )
