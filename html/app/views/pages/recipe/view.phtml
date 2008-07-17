@@ -72,15 +72,15 @@
 <p><?php echo "This recipe is rated: " . Rating::getRating($this->recipe['id']) . " / 5"; ?></p>
 
 <p>Submit yours:</p>
-<form id="rating_form" method="POST" action="/rating/add/">
-<select id="rating">
+<form name="rating_form" id="rating-form" method="POST" action="/rating/add/">
+<select name="rating_value" id="rating-value">
 <option value="1">1 out of 5</option>
 <option value="2">2 out of 5</option>
 <option value="3">3 out of 5</option>
 <option value="4">4 out of 5</option>
 <option value="5">5 out of 5</option>
 </select>
-<input type="hidden" id="recipe_id" value="<?php echo $this->recipe['id']; ?>" />
+<input type="hidden" name="recipe_id" id="recipe-id" value="<?php echo $this->recipe['id']; ?>" />
 <input type="submit" id="rating_submit" value="Submit rating." />
 </form>
 
