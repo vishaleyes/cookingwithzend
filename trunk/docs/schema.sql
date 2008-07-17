@@ -100,14 +100,14 @@ CREATE TABLE `method_items` (
 --
 
 DROP TABLE IF EXISTS `ratings`;
-CREATE TABLE `ratings` (
+CREATE TABLE IF NOT EXISTS `ratings` (
   `id` int(11) NOT NULL auto_increment,
-  `recipe_id` int(11) default NULL,
-  `value` int(11) default NULL,
-  `user_id` int(11) default NULL,
+  `recipe_id` int(11) NOT NULL,
+  `value` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `recipe_id` (`recipe_id`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 --
 -- Table structure for table `recipe_ingredients`
@@ -212,6 +212,16 @@ CREATE TABLE `users` (
 --
 ALTER TABLE `recipe_ingredients`
   ADD FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `recipe_ingredients`
+--
+ALTER TABLE `ratings`
+  ADD FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `ratings`
+  ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
