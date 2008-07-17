@@ -5,5 +5,21 @@
 
 At time of writing I am sure that not all the files adhere to these rules but I will try to make any new files added to to the project and any current files convert over to the following guidelines
 
+== PHP Guidelines ==
+
     * Indents are tabs not spaces
     * Indents are set to 4 (for my editor)
+    * Use standard PHPdoc formatting for commenting functions e.g.
+{{{
+/**
+ * Text to decribe stuff here
+ * @param $var Type Description
+ * @return
+ */
+}}}
+
+== HTML Guidelines ==
+
+    * HTML id attributes should use hyphens (-)
+    * HTML name attributes should use undescores (_)
+    * NEVER have an id attribute called the same as a name attribute
