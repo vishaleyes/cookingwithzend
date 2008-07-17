@@ -19,10 +19,8 @@ class MethodItem extends Zend_Db_Table_Abstract {
 	// Form elements for add/edit
 	public $_form_fields_config = array(
 		array( 'textarea', 'description', array(
-			'label' => 'Description',
-			'validators' => array(
-				array( 'alnum', true, true )
-			)
+			'required' => true,
+			'label'    => 'Description'
 		) ),
 	);
 
