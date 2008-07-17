@@ -1,31 +1,40 @@
 <h2><?php echo $this->recipe['name'] ?> (<?php echo $this->recipe['view_count'] ?>)</h2>
 
 <?php if ( $this->session->user['id'] == $this->recipe['creator_id'] ): ?>
-<p><a href="<?php echo '/recipe/edit/recipe_id/'. $this->recipe['id']; ?>">Edit Recipe</a></p>
+<p><a href="<?php echo "/recipe/edit/recipe_id/". $this->recipe['id']; ?>">Edit Recipe</a> |
+<a href="<?php echo "/recipe/delete/recipe_id/". $this->recipe['id']; ?>">Delete Recipe</a></p>
 <?php endif ?>
 
 <!-- Ingredients -->
 <?php if ( count( $this->ingredients ) > 0 ): ?>
 	<h3>Ingredients</h3>
+	<!-- Ingredient ID's are recipe_id-ingredient_id -->
 	<ul>
 	<?php foreach( $this->ingredients as $ingredient ): ?>
-		<li>
-		<?php if ( $ingredient['quantity'] > 0 ): ?>
-		<?php echo $ingredient['quantity'] ?>
-		<?php endif ?>
-		<?php if ( $ingredient['amount'] > 0 ): ?>
-		<?php echo $ingredient['amount'] ?>
-		<?php endif ?>
-		<?php if ( !empty( $ingredient['measurement'] ) ): ?>
-		<?php echo $ingredient['measurement_abbr'] ?>
-		<?php endif ?>
-		<?php echo $ingredient['name'] ?>
+		<li id="<?php echo "ingredient-" . $ingredient['recipe_id'] . "-" . $ingredient['ingredient_id'] ?>">
+			<ul>
+				<?php if ( $ingredient['quantity'] > 0 ): ?>
+				<li><?php echo $ingredient['quantity'] ?></li>
+				<?php endif ?>
+				<?php if ( $ingredient['amount'] > 0 ): ?>
+				<li><?php echo $ingredient['amount'] ?></li>
+				<?php endif ?>
+				<?php if ( !empty( $ingredient['measurement'] ) ): ?>
+				<li><?php echo $ingredient['measurement_abbr'] ?></li>
+				<?php endif ?>
+				<li><?php echo $ingredient['name'] ?>
+				<?php if ( $this->session->user['id'] == $this->recipe['creator_id'] ): ?>
+				<a href="<?php echo "/ingedient/edit/recipe_id/" . $ingredient['recipe_id'] . "/ingredient_id/" . $ingredient['ingredient_id'] ?>">Edit</a> | 
+				<a href="<?php echo "/ingedient/edit/recipe_id/" . $ingredient['recipe_id'] . "/ingredient_id/" . $ingredient['ingredient_id'] ?>">Delete</a>
+				<?php endif ?>
+				</li>
+			</ul>
 		</li>
 	<?php endforeach ?>
 	</ul>
-	<p><a href="<?php echo '/ingredient/new/recipe_id/' . $this->recipe['id'] ?>">Add ingredients</a></p>
+	<p><a href="<?php echo "/ingredient/new/recipe_id/" . $this->recipe['id'] ?>">Add ingredients</a></p>
 <?php else: ?>
-	<p>No ingredients, why not <a href="<?php echo '/ingredient/new/recipe_id/' . $this->recipe['id'] ?>">Add one</a></p>
+	<p>No ingredients, why not <a href="<?php echo "/ingredient/new/recipe_id/" . $this->recipe['id'] ?>">Add one</a></p>
 <?php endif ?>
 <!-- End of Ingredients -->
 
@@ -34,12 +43,16 @@
 	<h3>Method</h3>
 	<ol>
 	<?php foreach( $this->methods as $method ): ?>
-		<li><?php echo $method['description'] ?></li>
+		<li id="<?php echo "method-" . $method['id'] ?>"><?php echo $method['description'] ?>
+		<?php if ( $this->session->user['id'] == $this->recipe['creator_id'] ): ?>
+		<a href="<?php echo "/method/edit/id/" . $method['id'] ?>">Edit</a> | <a href="<?php echo "/method/delete/id/" . $method['id'] ?>">Delete</a>
+		<?php endif ?>
+		</li>
 	<?php endforeach ?>
 	</ol>
-	<p><a href="<?php echo '/method/new/recipe_id/' . $this->recipe['id'] ?>">Add more instructions</a></p>
+	<p><a href="<?php echo "/method/new/recipe_id/" . $this->recipe['id'] ?>">Add more instructions</a></p>
 <?php else: ?>
-	<p>Well I can't tell you how to make it, why not add some <a href="<?php echo '/method/new/recipe_id/' . $this->recipe['id'] ?>">Instructions</a></p>
+	<p>Well I can't tell you how to make it, why not add some <a href="<?php echo "/method/new/recipe_id/" . $this->recipe['id'] ?>">Instructions</a></p>
 <?php endif ?>
 <!-- End of Method Items -->
 
@@ -48,7 +61,7 @@
 	<h3>Tags</h3>
 	<ol>
 	<?php foreach( $this->tags as $tag ): ?>
-		<li><a href="<?php echo '/tag/name/'.$tag['name'] ?>"><?php echo $tag['name'] ?></li>
+		<li><a href="<?php echo "/tag/name/".$tag['name'] ?>"><?php echo $tag['name'] ?></a></li>
 	<?php endforeach ?>
 	</ol>
 <?php endif ?>
