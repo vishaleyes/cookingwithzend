@@ -2,12 +2,19 @@
 
 class MethodController extends DefaultController  
 {
+	/**
+	 * This happens before the page is dispatched
+	 */
 
 	public function preDispatch()
 	{
 		// Held in DefaultController
 		$this->loggedIn();
 	}
+
+	/**
+	 * Setup this controller specifically and then call the parent
+	 */
 
 	public function init()
 	{
@@ -30,7 +37,7 @@ class MethodController extends DefaultController
 		$this->view->pageContent = $this->pagesFolder.'/method/new.phtml';
 		
 		if (! $this->form->isValid($_POST)) {
-			$this->renderModelForm( '/method/create/recipe_id/' . $this->recipe->id, 'Add' );
+			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
 		}
 
 		$params = $this->form->getValues();
@@ -45,19 +52,19 @@ class MethodController extends DefaultController
 			$m->insert( $params );
 			$this->db->commit();
 			$this->log->info( 'Added MethodItem to recipe ' . sq_brackets( $ithis->recipe->id ) ); 
-			$this->_redirect( '/recipe/view/recipe_id/' . $ithis->recipe->id );
+			$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
 		} catch (Exception $e) {
 			$this->log->info( $e->getMessage() );
 			$this->db->rollBack();
-			$this->renderModelForm( '/method/create/recipe_id/' . $this->recipe->id, 'Add' );
+			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
 		}
 
 	}
 	
 	/**
 	 * We are existing after the action is dispatched
-	 *
 	 */
+
 	public function postDispatch() {
 		exit;
 	}
