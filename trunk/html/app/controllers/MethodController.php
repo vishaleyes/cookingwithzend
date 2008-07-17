@@ -58,7 +58,7 @@ class MethodController extends DefaultController
 		try {
 			$m->insert( $params );
 			$this->db->commit();
-			$this->log->info( 'Added MethodItem to recipe ' . sq_brackets( $ithis->recipe->id ) ); 
+			$this->log->info( 'Added MethodItem to recipe ' . sq_brackets( $this->recipe->id ) ); 
 			$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
 		} catch (Exception $e) {
 			$this->log->info( $e->getMessage() );
