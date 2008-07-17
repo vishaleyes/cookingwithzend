@@ -21,6 +21,12 @@ class MethodController extends DefaultController
 		$m = new MethodItem();
 		$this->form = new Zend_Form;
 		$this->form->addElements( $m->_form_fields_config );
+		$text = $this->form->getElement( 'description' );
+		$stripTags = new Zend_Filter_StripTags();
+		$stripTags->setTagsAllowed( array( 'p', 'a', 'img', 'strong', 'b', 'i', 'em', 's', 'del' ) );
+		$stripTags->setAttributesAllowed( array( 'href', 'target', 'rel', 'name', 'src', 'width', 'height', 'alt', 'title' ) );
+		$text->addFilter( $stripTags );
+
 		parent::init();
 	}
 	
@@ -37,6 +43,7 @@ class MethodController extends DefaultController
 		$this->view->pageContent = $this->pagesFolder.'/method/new.phtml';
 		
 		if (! $this->form->isValid($_POST)) {
+			$this->log->info( var_export( $this->form->getMessages(), true ) );
 			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
 		}
 
