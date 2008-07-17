@@ -34,7 +34,7 @@ class RatingController extends DefaultController
 
 		$params = array(
 			'recipe_id'   => $this->_getParam('recipe_id'),
-			'value'       => $this->_getParam('rating'),
+			'value'       => $this->_getParam('rating_value'),
 		);
 
 		
