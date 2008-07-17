@@ -20,6 +20,6 @@ At time of writing I am sure that not all the files adhere to these rules but I 
 
 == HTML Guidelines ==
 
-    * HTML id attributes should use hyphens (-)
-    * HTML name attributes should use undescores (_)
+    * HTML id attributes should use hyphens
+    * HTML name attributes should use undescores 
     * NEVER have an id attribute called the same as a name attribute
