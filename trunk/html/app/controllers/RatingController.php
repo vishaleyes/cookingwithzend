@@ -14,7 +14,10 @@ class RatingController extends DefaultController
 	 */
 
 	public function preDispatch() {
-		// $this->login();
+		
+		// Held in DefaultController. Params are actions allowed as guest.
+		$this->loggedIn( array( 'view', 'index' ) );
+
 	}
 
 	public function indexAction() {
@@ -22,17 +25,44 @@ class RatingController extends DefaultController
 	
 	public function addAction() {
 		
-		$rating_message = "No rating or recipe specified";
+		/*	Poss remove - check messages to user with Chris
+		$this->view->rating_message = "No rating or recipe specified"; */
 		
-		$this->view->pageContent = $this->pagesFolder.'/rating/add.phtml';
 		
-		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
+		
+		/* Get request variables */	
+
+		$params = array(
+			'recipe_id'   => $this->_getParam('recipe_id'),
+			'value'       => $this->_getParam('rating'),
+		);
+
+		
+		/*	Try and insert them into DB	*/
+		try {
+			$r = new Rating();
+			$r->insert($params);
+			
+			/*	If successful go back to last recipe		*/
+			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
+			
+			exit;
+			
+		} catch(Exception $e) {
+			/*	Broken constraints = throws exception. Display error and return to recipe		*/
+			$this->session->error = 'You have already rated this recipe.';
+			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
+		}
+		
 		
 	}
+	
+	
+	
 
 	/**
 	 * This happens after the page is dispatch
-	 */
+	*/ 
 
 	public function postDispatch() {
 		exit;
