@@ -47,11 +47,14 @@ class Rating extends Zend_Db_Table_Abstract {
 	public function getRating($recipe_id)
 	{
 		
-		/*	Get average rating for recipe_ip	*/
-		$temp_avg = Zend_Registry::get("db")->fetchOne("SELECT AVG(value) FROM ratings WHERE recipe_id = $recipe_id");
 		
-		/*	Round down to a sensible prescision, like 3.5	*/
-		return round($temp_avg,1);
+		
+		/*	Get average rating for recipe_ip	*/
+		$select = $this->db->select()->from('ratings',array("rating" => "AVG(value)"))->where('recipe_id = ?',$recipe_id); //("SELECT AVG(value) FROM ratings WHERE recipe_id = $recipe_id");
+		$avg = $this->db->fetchOne($select);
+
+		/*	Round down to a sensible prescision, like 3.5	*/	
+		return round($avg,1);
 		
 	}
 	

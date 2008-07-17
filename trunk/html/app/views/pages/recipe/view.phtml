@@ -69,10 +69,11 @@
 
 <!-- Rating -->
 <h3>Rating</h3>
-<p><?php echo "This recipe is rated: " . Rating::getRating($this->recipe['id']) . " / 5"; ?></p>
+<p><?php $r = new Rating(); echo "This recipe is rated: " . $r->getRating($this->recipe['id']) . " / 5"; ?></p>
 
+<!--
 <p>Submit yours:</p>
-<form name="rating_form" id="rating-form" method="POST" action="/rating/add/recipe_id/<?php echo $this->recipe['id']; ?>">
+<form name="rating_form" id="rating-form" method="POST" action="/rating/add/recipe_id/<?php // echo $this->recipe['id']; ?>">
 <select name="rating_value" id="rating-value">
 <option value="1">1 out of 5</option>
 <option value="2">2 out of 5</option>
@@ -81,6 +82,6 @@
 <option value="5">5 out of 5</option>
 </select>
 <input type="submit" id="rating_submit" value="Submit rating." />
-</form>
+</form>-->
 
 <!-- End of rating -->
