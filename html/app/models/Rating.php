@@ -32,5 +32,29 @@ class Rating extends Zend_Db_Table_Abstract {
 		
 		$this->_setup();
 	}
+	
+	/* Add user_id to insert query. */
+	
+	public function insert($params)
+	{
+		$params['user_id'] = Zend_Registry::get('session')->user['id'];
+		
+		return parent::insert($params);
+	}
+	
+	/* Calculate rating for recipe */
+	
+	public function getRating($recipe_id)
+	{
+		
+		/*	Get average rating for recipe_ip	*/
+		$temp_avg = Zend_Registry::get("db")->fetchOne("SELECT AVG(value) FROM ratings WHERE recipe_id = $recipe_id");
+		
+		/*	Round down to a sensible prescision, like 3.5	*/
+		return round($temp_avg,1);
+		
+	}
+	
+	
 
 }
