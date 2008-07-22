@@ -4,7 +4,7 @@ class RecipeController extends DefaultController
 {
 
 	/**
-	 * This happens before the page is dispatch
+	 * This happens before the page is dispatched
 	 */
 
 	public function preDispatch()
@@ -25,7 +25,6 @@ class RecipeController extends DefaultController
 		$this->form = new Zend_Form;
 		$this->form->addElements( $r->_form_fields_config );
 		$this->form->addElements( $t->_form_fields_config );
-		
 		parent::init();
 	}
 
@@ -37,7 +36,43 @@ class RecipeController extends DefaultController
 	{
 		$this->view->title = 'Create a recipe';
 		$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
-		$this->renderModelForm( '/recipe/create', 'Add' );
+		
+		if (! $this->form->isValid($_POST)) {
+			$this->renderModelForm( '/recipe/create', 'Add' );
+		}
+	}
+
+	/**
+	 *
+	 */
+
+	public function indexAction()
+	{
+		$r = new Recipe();
+		$select = $r->select()->limit(5);
+		$rowset = $r->fetchAll( $select );
+
+		$rat = new Rating();
+
+		$output = array();
+		
+		$tag = new Tag();
+		$this->view->tags = $tags;
+
+		foreach( $rowset as $row ) {
+			$temp = array();
+			$temp = $row->toArray();
+			$temp['tags'] = $tag->getTags( $row );
+			$temp['rating'] = $rat->getRating( $row->id );
+			$output[] = $temp;
+			
+		}
+
+		$this->view->recipes = $output;
+		
+		$this->view->title = 'Create a recipe';
+		$this->view->pageContent = $this->pagesFolder.'/recipe/index.phtml';
+		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 	}
 
 	/**
@@ -121,6 +156,26 @@ class RecipeController extends DefaultController
 	}
 
 	/**
+	 * Delete the recipe, the recipe_ingredients and ratings are caught by DB FK
+	 * constraints but tags cannot be (unsure about this) so will do them manually
+	 */
+
+	public function deleteAction()
+	{
+		$this->db->beginTransaction();
+		try{
+			$t = new Tag();
+			$t->delete( $this->recipe );
+			$this->recipe->delete();
+			$this->db->commit();
+		} catch (Exception $e) {
+			$this->log->info( $e->getMessage() );
+			$this->db->rollBack();
+		}
+		
+	}
+
+	/**
 	 * View the recipe in all its wonderful glory
 	 */
 
@@ -154,8 +209,7 @@ class RecipeController extends DefaultController
 		$tag = new Tag();
 		$tags = $tag->getTags( $this->recipe );
 		$this->view->tags = $tags;
-		
-		
+
 		/*	Submit rating form	*/
 		$this->view->submit_rating_form = new Zend_Form();
 		$this->view->submit_rating_form->setAction('/rating/add/recipe_id/' . $this->recipe->id);
@@ -172,37 +226,19 @@ class RecipeController extends DefaultController
      	$submit_button = new Zend_Form_Element_Submit('submit','submit_rating');
      	$submit_button->setLabel('Submit your rating');
      	$this->view->submit_rating_form->addElement($submit_button);
-     	
-     	//$this->view->submit_rating_form->addElement('submit','submit_rating')->setValue('Submit your rating.');
-		
-		
-		
+
 		$this->view->pageContent = $this->pagesFolder.'/recipe/view.phtml';
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
-		
 
-
-	}
-	
-	public function indexAction()
-	{
-		$this->view->title = 'simplycook.org';
-		$this->view->pageContent = $this->pagesFolder.'/recipe/index.phtml';
-		
-		$r = new Recipe();
-		$select = $r->select()->limit( 10 );
-		$rowset = $r->fetchAll( $select );
-		
-		$this->view->recipes = $rowset;
-		
 	}
 	
 	/**
 	 * We are existing after the action is dispatched
-	 *
 	 */
+
 	public function postDispatch() {
 		exit;
 	}
 	
 }
+
