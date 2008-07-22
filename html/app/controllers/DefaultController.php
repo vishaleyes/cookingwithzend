@@ -98,6 +98,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 		           ->setCredentialTreatment( $this->config->authentication->credentialTreatment );
 		
 		$this->pagesFolder = '/pages';
+		$this->partialsFolder = '/partials';
 		$this->templatesFolder = '/templates';
 		$this->includesFolder = '/includes';
 		
@@ -107,6 +108,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->view->version = $this->environment;
 		$this->view->session = $this->session;
 		
+		$this->view->partialsFolder = $this->partialsFolder;
 		$this->view->pagesFolder = $this->pagesFolder;
 		$this->view->templatesFolder = $this->templatesFolder;
 		$this->view->includesFolder = $this->includesFolder;

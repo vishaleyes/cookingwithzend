@@ -5,6 +5,8 @@
 <a href="<?php echo "/recipe/delete/recipe_id/". $this->recipe['id']; ?>">Delete Recipe</a></p>
 <?php endif ?>
 
+<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $recipe ) ?>
+
 <!-- Ingredients -->
 <?php if ( count( $this->ingredients ) > 0 ): ?>
 	<h3>Ingredients</h3>
@@ -59,11 +61,11 @@
 <!-- Tags -->
 <?php if ( count( $this->tags ) > 0 ): ?>
 	<h3>Tags</h3>
-	<ol>
-	<?php foreach( $this->tags as $tag ): ?>
-		<li><a href="<?php echo "/tag/name/".$tag['name'] ?>"><?php echo $tag['name'] ?></a></li>
-	<?php endforeach ?>
-	</ol>
+	<div>
+		<ol>
+			<?php echo $this->partialLoop( $this->partialsFolder . '/tags.phtml', $this->tags ) ?>
+		</ol>
+	</div>
 <?php endif ?>
 <!-- End of Tags -->
 
