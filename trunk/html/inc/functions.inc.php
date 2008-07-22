@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Surrounds a variable with backticks (`)
+ * Surrounds a variable with backticks ``
  * @param string $var
  * @return string
  */
@@ -12,7 +12,7 @@ function backtick($var)
 }
 
 /**
- * Surrounds a variable with double quotes (")
+ * Surrounds a variable with double quotes ""
  * @param string $var
  * @return string
  */
@@ -23,7 +23,7 @@ function double_quote($var)
 }
 
 /**
- * Surrounds a variable with single quotes (')
+ * Surrounds a variable with single quotes ''
  * @param string $var
  * @return string
  */
@@ -34,7 +34,7 @@ function single_quote($var)
 }
 
 /**
- * Surrounds a variable with square brackets ([])
+ * Surrounds a variable with square brackets []
  * @param string $var
  * @return string
  */
@@ -42,6 +42,17 @@ function single_quote($var)
 function sq_brackets($var)
 {
     return "[".$var."]";
+}
+
+/**
+ * Surrounds a variable with round brackets ()
+ * @param string $var
+ * @return string
+ */
+
+function round_brackets($var)
+{
+    return "(".$var.")";
 }
 
 /**
