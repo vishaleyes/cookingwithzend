@@ -7,9 +7,11 @@ At time of writing I am sure that not all the files adhere to these rules but I 
 
 == PHP Guidelines ==
 
+    * Use unix friendly line endings, if I find ^M's everywhere I'll brain you :)
     * Indents are tabs not spaces
     * Indents are set to 4 (for my editor)
     * Use standard PHPdoc formatting for commenting functions e.g.
+
 {{{
 /**
  * Text to decribe stuff here
