@@ -17,11 +17,7 @@ class IndexController extends DefaultController
 	 */
 
 	public function indexAction() {
-		if ( ! $this->session->user ) {
-			$this->_redirect( '/user/login' );
-		} else {
-			$this->_redirect( '/recipe/new' );
-		}
+		$this->_redirect( '/recipe/index' );
 	}
 
 }
