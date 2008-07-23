@@ -43,13 +43,17 @@ class RecipeController extends DefaultController
 	}
 
 	/**
-	 *
+	 * Main index page, you can optionally 
 	 */
 
 	public function indexAction()
 	{
 		$r = new Recipe();
-		$select = $r->select()->limit(5);
+		$select = $r->select();
+
+		if ( $this->_getParam( 'user_id' ) > 0 )
+			$select->where( 'creator_id = ?', $this->_getParam( 'user_id' ) );
+
 		$rowset = $r->fetchAll( $select );
 
 		$rat = new Rating();
