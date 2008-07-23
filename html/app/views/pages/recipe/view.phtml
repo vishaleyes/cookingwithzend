@@ -64,21 +64,8 @@
 
 <!-- Rating -->
 <h3>Rating</h3>
-<p><?php $r = new Rating(); echo ("This recipe is rated: " . $r->getRating($this->recipe['id']) . " / " . Rating::MAX_RATING); ?></p>
+<div><?php $r = new Rating();  echo ("This recipe is rated: " . $r->getRating($this->recipe['id']) . " / " . Rating::MAX_RATING); ?></div>
 
-<?php echo $this->submit_rating_form; ?>
-
-<!--
-<p>Submit yours:</p>
-<form name="rating_form" id="rating-form" method="POST" action="/rating/add/recipe_id/<?php // echo $this->recipe['id']; ?>">
-<select name="rating_value" id="rating-value">
-<option value="1">1 out of 5</option>
-<option value="2">2 out of 5</option>
-<option value="3">3 out of 5</option>
-<option value="4">4 out of 5</option>
-<option value="5">5 out of 5</option>
-</select>
-<input type="submit" id="rating_submit" value="Submit rating." />
-</form>-->
+<?php if ($r->checkIfRated($this->recipe['id']) != true) { echo $this->submit_rating_form; } ?>
 
 <!-- End of rating -->
