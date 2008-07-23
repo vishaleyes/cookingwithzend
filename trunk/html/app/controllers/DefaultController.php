@@ -90,6 +90,8 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->session = Zend_Registry::get('session');
 		$this->request = Zend_Registry::get('request');
 		$this->cache = Zend_Registry::get('cache');
+		$this->message = $this->_helper->getHelper('FlashMessenger');
+		$this->errorMessage = $this->_helper->getHelper('FlashMessenger');
 		
 		$this->auth = new Zend_Auth_Adapter_DbTable( $this->db );
 		$this->auth->setTableName( $this->config->authentication->tableName )
@@ -107,7 +109,9 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->view->release_no = $this->release_no;
 		$this->view->version = $this->environment;
 		$this->view->session = $this->session;
-		
+	
+		$this->view->message = $this->message;
+		$this->view->errorMessage = $this->errorMessage;
 		$this->view->partialsFolder = $this->partialsFolder;
 		$this->view->pagesFolder = $this->pagesFolder;
 		$this->view->templatesFolder = $this->templatesFolder;

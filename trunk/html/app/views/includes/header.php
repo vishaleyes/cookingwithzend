@@ -14,14 +14,18 @@
 
 <body id="body">
 
-<?php if ( ! empty($this->session->error) ): ?>
-<div id="error">
-	<?php echo $this->session->error; ?>
+<?php if ( $this->message->count() > 0 ): ?>
+<div id="notice" style="background: #72bf72">
+<?php foreach( $this->message->getMessages() as $msg ):?>
+	<?php echo $msg; ?>
+<?php endforeach ?>
 </div>
 <?php endif ?>
 
-<?php if ( ! empty($this->session->notice) ): ?>
-<div id="notice">
-	<?php echo $this->session->notice; ?>
+<?php if ( $this->errorMessage->count() > 0 ): ?>
+<div id="error" style="background: #bc5454">
+<?php foreach( $this->errorMessage->getMessages() as $msg ):?>
+	<?php echo $msg; ?>
+<?php endforeach ?>
 </div>
 <?php endif ?>
