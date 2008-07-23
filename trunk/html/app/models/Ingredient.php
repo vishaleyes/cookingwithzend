@@ -58,7 +58,7 @@ class Ingredient extends Zend_Db_Table_Abstract {
 			parent::insert( $data );
 		} catch (Exception $e) {
 			// Doesnt matter if we cannot insert the ingredient
-			$this->log->info( 'Ingredient ' . sq_brackets( $data['name'] ) . ' already exists' );
+			$this->log->info( 'Ingredient failed '.$e->getMessages() );
 		}
 
 		return $this->getByName( $data['name'] );

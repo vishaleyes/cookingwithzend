@@ -19,8 +19,8 @@
 				<?php endif ?>
 				<li><?php echo $ingredient['name'] ?>
 				<?php if ( $this->session->user['id'] == $this->recipe['creator_id'] ): ?>
-				<a href="<?php echo "/ingedient/edit/recipe_id/" . $ingredient['recipe_id'] . "/ingredient_id/" . $ingredient['ingredient_id'] ?>">Edit</a> | 
-				<a href="<?php echo "/ingedient/edit/recipe_id/" . $ingredient['recipe_id'] . "/ingredient_id/" . $ingredient['ingredient_id'] ?>">Delete</a>
+				<a href="<?php echo "/ingredient/edit/recipe_id/" . $ingredient['recipe_id'] . "/ingredient_id/" . $ingredient['ingredient_id'] ?>">Edit</a> | 
+				<a href="<?php echo "/ingredient/delete/recipe_id/" . $ingredient['recipe_id'] . "/ingredient_id/" . $ingredient['ingredient_id'] ?>">Delete</a>
 				<?php endif ?>
 				</li>
 			</ul>

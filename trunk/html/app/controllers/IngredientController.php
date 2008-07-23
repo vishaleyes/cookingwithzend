@@ -102,6 +102,24 @@ class IngredientController extends DefaultController
 
 	}
 
+	public function deleteAction()
+	{
+		$recipeId = $this->_getParam( 'recipe_id' );
+		$ingredientId = $this->_getParam( 'ingredient_id' );
+	
+		$where[] = $this->db->quoteInto( 'recipe_id = ?', $recipeId );
+		$where[] = $this->db->quoteInto( 'ingredient_id = ?', $ingredientId );
+
+		try {
+			$this->db->delete( 'recipe_ingredients', $where );
+		} catch (Exception $e) {
+			$this->log->info( $e->getMessages() );
+		}
+
+		$this->message->addMessage( 'Deleted ingredient from '.$this->recipe->name );
+		$this->_redirect( '/recipe/view/recipe_id/'.$this->recipe->id );
+	}
+
 	/**
 	 * We are existing after the action is dispatched
 	 *
