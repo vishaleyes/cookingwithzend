@@ -64,9 +64,9 @@ class Rating extends Zend_Db_Table_Abstract {
 		
 	}
 	
-	/* Check if a user has rated a recipe already */
+	/* Check if current user has rated a recipe already */
 	
-	public function checkIfRated($recipe_id)
+	public function checkIfUserHasRated($recipe_id)
 	{
 		
 		$select = $this->db->select()->from('ratings',array("numberOfRatings" => "COUNT(id)"))->where("recipe_id = $recipe_id AND user_id = '" . Zend_Registry::get('session')->user['id']. "'");
@@ -79,6 +79,23 @@ class Rating extends Zend_Db_Table_Abstract {
 			return false;
 		}
 		
+	}
+	
+	/* Check if anyone has rated a recipe already */
+	
+	public function isRated($recipe_id)
+	{
+		$select = $this->db->select()->from('ratings',array("numberOfRatings" => "COUNT(id)"))->where("recipe_id = $recipe_id");
+		
+		if ($this->db->fetchOne($select) > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+			
 	}
 
 }

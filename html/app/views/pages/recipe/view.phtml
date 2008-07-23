@@ -64,8 +64,8 @@
 
 <!-- Rating -->
 <h3>Rating</h3>
-<div><?php $r = new Rating();  echo ("This recipe is rated: " . $r->getRating($this->recipe['id']) . " / " . Rating::MAX_RATING); ?></div>
+<div><?php $r = new Rating();  if ($r->isRated($this->recipe['id'])) { echo ("This recipe is rated: " . $r->getRating($this->recipe['id']) . " / " . Rating::MAX_RATING); } else { echo ("This recipe is unrated."); } ?></div>
 
-<?php if (($this->session->user != NULL)&&($r->checkIfRated($this->recipe['id']) != true)) { echo $this->submit_rating_form; } ?>
+<?php if (($this->session->user != NULL)&&($r->checkIfUserHasRated($this->recipe['id']) != true)) { echo $this->submit_rating_form; } ?>
 
 <!-- End of rating -->
