@@ -1,0 +1,17 @@
+<?php foreach( $this->recipes as $recipe ): ?>
+<div style="border: dashed 2px black;margin-bottom: 10px;">
+	<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $recipe ) ?>
+	<a href="<?php echo "/recipe/view/recipe_id/".$recipe['id'] ?>">View</a>
+
+<?php if ( isset( $recipe['tags'] ) ): ?>
+	<div>
+		<ol>
+			<?php echo $this->partialLoop( $this->partialsFolder . '/tags.phtml', $recipe['tags'] ) ?>
+		</ol>
+	</div>
+<?php endif ?>
+
+	<h3>Rating</h3>
+	<p><?php echo "This recipe is rated: " . $recipe['rating'] . " / " . Rating::MAX_RATING; ?></p>
+</div>
+<?php endforeach ?>
