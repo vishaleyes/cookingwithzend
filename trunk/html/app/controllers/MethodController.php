@@ -67,6 +67,25 @@ class MethodController extends DefaultController
 		}
 
 	}
+
+	/**
+	 * Delete a method
+	 */
+
+	public function deleteAction()
+	{
+		$methodId = $this->_getParam( 'method_id' );
+		$where = $this->db->quoteInto( 'id = ?', $methodId );
+		
+		try {
+			$this->db->delete( 'method_items', $where );
+		} catch (Exception $e) {
+			$this->log->info( $e->getMessages() );
+		}
+		
+		$this->message->addMessage( 'Deleted instructions from '.$this->recipe->name );
+		$this->_redirect( '/recipe/view/recipe_id/'.$this->recipe->id );
+	}
 	
 	/**
 	 * We are existing after the action is dispatched
