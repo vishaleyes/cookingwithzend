@@ -39,11 +39,7 @@ class MethodController extends DefaultController
 	
 	public function createAction()
 	{
-		$this->view->title = 'Create a method';
-		$this->view->pageContent = $this->pagesFolder.'/method/new.phtml';
-		
 		if (! $this->form->isValid($_POST)) {
-			$this->log->info( var_export( $this->form->getMessages(), true ) );
 			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
 		}
 
@@ -69,7 +65,49 @@ class MethodController extends DefaultController
 	}
 
 	/**
-	 * Delete a method
+	 * Edit a method item
+	 */
+
+	public function editAction()
+	{
+		$this->view->title = 'Edit the instructions';
+		$this->view->pageContent = $this->pagesFolder.'/method/new.phtml';
+		
+		$m = new MethodItem();
+		$rowset = $m->find( $this->_getParam( 'method_id' ) );
+		if (! $rowset)
+			$this->_redirect( '/' );
+
+		$method = $rowset->current();
+		$values = $method->toArray();
+		foreach ( $this->form->getElements() as $element )
+		{
+			$element->setValue( $values[$element->getName()] );
+		}
+
+		$this->renderModelForm( '/method/update/recipe_id/' . $method->recipe_id . '/method_id/'.$method->id, 'edit' );
+	}
+
+	/**
+	 * Update the method
+	 */
+
+	public function updateAction()
+	{
+		if ( ! $this->form->isValid($_POST) ) {
+			$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
+		}
+
+		$params = $this->form->getValues();
+		$m = new MethodItem();
+		$where = $m->getAdapter()->quoteInto( 'id = ?', $this->_getParam( 'id' ) );
+		$m->update( $params, $where );
+
+		$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
+	}
+
+	/**
+	 * Delete a method item
 	 */
 
 	public function deleteAction()

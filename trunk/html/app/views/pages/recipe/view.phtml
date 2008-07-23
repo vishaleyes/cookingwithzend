@@ -40,7 +40,7 @@
 	<?php foreach( $this->methods as $method ): ?>
 		<li id="<?php echo "method-" . $method['id'] ?>"><?php echo $method['description'] ?>
 		<?php if ( $this->session->user['id'] == $this->recipe['creator_id'] ): ?>
-		<a href="<?php echo "/method/edit/id/" . $method['id'] ?>">Edit</a> | <a href="<?php echo "/method/delete/recipe_id/" . $method['recipe_id'] . "/method_id/" . $method['id'] ?>">Delete</a>
+		<a href="<?php echo "/method/edit/recipe_id/" . $method['recipe_id'] . "/method_id/" . $method['id'] ?>">Edit</a> | <a href="<?php echo "/method/delete/recipe_id/" . $method['recipe_id'] . "/method_id/" . $method['id'] ?>">Delete</a>
 		<?php endif ?>
 		</li>
 	<?php endforeach ?>
