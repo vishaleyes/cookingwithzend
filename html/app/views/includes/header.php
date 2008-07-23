@@ -23,10 +23,3 @@
 </div>
 <?php endif ?>
 
-<?php if ( $this->errorMessage->count() > 0 ): ?>
-<div id="error" style="background: #bc5454">
-<?php foreach( $this->errorMessage->getMessages() as $msg ):?>
-	<?php echo $msg; ?>
-<?php endforeach ?>
-</div>
-<?php endif ?>
