@@ -17,7 +17,6 @@ class Tag extends Zend_Db_Table_Abstract {
 	public $_form_fields_config = array(
 		array( 'text', 'tag_name', array(
 			'id' => 'tag-name',
-			'required' => true,
 			'label' => 'Tags',
 			'validators' => array(
 				array( 'NotEmpty', true ),
@@ -124,6 +123,14 @@ class Tag extends Zend_Db_Table_Abstract {
 
 		return $rowset;
 
+	}
+
+	public function delete( $row )
+	{
+		$where[] = $this->getAdapter()->quoteInto( 'taggable_type = ?', $row->getTableClass() );
+		$where[] = $this->getAdapter()->quoteInto( 'taggable_id = ?', $row->id );
+		
+		$this->getAdapter()->delete( 'taggings', $where );
 	}
 
 }

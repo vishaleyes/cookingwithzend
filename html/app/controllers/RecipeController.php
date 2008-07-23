@@ -168,6 +168,7 @@ class RecipeController extends DefaultController
 
 	public function deleteAction()
 	{
+		$name = $this->recipe->name;
 		$this->db->beginTransaction();
 		try{
 			$t = new Tag();
@@ -178,6 +179,9 @@ class RecipeController extends DefaultController
 			$this->log->info( $e->getMessage() );
 			$this->db->rollBack();
 		}
+
+		$this->message->addMessage( 'Deleted recipe ' . $name );
+		$this->_redirect( '/' );
 		
 	}
 
