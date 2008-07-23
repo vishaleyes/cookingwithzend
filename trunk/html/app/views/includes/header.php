@@ -8,6 +8,7 @@
 	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.autocomplete.pack.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="/public/css/jquery.autocomplete.css" />
+	<link rel="stylesheet" type="text/css" href="/public/css/recipe.css" />
 
 	<title><?php echo $this->escape($this->title) ?></title>
 </head>
