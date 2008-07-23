@@ -1,7 +1,6 @@
 <?php foreach( $this->recipes as $recipe ): ?>
 <div style="border: dashed 2px black;margin-bottom: 10px;">
 	<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $recipe ) ?>
-	<a href="<?php echo "/recipe/view/recipe_id/".$recipe['id'] ?>">View</a>
 
 <?php if ( isset( $recipe['tags'] ) ): ?>
 	<div>
