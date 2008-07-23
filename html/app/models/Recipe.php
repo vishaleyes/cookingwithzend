@@ -4,6 +4,7 @@ class Recipe extends Zend_Db_Table_Abstract {
 	
 	protected $_name = "recipes";
 	protected $_primary = "id";
+	protected $_rowClass = "RecipeRow";
 
 	# Primary does Auto Inc
 	protected $_sequence = true;
@@ -12,7 +13,7 @@ class Recipe extends Zend_Db_Table_Abstract {
 	
 	protected $_referenceMap = array(
 		'User' => array(
-			'columns'		=> 'user_id',
+			'columns'		=> 'creator_id',
 			'refTableClass' => 'User',
 			'refColumns'	=> 'id'
 		)
