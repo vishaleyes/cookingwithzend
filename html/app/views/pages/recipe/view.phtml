@@ -1,11 +1,4 @@
-<h2><?php echo $this->recipe['name'] ?> (<?php echo $this->recipe['view_count'] ?>)</h2>
-
-<?php if ( $this->session->user['id'] == $this->recipe['creator_id'] ): ?>
-<p><a href="<?php echo "/recipe/edit/recipe_id/". $this->recipe['id']; ?>">Edit Recipe</a> |
-<a href="<?php echo "/recipe/delete/recipe_id/". $this->recipe['id']; ?>">Delete Recipe</a></p>
-<?php endif ?>
-
-<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $recipe ) ?>
+<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $this->recipe ) ?>
 
 <!-- Ingredients -->
 <?php if ( count( $this->ingredients ) > 0 ): ?>
