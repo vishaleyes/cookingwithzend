@@ -68,8 +68,12 @@ class Rating extends Zend_Db_Table_Abstract {
 	
 	public function checkIfUserHasRated($recipe_id)
 	{
-		
-		$select = $this->db->select()->from('ratings',array("numberOfRatings" => "COUNT(id)"))->where("recipe_id = $recipe_id AND user_id = '" . Zend_Registry::get('session')->user['id']. "'");
+		// Multiple WHERE clauses = AND, use ?'s and pass the parameter as a variable this way Zend quotes it for you - CL
+		$select = $this->db->select()
+		  ->from('ratings',array("numberOfRatings" => "COUNT(id)"))
+		  ->where("recipe_id = ?", $recipe_id)
+		  ->where("user_id = ?", Zend_Registry::get('session')->user['id'] );
+
 		if ($this->db->fetchOne($select) > 0)
 		{
 			return true;
