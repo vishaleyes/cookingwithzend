@@ -85,7 +85,7 @@ class MethodController extends DefaultController
 			$element->setValue( $values[$element->getName()] );
 		}
 
-		$this->renderModelForm( '/method/update/recipe_id/' . $method->recipe_id . '/method_id/'.$method->id, 'edit' );
+		$this->renderModelForm( '/method/update/recipe_id/' . $method->recipe_id . '/method_id/'.$method->id, 'Update' );
 	}
 
 	/**
@@ -95,12 +95,13 @@ class MethodController extends DefaultController
 	public function updateAction()
 	{
 		if ( ! $this->form->isValid($_POST) ) {
+			$this->log->info( 'Form is not valid '.var_export( $this->form->getMessages(), true ) );
 			$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
 		}
 
 		$params = $this->form->getValues();
 		$m = new MethodItem();
-		$where = $m->getAdapter()->quoteInto( 'id = ?', $this->_getParam( 'id' ) );
+		$where = $m->getAdapter()->quoteInto( 'id = ?', $this->_getParam( 'method_id' ) );
 		$m->update( $params, $where );
 
 		$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
