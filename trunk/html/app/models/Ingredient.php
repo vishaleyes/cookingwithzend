@@ -8,20 +8,25 @@ class Ingredient extends Zend_Db_Table_Abstract {
 	# Primary does Auto Inc
 	protected $_sequence = true;
 	
-	// Form elements for add/edit
-	// field name => array(type, required, validatorArray, filtersArray);
-	public $_form_fields_config = array(
-		array( 'text', 'ingredient_name', array(
-			'id' => 'ingredient-name',
-			'required' => true,
-			'label' => 'Name',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'alnum', true, true ),
-				array( 'stringLength', false, array( 3, 255 ) ),
-			),
-		) )
-	);
+	/**
+     * This is to replace the _form_fields_config, I find it easier to follow - CL
+     */
+	
+	public function getFormElements()
+	{
+		$elements = array();
+		$e = new Zend_Form_Element( 'text' );
+		$e->setName( 'ingredient_name')
+		  ->setId( 'ingredient-name' )
+		  ->setLabel( 'Name' )
+		  ->setRequired( true )
+		  ->addValidator( new Zend_Validate_Int(), true )
+		  ->addValidator( new Zend_Validate_Alnum(true), true )
+          ->addValidator( new Zend_Validate_StringLength( array(3,255) ), false );
+		$elements[] = $e;
+		
+		return $elements;
+	}
 
 	function __construct()
 	{
