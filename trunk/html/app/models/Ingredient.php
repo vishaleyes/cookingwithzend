@@ -8,6 +8,16 @@ class Ingredient extends Zend_Db_Table_Abstract {
 	# Primary does Auto Inc
 	protected $_sequence = true;
 	
+	function __construct()
+	{
+		$this->db = Zend_Registry::get("db");
+		Zend_Db_Table_Abstract::setDefaultAdapter($this->db);
+		
+		$this->log = Zend_Registry::get('log');
+		
+		$this->_setup();
+	}
+
 	/**
      * This is to replace the _form_fields_config, I find it easier to follow - CL
      */
@@ -17,25 +27,14 @@ class Ingredient extends Zend_Db_Table_Abstract {
 		$elements = array();
 		$e = new Zend_Form_Element( 'text' );
 		$e->setName( 'ingredient_name')
-		  ->setId( 'ingredient-name' )
+		  ->setAttrib( 'id', 'ingredient-name' )
 		  ->setLabel( 'Name' )
 		  ->setRequired( true )
-		  ->addValidator( new Zend_Validate_Int(), true )
 		  ->addValidator( new Zend_Validate_Alnum(true), true )
           ->addValidator( new Zend_Validate_StringLength( array(3,255) ), false );
 		$elements[] = $e;
 		
 		return $elements;
-	}
-
-	function __construct()
-	{
-		$this->db = Zend_Registry::get("db");
-		Zend_Db_Table_Abstract::setDefaultAdapter($this->db);
-		
-		$this->log = Zend_Registry::get('log');
-		
-		$this->_setup();
 	}
 
 	/**

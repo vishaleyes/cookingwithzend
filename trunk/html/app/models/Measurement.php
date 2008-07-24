@@ -10,26 +10,6 @@ class Measurement extends Zend_Db_Table_Abstract {
 
 	protected $_dependentTables = array('IngredientMeasurement');
 
-	public $_form_fields_config = array(
-		array( 'text', 'measurement_name', array(
-			'id' => 'measurement-name',
-			'required' => false,
-			'label' => 'Measurement',
-			'validators' => array(
-				array( 'alnum', true )
-			)
-		) ),
-		array( 'text', 'measurement_abbr', array(
-			'id' => 'measurement-abbr',
-			'required' => false,
-			'label' => 'Measurement Abbr',
-			'validators' => array(
-				array( 'alnum', true )
-			)
-		) )
-
-	);
-
 	function __construct()
 	{
 		$this->db = Zend_Registry::get("db");
@@ -39,6 +19,31 @@ class Measurement extends Zend_Db_Table_Abstract {
 		
 		$this->_setup();
 	}
+
+	/**
+     * This is to replace the _form_fields_config, I find it easier to follow - CL
+     */
+
+	public function getFormElements()
+	{
+		$elements = array();
+		$e = new Zend_Form_Element( 'text' );
+		$e->setName( 'measurement_name')
+		  ->setAttrib( 'id', 'measurement-name' )
+		  ->setLabel( 'Measurement' )
+		  ->addValidator( new Zend_Validate_Alnum(), true );
+		$elements[] = $e;
+
+		$e = new Zend_Form_Element( 'text' );
+		$e->setName( 'measurement_abbr')
+		  ->setAttrib( 'id', 'measurement-abbr' )
+		  ->setLabel( 'Measurement Abbr' )
+		  ->addValidator( new Zend_Validate_Alnum(), true );
+		$elements[] = $e;
+		
+		return $elements;
+	}
+
 
 	/**
 	 * Fetch the row in the database that fits this particular name
