@@ -22,9 +22,9 @@
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) default NULL,
+  `user_id` int(11) unsigned NOT NULL,
   `comment` text,
-  `recipe_id` int(11) default NULL,
+  `recipe_id` int(11) unsigned NOT NULL,
   `created` datetime default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -91,7 +91,7 @@ CREATE TABLE `method_items` (
   `id` int(11) NOT NULL auto_increment,
   `description` text NOT NULL,
   `position` int(11) default NULL,
-  `recipe_id` int(11) NOT NULL,
+  `recipe_id` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -102,9 +102,9 @@ CREATE TABLE `method_items` (
 DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE IF NOT EXISTS `ratings` (
   `id` int(11) NOT NULL auto_increment,
-  `recipe_id` int(11) NOT NULL,
-  `value` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `recipe_id` int(11) unsigned NOT NULL,
+  `value` int(11) unsigned NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `recipe_id` (`recipe_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
@@ -114,12 +114,12 @@ CREATE TABLE IF NOT EXISTS `ratings` (
 --
 
 DROP TABLE IF EXISTS `recipe_ingredients`;
-CREATE TABLE `recipe_ingredients` (
-  `recipe_id` int(11) NOT NULL,
-  `ingredient_id` int(11) NOT NULL,
-  `measurement_id` int(11) default NULL,
-  `quantity` int(11) NOT NULL,
-  `amount` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `recipe_ingredients` (
+  `recipe_id` int(11) unsigned NOT NULL,
+  `ingredient_id` int(11) unsigned NOT NULL,
+  `measurement_id` int(11) unsigned default NULL,
+  `quantity` int(11) unsigned default NULL,
+  `amount` int(11) unsigned default NULL,
   PRIMARY KEY  (`recipe_id`,`ingredient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -131,10 +131,10 @@ DROP TABLE IF EXISTS `recipes`;
 CREATE TABLE `recipes` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
-  `cooking_time` int(11) default NULL,
-  `preparation_time` int(11) default NULL,
+  `cooking_time` int(11) unsigned default NULL,
+  `preparation_time` int(11) unsigned default NULL,
   `serves` int(11) default NULL,
-  `difficulty` int(2) default '1',
+  `difficulty` int(2) unsigned default '1',
   `freezable` int(1) default '0',
   `created` datetime default NULL,
   `updated` datetime NULL default NULL,
