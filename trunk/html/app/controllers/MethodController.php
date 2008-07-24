@@ -47,12 +47,15 @@ class MethodController extends DefaultController
 		$params['recipe_id'] = $this->recipe->id;
 		
 		$m = new MethodItem();
-		$row = null;
+		$r = $this->recipe->getTable();
+		
 		$this->db->beginTransaction();
 		
 		// Put the insert into a transaction
 		try {
 			$m->insert( $params );
+			$params = array();
+			$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
 			$this->db->commit();
 			$this->log->info( 'Added MethodItem to recipe ' . sq_brackets( $this->recipe->id ) ); 
 			$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
@@ -101,8 +104,21 @@ class MethodController extends DefaultController
 
 		$params = $this->form->getValues();
 		$m = new MethodItem();
-		$where = $m->getAdapter()->quoteInto( 'id = ?', $this->_getParam( 'method_id' ) );
-		$m->update( $params, $where );
+		$r = $this->recipe->getTable();
+
+		$this->db->beginTransaction();
+		try {
+			$where = $m->getAdapter()->quoteInto( 'id = ?', $this->_getParam( 'method_id' ) );
+			$m->update( $params, $where );
+		
+			$params = array();
+			$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
+			$r->update( $params, $where );
+			$this->db->commit();
+		} catch (Exception $e) {
+			$this->db->rollBack();
+			$this->log->info( $e->getMessage() );
+		}
 
 		$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
 	}
@@ -115,11 +131,19 @@ class MethodController extends DefaultController
 	{
 		$methodId = $this->_getParam( 'method_id' );
 		$where = $this->db->quoteInto( 'id = ?', $methodId );
-		
+
+		$params = array();
+		$r = $this->recipe->getTable();
+
+		$this->db->beginTransaction();
 		try {
 			$this->db->delete( 'method_items', $where );
+			$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
+			$r->update( $params, $where );
+			$this->db->commit();
 		} catch (Exception $e) {
-			$this->log->info( $e->getMessages() );
+			$this->db->rollBack();
+			$this->log->info( $e->getMessage() );
 		}
 		
 		$this->message->addMessage( 'Deleted instructions from '.$this->recipe->name );

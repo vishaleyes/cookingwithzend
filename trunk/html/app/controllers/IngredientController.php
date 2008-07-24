@@ -55,6 +55,7 @@ class IngredientController extends DefaultController
 		
 		$form = $this->ingredientForm();
 		if (! $form->isValid($_POST)) {
+			$this->log->info( 'Ingredient form is invalid '.var_export( $form->getMessages(), true ) );
 			$this->_redirect( '/ingredient/new/recipe_id/'.$this->recipe->id );
 		}
 		
@@ -86,8 +87,13 @@ class IngredientController extends DefaultController
 				)
 			);
 
-			$this->recipe->ingredients_count++;
-			$this->recipe->save();
+			$params = array(
+				'ingredients_count' => ($this->recipe->ingredients_count + 1)
+			);
+
+			$r = $this->recipe->getTable();
+			$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
+			$r->update( $params, $where );
 
 			$this->db->commit();
 			$this->log->info( 'Added Ingredient ' . sq_brackets( $values['ingredient_name'] ) . ' to RecipeID ' . sq_brackets( $this->recipe->id ) ); 
@@ -104,19 +110,29 @@ class IngredientController extends DefaultController
 
 	public function deleteAction()
 	{
-		$recipeId = $this->_getParam( 'recipe_id' );
 		$ingredientId = $this->_getParam( 'ingredient_id' );
 	
-		$where[] = $this->db->quoteInto( 'recipe_id = ?', $recipeId );
+		$where[] = $this->db->quoteInto( 'recipe_id = ?', $this->recipe->id );
 		$where[] = $this->db->quoteInto( 'ingredient_id = ?', $ingredientId );
 
+		$params = array(
+			'ingredients_count' => ($this->recipe->ingredients_count - 1)
+		);
+		$r = $this->recipe->getTable();
+		$rwhere = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
+
+		$this->db->beginTransaction();
 		try {
 			$this->db->delete( 'recipe_ingredients', $where );
+			$this->log->info( var_export( $params, true ) );
+			$r->update( $params, $rwhere );
+			$this->db->commit();
+			$this->message->addMessage( 'Deleted ingredient from '.$this->recipe->name );
 		} catch (Exception $e) {
-			$this->log->info( $e->getMessages() );
+			$this->db->rollBack();
+			$this->log->info( $e->getMessage() );
 		}
 
-		$this->message->addMessage( 'Deleted ingredient from '.$this->recipe->name );
 		$this->_redirect( '/recipe/view/recipe_id/'.$this->recipe->id );
 	}
 
