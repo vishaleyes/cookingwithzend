@@ -116,12 +116,16 @@ class RecipeController extends DefaultController
 			$this->db->commit();
 			$this->log->info( 'Added Recipe ' . sq_brackets( $params['name'] ) . ' by User ' . sq_brackets( $this->session->user['name'] ) ); 
 		} catch (Exception $e) {
+			$this->message->setNamespace( 'error' );
+			$this->message->addMessage( 'Something went horribly wrong' );
+			$this->message->resetNamespace();
 			$this->log->info( $e->getMessage() );
 			$this->db->rollBack();
 			$this->_redirect( '/recipe/new' );
 		}
 		
 		$this->message->addMessage( 'Added Recipe ' . sq_brackets( $params['name'] ) );
+
 		$this->_redirect( '/ingredient/new/recipe_id/' . $row->id );
 	}
 
