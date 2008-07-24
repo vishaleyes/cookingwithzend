@@ -3,7 +3,7 @@
 class RecipeIngredient extends Zend_Db_Table_Abstract {
 	
 	protected $_name = "recipe_ingredients";
-	protected $_primary = array( "recips_id", "ingredient_id" );
+	protected $_primary = array( "recipe_id", "ingredient_id" );
 	protected $_rowClass = 'RecipeIngredientRow';
 
 	# Primary does Auto Inc
@@ -27,22 +27,30 @@ class RecipeIngredient extends Zend_Db_Table_Abstract {
 		)
 	);
 	
-	// Form elements for add/edit
-	public $_form_fields_config = array(
-		array( 'text', 'amount', array(
-			'label' => 'Amount (e.g. 450g)',
-			'validators' => array(
-				array( 'alnum', true, true ),
-				array( 'stringLength', false, array( 3, 255 ) ),
-			)
-		) ),
-		array( 'text', 'quantity', array(
-			'label' => 'Quantity (e.g. 2 Eggs)',
-			'validators' => array(
-				array( 'int' )
-			)
-		) )
-	);
+	/**
+     * This is to replace the _form_fields_config, I find it easier to follow - CL
+     */
+
+	public function getFormElements()
+	{
+		$elements = array();
+
+		$e = new Zend_Form_Element( 'text' );
+		$e->setName( 'amount')
+          ->setLabel( 'Amount (e.g. 450g)' )
+		  ->addValidator( new Zend_Validate_Int(), true )
+          ->addValidator( new Zend_Validate_GreaterThan(0), true );
+		$elements[] = $e;
+		
+		$e = new Zend_Form_Element( 'text' );
+		$e->setName( 'quantity')
+		  ->setLabel( 'Quantity (e.g. 2 Eggs)' )
+		  ->addValidator( new Zend_Validate_Int(), true )
+          ->addValidator( new Zend_Validate_GreaterThan(0), true );
+		$elements[] = $e;
+
+		return $elements;
+	}
 
 	// May be able to delete this
 	function __construct( $prefetch = true )
