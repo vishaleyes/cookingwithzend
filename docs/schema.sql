@@ -137,7 +137,7 @@ CREATE TABLE `recipes` (
   `difficulty` int(2) default '1',
   `freezable` int(1) default '0',
   `created` datetime default NULL,
-  `updated` timestamp NULL default NULL,
+  `updated` datetime NULL default NULL,
   `ingredients_count` int(11) default '0',
   `creator_id` int(11) NOT NULL,
   `comments_count` int(11) default '0',
