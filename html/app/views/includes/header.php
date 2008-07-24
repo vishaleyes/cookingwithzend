@@ -23,3 +23,11 @@
 </div>
 <?php endif ?>
 
+<?php $this->message->setNameSpace( 'error' ); ?>
+<?php if ( $this->message->count() > 0 ): ?>
+<div id="error" style="background: #c2c2c2">
+<?php foreach( $this->message->getMessages() as $msg ):?>
+	<?php echo $msg; ?>
+<?php endforeach ?>
+</div>
+<?php endif ?>
