@@ -113,6 +113,8 @@ abstract class DefaultController extends Zend_Controller_Action {
 	
 		$this->view->message = $this->message;
 
+		$this->view->action = $this->_getParam( 'action' );
+		$this->view->controller = $this->_getParam( 'controller' );
 		$this->view->partialsFolder = $this->partialsFolder;
 		$this->view->pagesFolder = $this->pagesFolder;
 		$this->view->templatesFolder = $this->templatesFolder;
