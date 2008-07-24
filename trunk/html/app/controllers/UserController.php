@@ -76,8 +76,7 @@ class UserController extends DefaultController
 
 		if (! $this->form->isValid($_POST)) {
 			$this->view->form = $this->form;
-			$this->log->info( var_export( $_POST, true ) );
-			$this->log->info( 'Form is not valid '.var_export( $this->form->getMessages(), true ) );
+			//$this->log->info( 'Form is not valid '.var_export( $this->form->getMessages(), true ) );
 			echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 			exit;
 		}
