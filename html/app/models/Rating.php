@@ -3,7 +3,7 @@
 class Rating extends Zend_Db_Table_Abstract {
 	
 	protected $_name = "ratings";
-	protected $_primary = "id";	   
+	protected $_primary = array( "recipe_id", "user_id" );
 
 	# Primary does Auto Inc
 	protected $_sequence = true;
