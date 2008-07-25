@@ -21,9 +21,6 @@ class Rating extends Zend_Db_Table_Abstract {
 		)
 	);
 	
-
-	
-	
 	/*	Definite max rating allowed */
 	const MAX_RATING = 5;
 
@@ -70,7 +67,7 @@ class Rating extends Zend_Db_Table_Abstract {
 	{
 		// Multiple WHERE clauses = AND, use ?'s and pass the parameter as a variable this way Zend quotes it for you - CL
 		$select = $this->db->select()
-		  ->from('ratings',array("numberOfRatings" => "COUNT(id)"))
+		  ->from('ratings',array("numberOfRatings" => "COUNT(*)"))
 		  ->where("recipe_id = ?", $recipe_id)
 		  ->where("user_id = ?", Zend_Registry::get('session')->user['id'] );
 
@@ -89,7 +86,9 @@ class Rating extends Zend_Db_Table_Abstract {
 	
 	public function isRated($recipe_id)
 	{
-		$select = $this->db->select()->from('ratings',array("numberOfRatings" => "COUNT(id)"))->where("recipe_id = $recipe_id");
+		$select = $this->db->select()i
+		  ->from('ratings',array("numberOfRatings" => "COUNT(*)"))
+		  ->where("recipe_id = ?", $recipe_id);
 		
 		if ($this->db->fetchOne($select) > 0)
 		{
