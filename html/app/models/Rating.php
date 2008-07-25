@@ -86,7 +86,7 @@ class Rating extends Zend_Db_Table_Abstract {
 	
 	public function isRated($recipe_id)
 	{
-		$select = $this->db->select()i
+		$select = $this->db->select()
 		  ->from('ratings',array("numberOfRatings" => "COUNT(*)"))
 		  ->where("recipe_id = ?", $recipe_id);
 		
