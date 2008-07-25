@@ -77,6 +77,11 @@ class Tag extends Zend_Db_Table_Abstract {
 
 		$tags = explode( $this->DELIMETER, $text );
 		foreach ( $tags as $tag ) {
+
+			// If the tag is "" then skip to the next one
+			if ( empty($tag) )
+				continue;
+
 			try {
 				$this->insert( array( 'name' => $tag ) );
 			} catch (Exception $e) {
