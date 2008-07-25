@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `recipe_ingredients` (
 
 DROP TABLE IF EXISTS `recipes`;
 CREATE TABLE `recipes` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
   `cooking_time` int(11) unsigned default NULL,
   `preparation_time` int(11) unsigned default NULL,
@@ -170,7 +170,7 @@ CREATE TABLE `sessions` (
 
 DROP TABLE IF EXISTS `taggings`;
 CREATE TABLE `taggings` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) unsigned NOT NULL auto_increment,
   `tag_id` int(11) NOT NULL,
   `taggable_id` int(11) NOT NULL,
   `taggable_type` varchar(255) NOT NULL,
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `tags` (
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) unsigned NOT NULL auto_increment,
   `password` varchar(64) character set utf8 collate utf8_unicode_ci NOT NULL,
   `name` varchar(60) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
