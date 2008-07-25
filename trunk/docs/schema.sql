@@ -26,7 +26,9 @@ CREATE TABLE `comments` (
   `comment` text,
   `recipe_id` int(11) unsigned NOT NULL,
   `created` datetime default NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  KEY `recipe_id` (`recipe_id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -92,7 +94,8 @@ CREATE TABLE `method_items` (
   `description` text NOT NULL,
   `position` int(11) default NULL,
   `recipe_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  KEY `recipe_id` (`recipe_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -101,13 +104,13 @@ CREATE TABLE `method_items` (
 
 DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE IF NOT EXISTS `ratings` (
-  `id` int(11) NOT NULL auto_increment,
   `recipe_id` int(11) unsigned NOT NULL,
   `value` int(11) unsigned NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `recipe_id` (`recipe_id`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  PRIMARY KEY  (`recipe_id`,`user_id`),
+  KEY `recipe_id` (`recipe_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `recipe_ingredients`
