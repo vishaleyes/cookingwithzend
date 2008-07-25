@@ -61,7 +61,8 @@ CREATE TABLE `ingredients` (
 --
 
 INSERT INTO `ingredients` (`id`, `name`) VALUES
-(1, 'Eggs'),(2, 'Self Raising Flour'),(3, 'Plain Flour'),(4, 'Caster Sugar'),(5, 'Icing Sugar'),(6, 'Tinned Plum Tomatoes');
+(1, 'Eggs'),(2, 'Self Raising Flour'),(3, 'Plain Flour'),(4, 'Caster Sugar'),(5, 'Icing Sugar'),(6, 'Tinned Plum Tomatoes'),(7, 'Butter'),(8, 'Baking Soda'),(9, 'Vanilla pod'),(10, 'Cocoa Powder'),
+(11, 'Milk'),(12, 'Cooking Chocolate'),(13, 'Parsnips'),(14, 'Garlic Cloves'),(15, 'Root Ginger'),(16, 'Olive Oil'),(17, 'Vegetable Stock'),(18, 'Canned Coconut Milk '),(19, 'Thai Red Curry Paste '),(20, 'Fresh Corriander');
 
 --
 -- Table structure for table `measurements`
