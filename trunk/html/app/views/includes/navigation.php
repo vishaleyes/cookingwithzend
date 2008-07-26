@@ -1,7 +1,7 @@
 <!-- Navigation -->
 <ul>
 	<li><a href="/">Home</a></li>
-<?php if ( $this->loggedIn ): ?>
+<?php if ( $this->loggedIn() ): ?>
 	<li><a href="<?php echo '/recipe/index/user_id/'.$this->session->user['id'] ?>">My Recipes</a></li>	
 	<li><a href="/recipe/new">New Recipe</a></li>
 <?php else: ?>
