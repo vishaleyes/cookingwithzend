@@ -51,17 +51,8 @@
 <?php endif ?>
 <!-- End of Method Items -->
 
-<!-- Tags -->
-<?php if ( count( $this->tags ) > 0 ): ?>
-	<h3>Tags</h3>
-	<div>
-		<ol>
-			<?php echo $this->partialLoop( $this->partialsFolder . '/tags.phtml', $this->tags ) ?>
-		</ol>
-	</div>
-<?php endif ?>
-<!-- End of Tags -->
-
+<?php echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $this->tags ) ) ?>
+	
 <!-- Rating -->
 <h3>Rating</h3>
 <div><?php $r = new Rating();  if ($r->isRated($this->recipe['id'])) { echo ("This recipe is rated: " . $r->getRating($this->recipe['id']) . " / " . Rating::MAX_RATING); } else { echo ("This recipe is unrated."); } ?></div>
