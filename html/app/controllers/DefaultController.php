@@ -103,14 +103,12 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->includesFolder = '/includes';
 		
 		// Setting up view's properties
-		Zend_Controller_Action_HelperBroker::addPath('app/views/helpers');
-		$this->message = $this->_helper->getHelper('FlashMessenger');
-
 		$this->view->setScriptPath('app/views');
 		$this->view->release_no = $this->release_no;
 		$this->view->version = $this->environment;
 		$this->view->session = $this->session;
-	
+		
+		$this->message = $this->_helper->getHelper('FlashMessenger');	
 		$this->view->message = $this->message;
 
 		$this->view->action = $this->_getParam( 'action' );
