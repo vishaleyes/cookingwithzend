@@ -2,14 +2,7 @@
 <div style="border: dashed 2px black;margin-bottom: 10px;">
 	<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $recipe ) ?>
 
-<?php if ( isset( $recipe['tags'] ) ): ?>
-	<div>
-		<ol>
-			<?php echo $this->partialLoop( $this->partialsFolder . '/tags.phtml', $recipe['tags'] ) ?>
-		</ol>
-	</div>
-<?php endif ?>
-
+	<?php echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $recipe['tags'], 'creator' => $recipe['creator_id'] ) ) ?>
 
 	<div><?php echo "This recipe is rated: " . $recipe['rating'] . " / " . Rating::MAX_RATING; ?></div>
 </div>

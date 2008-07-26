@@ -16,11 +16,15 @@
 <body id="body">
 
 <?php if ( $this->message->count() > 0 ): ?>
-<div id="notice" style="background: #72bf72">
 <?php foreach( $this->message->getMessages() as $msg ):?>
+<?php if ( $msg['type'] == 'error' ): ?>
+<div id="error" style="background: #c2c2c2">
+<?php else: ?>
+<div id="notice" style="background: #72bf72">
+<?php endif ?>
 	<?php echo $msg; ?>
-<?php endforeach ?>
 </div>
+<?php endforeach ?>
 <?php endif ?>
 
 <?php $this->message->setNameSpace( 'error' ); ?>

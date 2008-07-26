@@ -8,11 +8,12 @@
 		</ul>
 	</div>
 	<div>Added by :
-	<?php if ( $this->getHelper('Partial')->view->session->user['id'] == $this->user->id ): ?>
+	<?php if ( $this->checkOwner( $this->creator_id ) ): ?>
 	You
 	<?php else: ?>
 	<a href="<?php echo '/recipe/index/user_id/' . $this->user->id ?>"><?php echo $this->user->name ?></a>
 	<?php endif ?>
+	<?php echo $this->created ?>
 	on <?php echo date( 'd-M-Y H:i:s', strtotime( $this->created ) ) ?>
 	updated <?php echo date( 'd-M-Y H:i:s', strtotime( $this->updated ) ) ?>
 	</div>
@@ -20,7 +21,7 @@
 		<?php if ( $this->getHelper('Partial')->view->action != 'view' && $this->getHelper('Partial')->view->controller == 'recipe' ): ?>
 		<a href="<?php echo "/recipe/view/recipe_id/".$this->id ?>">View</a>
 		<?php endif ?>
-<?php if ( $this->getHelper('Partial')->view->session->user['id'] == $this->user->id ): ?>
+<?php if ( $this->checkOwner( $this->creator_id ) ): ?>
 		<a href="<?php echo "/recipe/edit/recipe_id/".$this->id ?>">Edit</a>
 		<a href="<?php echo "/recipe/delete/recipe_id/".$this->id ?>">Delete</a>
 <?php endif ?>
