@@ -69,7 +69,7 @@ function __autoload($class) {
  * Get current version's release
  */
 
-$url = '$URL: https://repository.bd-ntwk.com/bd-ntwk/php_application_framework/trunk/html/inc/bootstrap.inc.php $'; // svn replaces this with the full path
+$url = '$URL$'; // svn replaces this with the full path
 @preg_split( ':release-(.*)\\/:', $url, $match );
 if ( @sizeof( $match ) > 0 ) {
         $release_no = $match[1];
