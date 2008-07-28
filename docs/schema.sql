@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `recipe_ingredients` (
   `ingredient_id` int(11) unsigned NOT NULL,
   `measurement_id` int(11) unsigned default NULL,
   `quantity` int(11) unsigned default NULL,
-  `amount` int(11) unsigned default NULL,
+  `amount` float unsigned default NULL,
   PRIMARY KEY  (`recipe_id`,`ingredient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
