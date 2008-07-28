@@ -38,7 +38,6 @@ class RecipeIngredient extends Zend_Db_Table_Abstract {
 		$e = new Zend_Form_Element( 'text' );
 		$e->setName( 'amount')
           ->setLabel( 'Amount (e.g. 450g)' )
-		  ->addValidator( new Zend_Validate_Int(), true )
           ->addValidator( new Zend_Validate_GreaterThan(0), true );
 		$elements[] = $e;
 		
