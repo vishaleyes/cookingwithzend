@@ -57,11 +57,9 @@ class RecipeController extends DefaultController
 		$rowset = $r->fetchAll( $select );
 
 		$rat = new Rating();
-
-		$output = array();
-		
 		$tag = new Tag();
-		$this->view->tags = $tags;
+		
+		$output = array();
 
 		foreach( $rowset as $row ) {
 			$temp = array();
@@ -69,12 +67,11 @@ class RecipeController extends DefaultController
 			$temp['tags'] = $tag->getTags( $row );
 			$temp['rating'] = $rat->getRating( $row->id );
 			$output[] = $temp;
-			
 		}
 
 		$this->view->recipes = $output;
 		
-		$this->view->title = 'Create a recipe';
+		$this->view->title = 'Viewing recipes';
 		$this->view->pageContent = $this->pagesFolder.'/recipe/index.phtml';
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 	}
@@ -109,7 +106,8 @@ class RecipeController extends DefaultController
 			            ->limit(1);
 			            
 			$row = $r->fetchRow( $select );
-
+			$user = $row->user->adjustColumn( 'recipes_count', 'increase' );
+			
 			$t = new Tag();
 			$t->splitTags( $tags, $row );
 
@@ -176,6 +174,7 @@ class RecipeController extends DefaultController
 		try{
 			$t = new Tag();
 			$t->delete( $this->recipe );
+			$user = $this->recipe->user->adjustColumn( 'recipes_count', 'decrease' );
 			$this->recipe->delete();
 			$this->db->commit();
 		} catch (Exception $e) {
