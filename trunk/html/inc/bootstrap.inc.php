@@ -2,9 +2,6 @@
 
 /**
  * Bootstrap file
- * @author Marcin Dominas : marcin.dominas@bd-ntwk.com
- * @package Generic Framework
- * @see : http://digitalwiki.bd-ntwk.com/index.php?title=BD_Network_PHP_Application_Framework
  */
 
 // Return current unix timestamp with microseconds
@@ -87,13 +84,20 @@ $controller->setControllerDirectory('app/controllers');
 
 $router = $controller->getRouter();
 
+// Might move these into the config or a seperate Route include
 $route = new Zend_Controller_Router_Route(
-	'tag/:name/*', 
+	':controller/:action/*'
+);
+$router->addRoute('default', $route);
+
+$route = new Zend_Controller_Router_Route(
+	'tag/:name/*3', 
 	array( 
 		'controller' => 'tag',
 		'action'     => 'index'
 	)
 );
 $router->addRoute('tag', $route);
+
 
 
