@@ -3,7 +3,11 @@
 
 = Introduction =
 
-Everybody runs linux/apache/whatever differently so I thought it would be wise for me to drop a little note here to say how I develop.  I run a XAMPP installation on a Macbook.  
+Everybody runs linux/apache/whatever differently so I thought it would be wise for me to drop a little note here to say how I develop.  I run a XAMPP installation on a Macbook.  This means I am assuming you have the following installed
+
+  * PHP 5.2+
+  * Apache 2.x
+  * Mysql 5.x
 
 == Apache Config ==
 
