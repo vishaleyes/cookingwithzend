@@ -5,9 +5,9 @@
 		<ol>
 			<?php foreach ($this->tags as $tag): ?>	
 			<li>
-				<a href="<?php echo "/tag/name/".$tag['name'] ?>"><?php echo $tag['name'] ?></a>
+				<a href="<?php echo "/tag/" . $tag['name'] ?>"><?php echo $tag['name'] ?></a>
 				<?php if ( $this->loggedIn() && $this->checkOwner( $this->creator ) ): ?>
-				<a href="<?php echo "/tag/delete/tagging_id/".$tag['id'] ?>">x</a>	
+				<a href="<?php echo "/tag/delete/id/" . $tag['id'] ?>">x</a>	
 				<?php endif ?>
 			</li>
 			<?php endforeach ?>
