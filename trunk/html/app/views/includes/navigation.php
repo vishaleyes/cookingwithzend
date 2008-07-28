@@ -7,6 +7,7 @@
 	<li><a href="/recipe/new">New Recipe</a></li>
 <?php else: ?>
 	<li><a href="/user/login">Login</a> / <a href="/user/new">Register</a></li>
+	<li><a href="http://cookingwithzend.blogspot.com/">Blog</a></li>
 <?php endif ?>
 </ul>
 <!-- End Navigation -->

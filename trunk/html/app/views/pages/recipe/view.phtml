@@ -51,7 +51,7 @@
 <?php endif ?>
 <!-- End of Method Items -->
 
-<?php echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $this->tags ) ) ?>
+<?php echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $this->tags, 'creator' => $this->recipe['creator_id'] ) ) ?>
 	
 <!-- Rating -->
 <h3>Rating</h3>
