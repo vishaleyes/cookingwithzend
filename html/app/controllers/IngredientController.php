@@ -128,10 +128,14 @@ class IngredientController extends DefaultController
 			$row = $rowset->current();
 			$form->getElement('quantity')->setValue( $row->quantity );
 			$form->getElement('amount')->setValue( $row->amount );
-			$form->getElement('measurement_name')->setValue( $row->findParentMeasurement()->name );
+			
+			if ( $row->measurement_id != null )
+				$form->getElement('measurement_name')->setValue( $row->findParentMeasurement() );
+				
 			$form->getElement('ingredient_name')->setValue( $row->findParentIngredient()->name );
 		}
 		$this->view->form = $form;
+		$this->view->recipe_id = $this->recipe->id;
 
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 
