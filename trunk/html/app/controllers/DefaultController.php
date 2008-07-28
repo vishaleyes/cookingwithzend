@@ -140,7 +140,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 			if ( ! $this->session->user ) {
 				// Nope, keep hold of where we were asking for
 				$this->session->referrer = '/'.$this->_request->getControllerName().'/'.$this->_request->getActionName();
-				$this->log->debug( 'Setting Referrer to Controller : ' . $this->_request->getControllerName() . ' | Action : ' . $this->_request->getActionName() );
+				$this->log->debug( 'Setting Referrer to : ' . $this->session->referrer );
 				// and forward the request to the login page
 				$this->_forward( 'login', 'user' );
 			}
