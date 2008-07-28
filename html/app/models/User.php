@@ -3,43 +3,44 @@
 class User extends Zend_Db_Table_Abstract {
 
 	protected $_name = "users";
-	protected $_primary = "id";	   
+	protected $_primary = "id";
+	protected $_rowClass = "UserRow";
 
 	# Primary does Auto Inc
 	protected $_sequence = true;
 
 	protected $_dependentTables = array('Recipe');
 
-	// Form elements for add/edit
-	public $_form_fields_config = array(
-		array( 'text', 'name', array(
-			'required' => true,
-			'label' => 'Username',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'alnum' ),
-				array( 'stringLength', false, array( 3, 255 ) ),
-			)
-		 ) ),
-		array( 'text', 'email', array(
-			'required' => true,
-			'label' => 'Email',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'EmailAddress' )
-			)
-		 ) ),
-		array( 'password', 'password', array(
-			'required' => true,
-			'label' => 'Password',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'alnum', true ),
-				array( 'stringLength', false, array( 6, 255 ) ),
-			)
-		 ) ),
+	public function getFormElements()
+	{
+		$elements = array();
+		$e = new Zend_Form_Element( 'text' );
+		$e->setRequired( true )
+		  ->setLabel( 'Username' )
+		  ->setName('name')
+		  ->addValidator( new Zend_Validate_NotEmpty(), true )
+		  ->addValidator( new Zend_Validate_Alnum(), true )
+		  ->addValidator( new Zend_Validate_StringLength( array(3,255) ) );
+		$elements[] = $e;
+
+		$e = new Zend_Form_Element( 'text' );
+		$e->setRequired( true )
+		  ->setLabel( 'Email' )
+		  ->setName( 'email' )
+		  ->addValidator( new Zend_Validate_NotEmpty(), true )
+		  ->addValidator( new Zend_Validate_EmailAddress(), true );
+		$elements[] = $e;
 		
-	);
+		$e = new Zend_Form_Element_Password('password');
+		$e->setRequired( true )
+		  ->setLabel( 'Password' )
+		  ->addValidator( new Zend_Validate_NotEmpty(), true )
+		  ->addValidator( new Zend_Validate_Alnum(), true )
+		  ->addValidator( new Zend_Validate_StringLength( array(3,255) ) );
+		$elements[] = $e;
+		
+		return $elements;
+	}
 
 	// May be able to delete this
 	function __construct( $prefetch = true )
