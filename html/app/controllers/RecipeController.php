@@ -37,9 +37,7 @@ class RecipeController extends DefaultController
 		$this->view->title = 'Create a recipe';
 		$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
 		
-		if (! $this->form->isValid($_POST)) {
-			$this->renderModelForm( '/recipe/create', 'Add' );
-		}
+		$this->renderModelForm( '/recipe/create', 'Add' );
 	}
 
 	/**
@@ -48,18 +46,40 @@ class RecipeController extends DefaultController
 
 	public function indexAction()
 	{
+
+		$items_per_page = 1;
+
 		$r = new Recipe();
 		$select = $r->select();
-
-		if ( $this->_getParam( 'user_id' ) > 0 )
+		$total_select = $this->db->select()->from( 'recipes', array( 'count' => 'COUNT(id)' ) );
+		
+		if ( $this->_getParam( 'user_id' ) > 0 ) {
 			$select->where( 'creator_id = ?', $this->_getParam( 'user_id' ) );
+			$total_select->where( 'creator_id = ?', $this->_getParam( 'user_id' ) );
+		}
 
-		$rowset = $r->fetchAll( $select );
+		if ( $this->_getParam( 'page' ) > 1 ) {
+			$offset = $items_per_page * ($this->_getParam( 'page' ) - 1);
+			$select->limit( $items_per_page, $offset );
+		} else {
+			$select->limit( $items_per_page );
+		}
+
+		$stmt = $this->db->query( $total_select );
+		$total_entries = $stmt->fetch();
+		
+		$this->view->pagination_config = array(
+			'total_items'    => $total_entries['count'],
+		    'items_per_page' => $items_per_page,
+			'style'          => 'digg'
+		);
 
 		$rat = new Rating();
 		$tag = new Tag();
 		
 		$output = array();
+		
+		$rowset = $r->fetchAll( $select );
 
 		foreach( $rowset as $row ) {
 			$temp = array();
@@ -84,6 +104,7 @@ class RecipeController extends DefaultController
 	public function createAction()
 	{
 		if (! $this->form->isValid($_POST)) {
+			$this->log->info( var_export( $this->form->getMessages(), true) );
 			$this->_redirect( '/recipe/new' );
 		}
 

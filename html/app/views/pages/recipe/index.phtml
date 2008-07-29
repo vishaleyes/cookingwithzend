@@ -7,3 +7,5 @@
 	<div><?php echo "This recipe is rated: " . $recipe['rating'] . " / " . Rating::MAX_RATING; ?></div>
 </div>
 <?php endforeach ?>
+
+<?php echo $this->pagination( $this->pagination_config )->create_links(); ?>
