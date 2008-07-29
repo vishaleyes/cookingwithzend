@@ -13,61 +13,10 @@ class Recipe extends Zend_Db_Table_Abstract {
 	
 	protected $_referenceMap = array(
 		'User' => array(
-			'columns'		=> 'creator_id',
+			'columns'       => 'creator_id',
 			'refTableClass' => 'User',
 			'refColumns'	=> 'id'
 		)
-	);
-
-	// Form elements for add/edit
-	// field name => array(type, required, validatorArray, filtersArray);
-	public $_form_fields_config = array(
-		array( 'text', 'name', array(
-			'required' => true,
-			'label' => 'Name',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'alnum', true, true ),
-				array( 'stringLength', false, array( 3, 255 ) ),
-			)
-		) ),
-		array( 'text', 'cooking_time', array(
-			'required' => true,
-			'label' => 'Cooking Time',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'int' )
-			)
-		) ),
-		array( 'text', 'preparation_time', array(
-			'required' => true,
-			'label' => 'Preparation Time',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'int' )
-			)
-		) ),
-		array( 'text', 'serves', array(
-			'required' => true,
-			'label' => 'Serves',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'int' ),
-				array( 'GreaterThan', true, array(0) ),
-			)
-		) ),
-		array( 'text', 'difficulty', array(
-			'required' => true,
-			'label' => 'Difficulty',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'int' ),
-				array( 'Between', true, array(1,10) )
-			)
-		) ),
-		array( 'checkbox', 'freezable', array(
-			'label' => 'Freezable'
-		) )
 	);
 
 	// May be able to delete this
@@ -80,6 +29,54 @@ class Recipe extends Zend_Db_Table_Abstract {
 		$this->log = Zend_Registry::get('log');
 		
 		$this->_setup();
+	}
+
+	public function getFormElements()
+	{
+		$elements = array();
+		$e = new Zend_Form_Element_Text( 'name' );
+		$e->setLabel( 'Name' )
+		  ->setRequired( true )
+		  ->addValidator( new Zend_Validate_NotEmpty(), true )
+		  ->addValidator( new Zend_Validate_StringLength( array( 3, 255 ) ) )
+		  ->addFilter( new Zend_Filter_HtmlEntities() );
+		$elements[] = $e;
+
+		$e = new Zend_Form_Element_Text( 'cooking_time' );
+		$e->setLabel( 'Cooking Time (in minutes)' )
+		  ->setRequired( true )
+		  ->addValidator( new Zend_Validate_NotEmpty(), true )
+		  ->addValidator( new Zend_Validate_Int() );
+		$elements[] = $e;
+
+		$e = new Zend_Form_Element_Text( 'preparation_time' );
+		$e->setLabel( 'Preparation Time (in minutes)' )
+		  ->setRequired( true )
+		  ->addValidator( new Zend_Validate_NotEmpty(), true )
+		  ->addValidator( new Zend_Validate_Int() );
+		$elements[] = $e;
+
+		$e = new Zend_Form_Element_Text( 'serves' );
+		$e->setLabel( 'Serves' )
+		  ->setRequired( true )
+		  ->addValidator( new Zend_Validate_NotEmpty(), true )
+		  ->addValidator( new Zend_Validate_Int() )
+		  ->addValidator( new Zend_Validate_GreaterThan(0) );
+		$elements[] = $e;
+
+		$e = new Zend_Form_Element_Text( 'difficulty' );
+		$e->setLabel( 'Difficulty' )
+		  ->setRequired( true )
+		  ->addValidator( new Zend_Validate_NotEmpty(), true )
+		  ->addValidator( new Zend_Validate_Int() )
+		  ->addValidator( new Zend_Validate_Between( 1,10 ) );
+		$elements[] = $e;
+		
+		$e = new Zend_Form_Element_Checkbox( 'freezable' );
+		$e->setLabel( 'Freezable' );
+		$elements[] = $e;
+
+		return $elements;
 	}
 
 	public function insert( $params )

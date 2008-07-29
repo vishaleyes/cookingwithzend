@@ -23,7 +23,7 @@ class RecipeController extends DefaultController
 		$r = new Recipe();
 		$t = new Tag();
 		$this->form = new Zend_Form;
-		$this->form->addElements( $r->_form_fields_config );
+		$this->form->addElements( $r->getFormElements() );
 		$this->form->addElements( $t->_form_fields_config );
 		parent::init();
 	}
