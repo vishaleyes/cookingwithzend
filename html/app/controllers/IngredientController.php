@@ -40,6 +40,8 @@ class IngredientController extends DefaultController
 		$form->addElement( 'submit', 'Add' );
 		$this->view->form = $form;
 		
+		$this->view->recipe_id = $this->recipe->id;
+		
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 	}
 	
