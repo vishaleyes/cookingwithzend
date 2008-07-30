@@ -20,12 +20,7 @@ class MethodController extends DefaultController
 	{
 		$m = new MethodItem();
 		$this->form = new Zend_Form;
-		$this->form->addElements( $m->_form_fields_config );
-		$text = $this->form->getElement( 'description' );
-		$stripTags = new Zend_Filter_StripTags();
-		$stripTags->setTagsAllowed( array( 'p', 'a', 'img', 'strong', 'b', 'i', 'em', 's', 'del' ) );
-		$stripTags->setAttributesAllowed( array( 'href', 'target', 'rel', 'name', 'src', 'width', 'height', 'alt', 'title' ) );
-		$text->addFilter( $stripTags );
+		$this->form->addElements( $m->getFormElements() );
 
 		parent::init();
 	}
@@ -78,14 +73,14 @@ class MethodController extends DefaultController
 		
 		$m = new MethodItem();
 		$rowset = $m->find( $this->_getParam( 'method_id' ) );
-		if (! $rowset)
-			$this->_redirect( '/' );
+		if ($rowset) {
+			$method = $rowset->current();
 
-		$method = $rowset->current();
-		$values = $method->toArray();
-		foreach ( $this->form->getElements() as $element )
-		{
-			$element->setValue( $values[$element->getName()] );
+			$values = $method->toArray();
+			foreach ( $this->form->getElements() as $element )
+			{
+				$element->setValue( $values[$element->getName()] );
+			}
 		}
 
 		$this->renderModelForm( '/method/update/recipe_id/' . $method->recipe_id . '/method_id/'.$method->id, 'Update' );

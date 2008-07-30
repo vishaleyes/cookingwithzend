@@ -47,7 +47,7 @@ class RecipeController extends DefaultController
 	public function indexAction()
 	{
 
-		$items_per_page = 1;
+		$items_per_page = ( $this->session->pagination['items_per_page'] ? $this->session->pagination['items_per_page'] : 5 );
 
 		$r = new Recipe();
 		$select = $r->select();
