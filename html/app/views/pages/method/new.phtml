@@ -1,1 +1,12 @@
+<script type="text/javascript" src="/public/js/jquery.FCKEditor.js" language="Javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(function(){ 
+		$('textarea.fck').fck( {
+			path: '/public/fck/',
+			toolbar: 'Cookery',
+			width: 700
+		});
+	});
+</script>
+
 <?php echo $this->form ?>
