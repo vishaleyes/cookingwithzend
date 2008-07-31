@@ -99,10 +99,14 @@ class Tag extends Zend_Db_Table_Abstract {
 			);
 			
 			$tg = new Tagging();
+			$this->log->info( 'Tag id ' . $tag->id );
 			try {
-				$tg->insert( $params );
+				$this->log->info( var_export( $params, true ) );
+				$rowid = $tg->insert( $params );
+
+				$this->log->info( 'Id: '.$rowid );
 			} catch (Exception $e) {
-				// Taggable insert fauils, dont really worry
+				// Taggable insert fails, dont really worry
 				$this->log->info( 'Inserting Taggable failed, params were '.var_export( $params, true ) );
 			}
 
