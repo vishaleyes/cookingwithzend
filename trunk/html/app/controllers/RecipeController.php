@@ -180,9 +180,34 @@ class RecipeController extends DefaultController
 		}
 	
 		$params = $this->form->getValues();
+		$tags = $params['tag_name'];
+		unset( $params['tag_name'] );
+
+
 		$r = new Recipe();
 		$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
-		$r->update( $params, $where );
+
+		$recipe = $this->recipe;
+
+		$this->db->beginTransaction();
+		try {
+			$r->update( $params, $where );
+
+			// Remove all the taggings
+			$this->db->delete( 'taggings', array( 
+				'taggable_id = ' . $this->recipe->id,
+				'taggable_type = ' . $this->db->quote( $this->recipe->getTableClass() )
+			));
+
+			// Insert new ones
+			$t = new Tag();
+			$t->splitTags( $tags, $this->recipe );
+			$this->db->commit();
+
+		} catch (Exception $e) {
+			$this->log->info( var_export( $e->getMessages(),true ) );
+			$this->db->rollBack();
+		}
 		
 		$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );	
 	}
