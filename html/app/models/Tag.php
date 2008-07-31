@@ -130,6 +130,24 @@ class Tag extends Zend_Db_Table_Abstract {
 
 	}
 
+	/**
+	 * This uses getTags and then compiles the tags as a string
+	 */
+
+	public function getTagsAsString( $row )
+	{
+		$names = array();
+		$rowset = $this->getTags( $row );
+		foreach( $rowset as $row )
+		{
+			$names[] = $row['name'];
+		}
+		$string = join( $this->DELIMETER, $names );
+
+		return $string;
+
+	}
+
 	public function delete( $row )
 	{
 		$where[] = $this->getAdapter()->quoteInto( 'taggable_type = ?', $row->getTableClass() );

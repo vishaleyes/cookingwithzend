@@ -162,6 +162,10 @@ class RecipeController extends DefaultController
 		{
 			$element->setValue( $values[$element->getName()] );
 		}
+		$t = new Tag();
+		$tags = $t->getTagsAsString( $this->recipe );
+		$this->form->getElement( 'tag_name' )->setValue( $tags );
+
 		$this->renderModelForm( '/recipe/update/recipe_id/'.$this->recipe->id, 'edit' );
 	}
 
