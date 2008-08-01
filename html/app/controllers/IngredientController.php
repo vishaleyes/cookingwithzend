@@ -95,6 +95,8 @@ class IngredientController extends DefaultController
 			$r->update( $params, $where );
 
 			$this->db->commit();
+			$url = "/ingredient/new/recipe_id/".$this->recipe->id;
+			$this->message->addMessage( 'Added Ingredient ' . sq_brackets( $values['ingredient_name'] ) . ' to ' . sq_brackets( $this->recipe->name ) . ' <a href="'.$url.'">Click Here</a> to add another' );
 			$this->log->info( 'Added Ingredient ' . sq_brackets( $values['ingredient_name'] ) . ' to RecipeID ' . sq_brackets( $this->recipe->id ) ); 
 			// All is well send us to the ingredient list for this recipe
 			$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
