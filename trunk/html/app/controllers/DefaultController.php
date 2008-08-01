@@ -135,14 +135,24 @@ abstract class DefaultController extends Zend_Controller_Action {
 	{
 		// figure out whats being requested
 		$action = $this->_request->getActionName();
+		
+		if ( $action != 'login' ) {
+			// Nope, keep hold of where we were asking for
+			$this->session->referrer = '/'.$this->_request->getControllerName().'/'.$this->_request->getActionName();
+			foreach( $this->_getAllParams() as $k => $v )
+			{
+				if ( $k == 'controller' || $k == 'action' )
+					continue;
+					
+				$this->session->referrer .= '/' . $k . '/' . $v;
+			}
+			// $this->log->debug( 'Setting Referrer to : ' . $this->session->referrer );
+		}
 
 		if ( ! in_array( $action, $exclusions ) )
 		{
 			// Were not excluded so are we logged in?
 			if ( ! $this->session->user ) {
-				// Nope, keep hold of where we were asking for
-				$this->session->referrer = '/'.$this->_request->getControllerName().'/'.$this->_request->getActionName();
-				$this->log->debug( 'Setting Referrer to : ' . $this->session->referrer );
 				// and forward the request to the login page
 				$this->_forward( 'login', 'user' );
 			}
