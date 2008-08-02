@@ -43,6 +43,8 @@ class Rating extends Zend_Db_Table_Abstract {
 		$params['user_id'] = Zend_Registry::get('session')->user['id'];
 		
 		return parent::insert($params);
+		
+
 	}
 	
 	/* Calculate rating for recipe */
