@@ -1,3 +1,12 @@
 * {
 	font-family: Helvetica, Arial;
 }
+
+pre.comments {
+	margin:10px;
+	
+}
+
+td.comments {
+	padding-bottom:20px;
+}
