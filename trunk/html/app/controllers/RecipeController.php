@@ -299,9 +299,16 @@ class RecipeController extends DefaultController
 										->setAttrib('id','submit-comment');
 										
 		$comment_textarea = new Zend_Form_Element_Textarea('comment_value');
+		$stripTags = new Zend_Filter_StripTags();
+		$stripTags->setTagsAllowed( array( 'p', 'a', 'img', 'strong', 'b', 'i', 'em', 's', 'del' ) );
+		$stripTags->setAttributesAllowed( array( 'href', 'target', 'rel', 'name', 'src', 'width', 'height', 'alt', 'title' ) );
+
 		$comment_textarea->setLabel('Your comment: ')
 						->setAttrib('cols','60')
 						->setAttrib('rows','5')
+						->setAttrib('class','fck')
+						->setRequired( true )
+						->addFilter($stripTags)
 						->addValidator( new Zend_Validate_NotEmpty(), true );
 		
 										
