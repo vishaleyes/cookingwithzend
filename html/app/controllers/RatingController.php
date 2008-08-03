@@ -43,8 +43,9 @@ class RatingController extends DefaultController
 			$r = new Rating();
 			$r->insert($params);
 			
-			/* Incease user's ratings count */
+			/* Incease ratings counters */
 			$this->db->update("users",array("ratings_count" => new Zend_Db_Expr("(ratings_count + 1)")),"id = " . $this->session->user['id']);
+			$this->db->update("recipes",array("ratings_count" => new Zend_Db_Expr("(ratings_count + 1)")),"id = " . $params['recipe_id']);
 			
 			/*	If successful go back to last recipe		*/
 			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
