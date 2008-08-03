@@ -27,5 +27,24 @@ class Comment extends Zend_Db_Table_Abstract {
 		
 		$this->_setup();
 	}
+	
+	public function insert($params)
+	{
+		$params['user_id'] = Zend_Registry::get( 'session')->user['id'];
+		$params['created'] = new Zend_Db_Expr('NOW()');
+		
+		return parent::insert($params);
+	}
+	
+	public function getComments($recipe_id)
+	{
+		$select = $this->db->select()
+				->from('comments')
+				->join('users','comments.user_id = users.id',array('name','email'))
+				->where('recipe_id = ?',$recipe_id)
+				->order('comments.created','ASC');
+				
+		return ($this->db->fetchAll($select));
+	}
 
 }

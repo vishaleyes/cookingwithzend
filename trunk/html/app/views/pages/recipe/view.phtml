@@ -60,3 +60,19 @@
 <?php if (($this->session->user != NULL)&&($r->checkIfUserHasRated($this->recipe['id']) != true) && ($this->session->user['id'] != $this->recipe['creator_id'])) { echo $this->submit_rating_form; } ?>
 
 <!-- End of rating -->
+
+<h3>Comments</h3>
+
+<!-- Comments -->
+
+<?php $c = new Comment(); $all_comments = $c->getComments($this->recipe['id']); ?>
+<table id="all-comments" name="all_comments" style="width:50%;" cellspacing="0" cellpadding="0">
+<?php for ($i = 0;$i < count($all_comments);$i++)
+{
+echo ("<tr><td>" . date("jS F Y G:H:s",strtotime($all_comments[$i]['created'])) . "</td><td>By: " . $all_comments[$i]['name'] . "</td></tr>");
+echo ("<tr><td colspan=\"2\" class=\"comments\"><pre class=\"comments\">" . $all_comments[$i]['comment'] . "</pre></td></tr>");
+} ?>
+</table>
+
+
+<?php if ($this->loggedIn()) { echo $this->submit_comment_form; } ?>
