@@ -102,5 +102,27 @@ class Rating extends Zend_Db_Table_Abstract {
 		}
 			
 	}
+	
+	public function getRatingForm()
+	{
+		/*	Submit rating form	*/
+		$submitRatingForm = new Zend_Form();
+		$submitRatingForm->setAction('/rating/add/recipe_id/' . $this->recipe->id)
+     									->setMethod('post')
+     									->setAttrib('name','submit_rating')
+     									->setAttrib('id','submit-rating')
+     									->addElement('select','rating_value');
+     	
+     	for ($i = 1;$i <= Rating::MAX_RATING;$i++)
+     	{
+     		$submitRatingForm->rating_value->addMultiOption($i,$i . " out of " . Rating::MAX_RATING);
+     	}
+     	
+     	$submitButton = new Zend_Form_Element_Submit('submit','submit_rating');
+     	$submitButton->setLabel('Submit your rating');
+     	$submitRatingForm->addElement($submitButton);
+		
+		return $submitRatingForm;
+	}
 
 }
