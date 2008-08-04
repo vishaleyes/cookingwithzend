@@ -272,52 +272,6 @@ class RecipeController extends DefaultController
 		$tags = $tag->getTags( $this->recipe );
 		$this->view->tags = $tags;
 
-		/*	Submit rating form	*/
-		/* Most of this should be held in the rating model :) - CL */
-		$this->view->submit_rating_form = new Zend_Form();
-		$this->view->submit_rating_form->setAction('/rating/add/recipe_id/' . $this->recipe->id)
-     									->setMethod('post')
-     									->setAttrib('name','submit_rating')
-     									->setAttrib('id','submit-rating')
-     									->addElement('select','rating_value');
-     	
-     	for ($i = 1;$i <= Rating::MAX_RATING;$i++)
-     	{
-     		$this->view->submit_rating_form->rating_value->addMultiOption($i,$i . " out of " . Rating::MAX_RATING);
-     	}
-     	
-     	$submit_button = new Zend_Form_Element_Submit('submit','submit_rating');
-     	$submit_button->setLabel('Submit your rating');
-     	$this->view->submit_rating_form->addElement($submit_button);
-
-		/* Submit comment form */
-		/* Most of this should be held in the comment model :) - CL */
-		$this->view->submit_comment_form = new Zend_Form();
-		$this->view->submit_comment_form->setAction('/comment/add/recipe_id/' . $this->recipe->id)
-										->setMethod('post')
-										->setAttrib('name','submit_comment')
-										->setAttrib('id','submit-comment');
-										
-		$comment_textarea = new Zend_Form_Element_Textarea('comment_value');
-		$stripTags = new Zend_Filter_StripTags();
-		$stripTags->setTagsAllowed( array( 'p', 'a', 'img', 'strong', 'b', 'i', 'em', 's', 'del' ) );
-		$stripTags->setAttributesAllowed( array( 'href', 'target', 'rel', 'name', 'src', 'width', 'height', 'alt', 'title' ) );
-
-		$comment_textarea->setLabel('Your comment: ')
-						->setAttrib('cols','60')
-						->setAttrib('rows','5')
-						->setAttrib('class','fck')
-						->setRequired( true )
-						->addFilter($stripTags)
-						->addValidator( new Zend_Validate_NotEmpty(), true );
-		
-		$this->view->submit_comment_form->addElement($comment_textarea);
-		
-		$submit_button = new Zend_Form_Element_Submit('submit_comment');
-		$submit_button->setLabel('Submit comment');
-		
-		$this->view->submit_comment_form->addElement($submit_button);
-	
 		$this->view->pageContent = $this->pagesFolder.'/recipe/view.phtml';
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 

@@ -46,5 +46,38 @@ class Comment extends Zend_Db_Table_Abstract {
 				
 		return ($this->db->fetchAll($select));
 	}
+	
+	public function getCommentForm()
+	{
+		/* Submit comment form */
+
+		$submitCommentForm = new Zend_Form();
+		$submitCommentForm->setAction('/comment/add/recipe_id/' . $this->recipe->id)
+										->setMethod('post')
+										->setAttrib('name','submit_comment')
+										->setAttrib('id','submit-comment');
+										
+		$commentTextarea = new Zend_Form_Element_Textarea('comment_value');
+		$stripTags = new Zend_Filter_StripTags();
+		$stripTags->setTagsAllowed( array( 'p', 'a', 'img', 'strong', 'b', 'i', 'em', 's', 'del' ) );
+		$stripTags->setAttributesAllowed( array( 'href', 'target', 'rel', 'name', 'src', 'width', 'height', 'alt', 'title' ) );
+
+		$commentTextarea->setLabel('Your comment: ')
+						->setAttrib('cols','60')
+						->setAttrib('rows','5')
+						->setAttrib('class','fck')
+						->setRequired( true )
+						->addFilter($stripTags)
+						->addValidator( new Zend_Validate_NotEmpty(), true );
+		
+		$submitCommentForm->addElement($commentTextarea);
+		
+		$submitButton = new Zend_Form_Element_Submit('submit_comment');
+		$submitButton->setLabel('Submit comment');
+		
+		$submitCommentForm->addElement($submitButton);
+		
+		return $submitCommentForm;
+	}
 
 }
