@@ -62,9 +62,6 @@ class CommentController extends DefaultController
 		
 	}
 	
-	
-	
-
 	/**
 	 * This happens after the page is dispatch
 	*/ 

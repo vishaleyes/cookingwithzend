@@ -61,8 +61,6 @@
 
 <!-- End of rating -->
 
-<h3>Comments</h3>
-
 <!-- Comments -->
 
 <!-- Define FCKeditor src -->
@@ -75,18 +73,24 @@
 			width: 700
 		});
 	});
+	function commentPage( page )
+	{
+		$.ajax({
+			type: "POST",
+			url: "/ajax/getcomments",
+			data: "page=" + page,
+			cache: false,
+			success: function(html){
+				$('#comments-holder').html( html );
+			}
+		});
+
+	}
 </script>
 
+<h3>Comments</h3>
+<a href='#' onclick="commentPage(1); return false;">Clickme</a>
+<div id="comments-holder">
+</div>
 
-
-<?php $c = new Comment(); $allComments = $c->getComments($this->recipe['id']); ?>
-<table id="all-comments" name="all_comments" style="width:50%;" cellspacing="0" cellpadding="0">
-<?php for ($i = 0;$i < count($allComments);$i++)
-{?>
-<tr><td> <?php echo date("jS F Y G:H:s",strtotime($allComments[$i]['created'])) ?> </td><td><?php echo "By: " . $allComments[$i]['name'] ?></td></tr>
-<tr><td colspan="2" class="comments"><pre class="comments"><?php echo $allComments[$i]['comment']; ?></pre></td></tr>
-<?php } ?>
-</table>
-
-
-<?php if ($this->loggedIn()) { echo $c->getCommentForm(); } ?>
+<?php /* if ($this->loggedIn()) { echo $c->getCommentForm(); } */ ?>

@@ -5,7 +5,7 @@ class AjaxController extends DefaultController
 
 	public function preDispatch()
 	{
-		$this->loggedIn();
+		$this->loggedIn( array( 'getcomments' ) );
 	}
 
 	/**
@@ -43,6 +43,23 @@ class AjaxController extends DefaultController
 		$rowset = $m->fetchAll( $select );
 		if ( $rowset )
 			echo json_encode( $rowset->toArray() );
+	}
+
+	public function getcommentsAction()
+	{
+		$items_per_page = ( $this->session->pagination['items_per_page'] ? $this->session->pagination['items_per_page'] : 1 );
+		
+		$c = new Comment();
+		$rowset = $c->getComments( 1, 2, 0 );
+		
+		$this->view->pagination_config = array(
+			'total_items'    => count( $rowset ),
+		    'items_per_page' => $items_per_page,
+			'style'          => 'digg_with_jquery'
+		);
+
+		echo $this->view->partial( $this->partialsFolder . '/comments.phtml', array( 'comments' => $rowset, 'pagination_config' => $this->view->pagination_config ) );
+		
 	}
 
 	/**
