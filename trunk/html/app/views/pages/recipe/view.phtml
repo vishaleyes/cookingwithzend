@@ -78,7 +78,7 @@
 		$.ajax({
 			type: "POST",
 			url: "/ajax/getcomments",
-			data: "page=" + page,
+			data: "page=" + page + "&recipe_id=" + <?php echo $this->recipe['id'] ?>,
 			cache: false,
 			success: function(html){
 				$('#comments-holder').html( html );
