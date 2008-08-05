@@ -1,0 +1,13 @@
+<!-- Comments -->
+<div>
+	<?php foreach ($this->comments as $comment): ?>
+	<div id="comment-date"><?php echo date("jS F Y G:H:s",strtotime($comment['created'])) ?></div>
+	<div id="comment-user"><?php echo $comment['name'] ?></div>
+	<div id="comment-content"><?php echo $comment['comment'] ?></div>
+	<?php endforeach ?>
+</div>
+
+<?php if ( $this->pagination( $this->pagination_config )->total_pages > 1 ): ?>
+<?php echo $this->pagination( $this->pagination_config )->create_links(); ?>
+<?php endif ?>
+<!-- End of Comments -->
