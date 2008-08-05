@@ -47,13 +47,16 @@ class AjaxController extends DefaultController
 
 	public function getcommentsAction()
 	{
-		$items_per_page = ( $this->session->pagination['items_per_page'] ? $this->session->pagination['items_per_page'] : 1 );
-		
+		$items_per_page = ( $this->session->pagination['items_per_page'] ? $this->session->pagination['items_per_page'] : 5 );
+
+		$page = $this->_getParam( 'page' );
+		$offset = $items_per_page * ($page - 1);
+
 		$c = new Comment();
-		$rowset = $c->getComments( 1, 2, 0 );
-		
+		$rowset = $c->getComments( $this->recipe->id, $items_per_page, $offset );
+
 		$this->view->pagination_config = array(
-			'total_items'    => count( $rowset ),
+			'total_items'    => $this->recipe->comments_count,
 		    'items_per_page' => $items_per_page,
 			'style'          => 'digg_with_jquery'
 		);
