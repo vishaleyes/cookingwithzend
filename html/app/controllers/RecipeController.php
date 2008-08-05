@@ -272,6 +272,9 @@ class RecipeController extends DefaultController
 		$tags = $tag->getTags( $this->recipe );
 		$this->view->tags = $tags;
 
+		$c = new Comment();
+		$this->view->comment_form = $c->getCommentForm();
+
 		$this->view->pageContent = $this->pagesFolder.'/recipe/view.phtml';
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 
