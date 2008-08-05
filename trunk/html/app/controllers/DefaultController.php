@@ -136,12 +136,15 @@ abstract class DefaultController extends Zend_Controller_Action {
 		// figure out whats being requested
 		$action = $this->_request->getActionName();
 		
+		// we dont want to put any of these keys in the referrer
+		$keys = array( 'controller', 'action', 'email', 'password', 'module', 'Login' );
+		
 		if ( $action != 'login' ) {
 			// Nope, keep hold of where we were asking for
 			$this->session->referrer = '/'.$this->_request->getControllerName().'/'.$this->_request->getActionName();
 			foreach( $this->_getAllParams() as $k => $v )
 			{
-				if ( $k == 'controller' || $k == 'action' )
+				if ( in_array( $k, $keys ) )
 					continue;
 					
 				$this->session->referrer .= '/' . $k . '/' . $v;
