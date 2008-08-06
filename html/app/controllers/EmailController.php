@@ -7,19 +7,20 @@
  *  
  *  @todo Alter database schema to add confirmed field?
  *  @todo Add add the confirmed/unconfirmed code
- *  @todo Change email body/headers
+ *  @todo Change from address email body/headers
  *  
  */
 
 class EmailController extends DefaultController  
 {
+	
+		const SALT = "aSalt";
+		const FROM_EMAIL = "From: Recipes Site Name <email@site.name>";
 
 	/**
 	 * This happens before the page is dispatched
 	 */
 	
-	const SALT = "aSalt";
-
 	public function preDispatch()
 	{
 		// People should be logged in to verify.
@@ -57,7 +58,7 @@ class EmailController extends DefaultController
 	$verificationCode = $this->getVerificationCode($email);
 		
 	$message = "<html><body>Thank you for registering with us.\n\nVerification code: <a href=\"http://" . $_SERVER["HTTP_HOST"] . "/email/confirm/code/$verificationCode\">$verificationCode</a></body></html>";
-	$headers .= 'From: Recipes <mail@punky.name>' . "\r\n";
+	$headers .= self::FROM_EMAIL . "\r\n";
 	
 	$headers .= "Message-ID: <".$now."root@".$_SERVER['SERVER_NAME'].">"."\r\n";
 	
@@ -68,7 +69,7 @@ class EmailController extends DefaultController
 	/*
 	 * Uncomment to enable emails.
 	 */ 
-	//mail($email,"Email verification",$message,$headers);
+	mail($email,"Email verification",$message,$headers);
 	
 	echo $this->_response->setBody($message);				
 	
