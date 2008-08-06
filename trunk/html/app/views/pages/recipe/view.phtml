@@ -5,27 +5,7 @@
 	<h3>Ingredients</h3>
 	<!-- Ingredient ID's are recipe_id-ingredient_id -->
 	<ul>
-	<?php foreach( $this->ingredients as $ingredient ): ?>
-		<li id="<?php echo "ingredient-" . $ingredient['recipe_id'] . "-" . $ingredient['ingredient_id'] ?>">
-			<ul>
-				<?php if ( $ingredient['quantity'] > 0 ): ?>
-				<li><?php echo $ingredient['quantity'] ?></li>
-				<?php endif ?>
-				<?php if ( $ingredient['amount'] > 0 ): ?>
-				<li><?php echo $ingredient['amount'] ?></li>
-				<?php endif ?>
-				<?php if ( !empty( $ingredient['measurement'] ) ): ?>
-				<li><?php echo $ingredient['measurement_abbr'] ?></li>
-				<?php endif ?>
-				<li><?php echo $ingredient['name'] ?>
-				<?php if ( $this->checkOwner($this->recipe['creator_id'] ) ): ?>
-				<a href="<?php echo "/ingredient/edit/recipe_id/" . $ingredient['recipe_id'] . "/ingredient_id/" . $ingredient['ingredient_id'] ?>">Edit</a> | 
-				<a href="<?php echo "/ingredient/delete/recipe_id/" . $ingredient['recipe_id'] . "/ingredient_id/" . $ingredient['ingredient_id'] ?>">Delete</a>
-				<?php endif ?>
-				</li>
-			</ul>
-		</li>
-	<?php endforeach ?>
+	<?php echo $this->partialLoop( $this->partialsFolder . '/ingredient.phtml', $this->ingredients ); ?>
 	</ul>
 	<p><a href="<?php echo "/ingredient/new/recipe_id/" . $this->recipe['id'] ?>">Add ingredients</a></p>
 <?php else: ?>
