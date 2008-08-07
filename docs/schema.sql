@@ -210,7 +210,8 @@ CREATE TABLE `users` (
   `comments_count` int(11) default '0',
   `ratings_count` int(11) default '0',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
