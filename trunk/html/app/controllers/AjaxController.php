@@ -45,6 +45,29 @@ class AjaxController extends DefaultController
 			echo json_encode( $rowset->toArray() );
 	}
 
+	/**
+	 * Check the username is not taken since usernames need to be unique
+	 */
+
+	public function userlookupAction()
+	{
+		$text = $this->_getParam('q');
+
+		$u = new User();
+		$select = $u->select()
+			->where( 'name = ?', $text );
+		
+		$row = $u->fetchRow( $select );
+		if ( $row )
+			echo json_encode( false );
+
+		echo json_encode( true );
+	}
+
+	/**
+	 * Ajax call to return the comments for the relevant recipe
+	 */
+
 	public function getcommentsAction()
 	{
 		$items_per_page = ( $this->session->pagination['items_per_page'] ? $this->session->pagination['items_per_page'] : 5 );
