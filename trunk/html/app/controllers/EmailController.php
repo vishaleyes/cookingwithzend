@@ -7,7 +7,7 @@
  *  
  *  @todo Alter database schema to add confirmed field?
  *  @todo Add add the confirmed/unconfirmed code
- *  @todo Change from address email body/headers
+ *  @todo Change from address email & body/headers
  *  
  */
 
@@ -69,7 +69,7 @@ class EmailController extends DefaultController
 	/*
 	 * Uncomment to enable emails.
 	 */ 
-	mail($email,"Email verification",$message,$headers);
+	//mail($email,"Email verification",$message,$headers);
 	
 	echo $this->_response->setBody($message);				
 	
