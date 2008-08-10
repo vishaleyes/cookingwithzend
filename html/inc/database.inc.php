@@ -2,9 +2,6 @@
 
 /**
  * Database file - registers database object
- * @author Marcin Dominas : marcin.dominas@bd-ntwk.com
- * @package Generic Framework
- * @see : http://digitalwiki.bd-ntwk.com/index.php?title=BD_Network_PHP_Application_Framework
  */
 
 $use_db = true;
