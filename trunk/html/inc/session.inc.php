@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Session file - Sets Up Session Handling so if "sessions" table exists and database is supported then session is stored in Database otherwise it's stored in the filesystem
- * @author Marcin Dominas : marcin.dominas@bd-ntwk.com
- * @package Generic Framework
- * @see : http://digitalwiki.bd-ntwk.com/index.php?title=BD_Network_PHP_Application_Framework
+ * Session file - Sets Up Session Handling so if "sessions" table exists and
+ * database is supported then session is stored in Database otherwise it's
+ * stored in the filesystem
  */
 
 require_once('ZendExtended/Zend_Session_SaveHandler_Db.php');

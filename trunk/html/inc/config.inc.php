@@ -2,9 +2,6 @@
 
 /**
  * Config file - figures out what stage the application is on.
- * @author Marcin Dominas : marcin.dominas@bd-ntwk.com
- * @package Generic Framework
- * @see : http://digitalwiki.bd-ntwk.com/index.php?title=BD_Network_PHP_Application_Framework
  */
 
 $environment = '';
@@ -46,6 +43,9 @@ if ( array_key_exists( 'HTTP_HOST', $_SERVER ) ) {
     }
 }
 
+// Add the routes
+//$router = $controller->getRouter();
+//$router->addConfig( $config, 'routes' );
 
 Zend_Registry::set('environment', $environment);
 Zend_Registry::set('config', $config);

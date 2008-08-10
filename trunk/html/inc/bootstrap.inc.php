@@ -82,22 +82,5 @@ Zend_Registry::set('request', $_REQUEST);
 $controller = Zend_Controller_Front::getInstance(); 
 $controller->setControllerDirectory('app/controllers');
 
-$router = $controller->getRouter();
-
-// Might move these into the config or a seperate Route include
-$route = new Zend_Controller_Router_Route(
-	':controller/:action/*'
-);
-$router->addRoute('default', $route);
-
-$route = new Zend_Controller_Router_Route(
-	'tag/:name/*3', 
-	array( 
-		'controller' => 'tag',
-		'action'     => 'index'
-	)
-);
-$router->addRoute('tag', $route);
-
 
 

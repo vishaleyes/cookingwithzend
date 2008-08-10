@@ -2,9 +2,6 @@
 
 /**
  * Log file - depending on configuration settings it figures out where to write logs
- * @author Chris Tomlinson : chris.tomlinson@bd-ntwk.com
- * @package Generic Framework
- * @see : http://digitalwiki.bd-ntwk.com/index.php?title=BD_Network_PHP_Application_Framework
  */
 
 $log = new Zend_Log();

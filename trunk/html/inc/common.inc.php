@@ -2,9 +2,6 @@
 
 /**
  * Common includes file
- * @author Marcin Dominas : marcin.dominas@bd-ntwk.com
- * @package Generic Framework
- * @see : http://digitalwiki.bd-ntwk.com/index.php?title=BD_Network_PHP_Application_Framework
  */
 
 require_once('bootstrap.inc.php');

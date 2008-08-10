@@ -1,36 +1,24 @@
 <?php
 
 /**
- * Surrounds a variable with backticks ``
- * @param string $var
+ * Surrounds a variable with the relevant string, this replaces backtick, 
+ * double_quote and single_quote functions, defaults to `
+ * @param mixed $var
+ * @param string $string
  * @return string
  */
 
-function backtick($var)
+function encase( $var, $string = '`')
 {
-    return '`'.$var.'`';
-}
-
-/**
- * Surrounds a variable with double quotes ""
- * @param string $var
- * @return string
- */
-
-function double_quote($var)
-{
-    return '"'.$var.'"';
-}
-
-/**
- * Surrounds a variable with single quotes ''
- * @param string $var
- * @return string
- */
-
-function single_quote($var)
-{
-    return "'".$var."'";
+	if ( is_array( $var ) ) {
+		for( $i = 0; $i < count( $var ); $i++ )
+		{
+			$var[$i] = $string.$var[$i].$string;
+		}
+		return join( ',', $var );
+	} else {
+		return $string.$var.$string;
+	}
 }
 
 /**
