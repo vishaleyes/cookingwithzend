@@ -17,10 +17,16 @@ class UserController extends DefaultController
 		parent::init();
 	}
 
+	public function confirmAction()
+	{
+		
+	}
+
 	public function newAction()
 	{
 		$this->view->title = 'Create an account';
 		$this->view->pageContent = $this->pagesFolder.'/user/new.phtml';
+		$this->form->removeElement( 'openid' );
 		$this->renderModelForm( '/user/create', 'Signup' );
 	}
 	
@@ -67,7 +73,7 @@ class UserController extends DefaultController
 	public function accountAction()
 	{
 		$u = new User();
-		$rowset = $u->find( $this->_getParam( 'user_id' ) );
+		$rowset = $u->find( $this->session->user['id'] );
 		if ( $rowset->current() )
 		{
 			$this->view->user = $rowset->current()->toArray();
@@ -78,8 +84,10 @@ class UserController extends DefaultController
 		
 		$this->form->getElement('name')->setValue( $this->view->user['name'] );
 		$this->form->getElement('email')->setValue( $this->view->user['email'] );
+		$this->form->getElement('openid')->setValue( $this->view->user['openid'] );
 		$this->form->setAction( '/user/update/user_id/' . $this->view->user['id'] );
 		$this->form->addElement( 'submit', 'Update' );
+		
 		
 		$this->view->title = 'Your account';
 		$this->view->form = $this->form;
@@ -109,67 +117,6 @@ class UserController extends DefaultController
 		
 		$this->db->update( 'users', $params );
 		$this->_redirect( '/user/account/user_id/'.$this->_getParam( 'user_id' ) );
-	}
-
-	/**
-	 * Log the user into the system
-	 */
-
-	public function loginAction() {
-
-		$this->view->pageContent = $this->pagesFolder.'/user/login.phtml';
-		$this->view->title = 'Login';
-		
-		// Dont need the username
-		$this->form->removeElement( 'name' );
-		$this->form->addElement( 'submit', 'Login' );
-
-		if (! $this->form->isValid($_POST)) {
-			$this->view->form = $this->form;
-			echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
-			exit;
-		}
-		
-		$values = $this->form->getValues();
-
-		$this->auth->setIdentity( $values['email'] )
-		           ->setCredential( $values['password'] );
-
-		$result = $this->auth->authenticate();
-		
-		if( $result->isValid() )
-		{
-			$u = new User();
-
-			if ( $user = $u->getByEmail( $values['email'] ) ) {
-				$user->last_login = new Zend_Db_Expr('NOW()');
-				$user->save();
-				$this->session->user = $user->toArray();
-			}
-			$this->log->info( 'User '.sq_brackets( $this->session->user['name'] ).' logged in' );
-		} else {
-			$this->log->info( 'User '.sq_brackets( $values['email'] ).' failed login'. var_export( $result, true ) );
-		}
-		
-		// Redirect to what we were asking for in the fist place or /
-		if ( ! empty( $this->session->referrer ) ) {
-			$redirect = $this->session->referrer;
-			$this->log->info( $redirect );
-			unset( $this->session->referrer );
-			$this->_redirect( $redirect );
-		} else {
-			$this->_redirect( '/' );
-		}
-	}
-	
-	/**
-	 * Logout, nuke the user session
-	 */
-	
-	public function logoutAction()
-	{
-		unset( $this->session->user );
-		$this->_redirect( '/' );
 	}
 	
 	public function postDispatch() {
