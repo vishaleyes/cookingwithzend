@@ -39,6 +39,13 @@ class User extends Zend_Db_Table_Abstract {
 		  ->addValidator( new Zend_Validate_StringLength( array(3,255) ) );
 		$elements[] = $e;
 		
+		$e = new Zend_Form_Element( 'text' );
+		$e->setRequired( true )
+		  ->setLabel( 'OpenID' )
+		  ->setName('openid');
+		
+		$elements[] = $e;
+		
 		return $elements;
 	}
 
@@ -67,6 +74,14 @@ class User extends Zend_Db_Table_Abstract {
 	{
 		$user = null;
 		$select = $this->select()->where( 'email = ?', $email );
+		$user = $this->fetchRow( $select );
+		return $user;
+	}
+	
+	public function getByOpenID( $id )
+	{
+		$user = null;
+		$select = $this->select()->where( 'openid = ?', $id );
 		$user = $this->fetchRow( $select );
 		return $user;
 	}
