@@ -26,7 +26,7 @@ class UserController extends DefaultController
 	{
 		$this->view->title = 'Create an account';
 		$this->view->pageContent = $this->pagesFolder.'/user/new.phtml';
-		$this->form->removeElement( 'openid' );
+		$this->form->removeElement( 'open_id' );
 		$this->renderModelForm( '/user/create', 'Signup' );
 	}
 	
