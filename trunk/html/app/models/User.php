@@ -18,6 +18,7 @@ class User extends Zend_Db_Table_Abstract {
 		$e->setRequired( true )
 		  ->setLabel( 'Username' )
 		  ->setName('name')
+		  ->setAttrib( 'id', 'user-name' )
 		  ->addValidator( new Zend_Validate_NotEmpty(), true )
 		  ->addValidator( new Zend_Validate_Alnum(), true )
 		  ->addValidator( new Zend_Validate_StringLength( array(3,255) ) );
@@ -38,11 +39,16 @@ class User extends Zend_Db_Table_Abstract {
 		  ->addValidator( new Zend_Validate_Alnum(), true )
 		  ->addValidator( new Zend_Validate_StringLength( array(3,255) ) );
 		$elements[] = $e;
+
+		$e = new Zend_Form_Element_Text( 'open_id' );
+		$e->setLabel( 'Open ID' );
+		$elements[] = $e;
 		
 		$e = new Zend_Form_Element( 'text' );
 		$e->setRequired( true )
 		  ->setLabel( 'OpenID' )
-		  ->setName('openid');
+		  ->setAttrib( 'id', 'open-id' )
+		  ->setName('open_id');
 		
 		$elements[] = $e;
 		
