@@ -10,6 +10,7 @@ At time of writing I am sure that not all the files adhere to these rules but I 
     * Use unix friendly line endings, if I find ^M's everywhere I'll brain you :)
     * Indents are tabs not spaces
     * Indents are set to 4 (for my editor)
+    * Never EVER store a whole object in a session, just don't, trust me :)
     * Use standard PHPdoc formatting for commenting functions e.g.
 
 {{{
