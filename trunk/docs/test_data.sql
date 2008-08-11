@@ -49,7 +49,7 @@ UNLOCK TABLES;
 
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 LOCK TABLES `users` WRITE;
-INSERT INTO `users` VALUES (1,'5b8abbfc38cda495','Catharsis','cookery@catharsis.co.uk','2008-07-17 09:52:36','2008-07-17 09:52:36','2008-07-17 09:52:36',0,0,0);
+INSERT INTO `users` VALUES (1,'5b8abbfc38cda495','Catharsis','cookery@catharsis.co.uk','http://www.flickr.com/photos/catharsisjelly/','2008-07-17 09:52:36','2008-07-17 09:52:36','2008-07-17 09:52:36',1,0,0,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
