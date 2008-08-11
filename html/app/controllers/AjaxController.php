@@ -5,7 +5,7 @@ class AjaxController extends DefaultController
 
 	public function preDispatch()
 	{
-		$this->loggedIn( array( 'getcomments' ) );
+		$this->loggedIn( array( 'getcomments', 'userlookup' ) );
 	}
 
 	/**
@@ -58,10 +58,12 @@ class AjaxController extends DefaultController
 			->where( 'name = ?', $text );
 		
 		$row = $u->fetchRow( $select );
-		if ( $row )
-			echo json_encode( false );
+		if ( $row ) {
+			echo json_encode( 'is not free' );
+			exit;
+		}
 
-		echo json_encode( true );
+		echo json_encode( 'is free' );
 	}
 
 	/**

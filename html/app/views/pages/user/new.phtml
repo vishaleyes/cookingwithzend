@@ -1,1 +1,20 @@
 <?php echo $this->form; ?>
+<a href="#" onclick="checkUsername();return false;">Check Username</a>
+<div id="username-result">
+</div>
+
+<script type="text/javascript" language="Javascript" charset="utf-8">
+	function checkUsername()
+	{
+		$.ajax({
+			type: "POST",
+			url: "/ajax/userlookup",
+			data: "q=" + $('#user-name').val(),
+			cache: false,
+			success: function(html){
+				$('#username-result').html( html );
+			}
+		});
+
+	}
+</script>
