@@ -39,10 +39,15 @@ class Comment extends Zend_Db_Table_Abstract {
 	public function getComments($recipe_id, $per_page = null, $offset = null)
 	{
 		$select = $this->db->select()
-				->from('comments')
-				->join('users','comments.user_id = users.id',array('name','email'))
-				->where('recipe_id = ?',$recipe_id)
-				->order('comments.created','ASC');
+				->from( array( 'c' => 'comments') )
+				->join( 'users', 'c.user_id = users.id', array('name','email') )
+				->joinLeft( 
+					array( 'r' => 'ratings' ), 
+					'c.recipe_id = r.recipe_id AND c.user_id = r.user_id',
+					'value'
+				)
+				->where('c.recipe_id = ?',$recipe_id)
+				->order('c.created','ASC');
 
 		if ( isset( $per_page ) ) {
 			$offset = ( isset( $offset ) ? $offset : 0 );

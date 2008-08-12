@@ -35,14 +35,28 @@
 	
 <!-- Rating -->
 <h3>Rating</h3>
-<div><?php $r = new Rating();  if ($r->isRated($this->recipe['id'])) { echo ("This recipe is rated: " . $r->getRating($this->recipe['id']) . " / " . Rating::MAX_RATING); } else { echo ("This recipe is unrated."); } ?></div>
+<div>
+<?php if ( $this->rating > 0 ): ?> 
+<?php echo "This recipe is rated: " . $this->rating . " / " . Rating::MAX_RATING ?>)
+<?php else: ?>
+This recipe is unrated
+<?php endif ?>
+</div>
 
-<?php if (($this->loggedIn())&&(! $r->checkIfUserHasRated($this->recipe['id'])) && (! $this->checkOwner($this->recipe['creator_id']))) { echo $r->getRatingForm(); }  ?>
+<?php if ($this->loggedIn()): ?>
+	<?php if ((! $r->checkIfUserHasRated($this->recipe['id'])) && (! $this->checkOwner($this->recipe['creator_id']))): ?>
+		<?php echo $r->getRatingForm(); ?>
+	<?php endif ?>
+<?php else: ?>
+	<p><a href="/login/login">Login</a> to rate this recipe</p>
+<?php endif ?>
+
 
 <!-- End of rating -->
 
 <!-- Comments -->
 
+<?php if ( $this->recipe['comments_count'] > 0 ): ?>
 <!-- Define FCKeditor src -->
 <script type="text/javascript" src="/public/js/jquery.FCKEditor.js" language="Javascript" charset="utf-8"></script>
 <script type="text/javascript">
@@ -62,6 +76,7 @@
 			cache: false,
 			success: function(html){
 				$('#comments-holder').html( html );
+				$('#comments-href').hide();
 			}
 		});
 
@@ -69,8 +84,15 @@
 </script>
 
 <h3>Comments</h3>
-<a href='#' onclick="commentPage(1); return false;">Clickme</a>
+<a id="comments-href" href="#" onclick="commentPage(1); return false;">Clickme</a>
 <div id="comments-holder">
 </div>
+<?php else: ?>
+<h3>No Comments</h3>
+<?php endif ?>
 
-<?php if ($this->loggedIn()) { echo $this->comment_form; } ?>
+<?php if ($this->loggedIn()): ?>
+<?php echo $this->comment_form; ?>
+<?php else: ?>
+<p><a href="/login/login">Login</a> to leave a comment</p>
+<?php endif ?>
