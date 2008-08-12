@@ -7,8 +7,9 @@ class PdfController extends DefaultController
 		
 		// Create new PDF document.
 		$pdf = new Zend_Pdf();
-		$pdf->pages[] = new Zend_Pdf_Page(1754,2480);
-		$pdf->pages[] = new Zend_Pdf_Page(1754,2480);
+		// 421 x 596 = A5 Landscape in pixels @ 72dpi
+		$pdf->pages[] = new Zend_Pdf_Page(596, 421);
+		$pdf->pages[] = new Zend_Pdf_Page(596, 421);
 		
 		$front = $pdf->pages[0];
 		$back = $pdf->pages[1];
@@ -18,20 +19,25 @@ class PdfController extends DefaultController
 
 		// Apply font
 		$front->setFont($font, 18);
-		$y = 300;
-		$front->drawText( $this->recipe->name, 10, $y );
+
+		// Start at the top
+		$y = 590;
+		// With a left Margin of 10
+		$x = 10;
+
+		$front->drawText( $this->recipe->name, $x, $y );
 		
 		$y = $y - 30;
 		$front->setFont($font, 12);
-		$front->drawText( 'Difficulty: ' . $this->recipe->difficulty, 10, $y );
+		$front->drawText( 'Difficulty: ' . $this->recipe->difficulty, $x, $y );
 		$y = $y - 15;
-		$front->drawText( 'Preparation Time: ' . $this->recipe->preparation_time, 10, $y );
+		$front->drawText( 'Preparation Time: ' . $this->recipe->preparation_time, $x, $y );
 		$y = $y - 15;
-		$front->drawText( 'Cooking Time: ' . $this->recipe->preparation_time, 10, $y );
+		$front->drawText( 'Cooking Time: ' . $this->recipe->preparation_time, $x, $y );
 		$y = $y - 15;
-		$front->drawText( 'Serves: ' . $this->recipe->serves, 10, $y );
+		$front->drawText( 'Serves: ' . $this->recipe->serves, $x, $y );
 		$y = $y - 15;
-		$front->drawText( 'Freezable: ' . $this->recipe->freezable, 10, $y );
+		$front->drawText( 'Freezable: ' . $this->recipe->freezable, $x, $y );
 		
 		$ingredients = $this->recipe->findRecipeIngredient();
 		$y = $y - 15;
@@ -40,7 +46,7 @@ class PdfController extends DefaultController
 			$y = $y - 15;
 			$text = '';
 			if ( $ingredient->quantity > 0 )
-				$text .= $ingredient->quantity . ' x ';
+				$text .= $ingredient->quantity;
 
 			if ( $ingredient->amount > 0 )
 				$text .= $ingredient->amount . ' ';
@@ -49,7 +55,7 @@ class PdfController extends DefaultController
 				$text .= $ingredient->measurement_abbr . ' ';
 
 			$text .= $ingredient->name;
-			$front->drawText( $text, 10, $y );
+			$front->drawText( $text, $x, $y );
 		}
 		
 		$back->setFont($font, 18);
