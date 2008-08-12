@@ -6,6 +6,19 @@
 
 	<script type="text/javascript" charset="utf-8" src="http://jqueryjs.googlecode.com/files/jquery-1.2.6.pack.js"></script>
 	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.autocomplete.pack.js"></script>
+	<?php if ( $this->textfield === true ): ?>
+	<script type="text/javascript" src="/public/js/jquery.FCKEditor.js" language="Javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){ 
+			$('textarea.fck').fck( {
+				path: '/public/fck/',
+				toolbar: 'Cookery',
+				width: 700
+			});
+		});
+	</script>
+
+	<?php endif ?>
 
 	<link rel="stylesheet" type="text/css" href="/public/css/jquery.autocomplete.css" />
 	<link rel="stylesheet" type="text/css" href="/public/css/recipe.css" />

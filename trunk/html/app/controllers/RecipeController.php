@@ -254,6 +254,7 @@ class RecipeController extends DefaultController
 		// Fetch things
 		$this->view->ingredients = array();
 		$this->view->title       = $this->recipe->name;
+		$this->view->textfield = true;
 		$ingredients = $this->recipe->findRecipeIngredient();
 
 		if ( $ingredients )
