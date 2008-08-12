@@ -57,16 +57,7 @@ This recipe is unrated
 <!-- Comments -->
 
 <?php if ( $this->recipe['comments_count'] > 0 ): ?>
-<!-- Define FCKeditor src -->
-<script type="text/javascript" src="/public/js/jquery.FCKEditor.js" language="Javascript" charset="utf-8"></script>
 <script type="text/javascript">
-	$(function(){ 
-		$('textarea.fck').fck( {
-			path: '/public/fck/',
-			toolbar: 'Cookery',
-			width: 700
-		});
-	});
 	function commentPage( page )
 	{
 		$.ajax({

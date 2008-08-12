@@ -45,6 +45,8 @@ class MethodController extends DefaultController
 		$r = $this->recipe->getTable();
 		
 		$this->db->beginTransaction();
+		// Switch textfield JS on
+		$this->view->textfield = true;
 		
 		// Put the insert into a transaction
 		try {
@@ -70,6 +72,9 @@ class MethodController extends DefaultController
 	{
 		$this->view->title = 'Edit the instructions';
 		$this->view->pageContent = $this->pagesFolder.'/method/new.phtml';
+		
+		// Switch textfield JS on
+		$this->view->textfield = true;
 		
 		$m = new MethodItem();
 		$rowset = $m->find( $this->_getParam( 'method_id' ) );
