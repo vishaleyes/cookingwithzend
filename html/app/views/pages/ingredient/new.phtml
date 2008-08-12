@@ -37,7 +37,9 @@ $().ready(function(){
 </ul>
 
 <ul>
+	<?php if ( $this->ingredients ): ?>
 	<?php echo $this->partialLoop( $this->partialsFolder . '/ingredient.phtml', $this->ingredients ); ?>
+	<?php endif ?>
 </ul>
 
 <?php echo $this->form ?>
