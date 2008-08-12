@@ -28,8 +28,6 @@ class RatingController extends DefaultController
 		/*	Poss remove - check messages to user with Chris
 		$this->view->rating_message = "No rating or recipe specified"; */
 		
-		
-		
 		/* Get request variables */	
 
 		$params = array(
@@ -54,7 +52,8 @@ class RatingController extends DefaultController
 			
 		} catch(Exception $e) {
 			/*	Broken constraints = throws exception. Display error and return to recipe		*/
-			$this->session->error = 'You have already rated this recipe.';
+			$this->message->setNamespace( 'error' );
+			$this->message->addMessage( 'You have already rated this recipe.' );
 			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
 		}
 		
