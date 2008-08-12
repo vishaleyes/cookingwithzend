@@ -34,6 +34,7 @@ class LoginController extends DefaultController
 		
 		// Dont need the username
 		$this->form->removeElement( 'name' );
+		$this->form->removeElement( 'open_id' );
 		$this->form->addElement( 'submit', 'Login' );
 
 		if ( ! $this->form->isValid($_POST) ) {
@@ -51,8 +52,8 @@ class LoginController extends DefaultController
 		
 		if( $result->isValid() )
 		{
-
-			$user = User::getByEmail( $values['email'] );
+			$u = new User();
+			$user = $u->getByEmail( $values['email'] );
 			
 			if ( ! $user->confirmed )
 			{
