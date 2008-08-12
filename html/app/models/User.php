@@ -41,14 +41,9 @@ class User extends Zend_Db_Table_Abstract {
 		$elements[] = $e;
 
 		$e = new Zend_Form_Element_Text( 'open_id' );
-		$e->setLabel( 'Open ID' );
-		$elements[] = $e;
-		
-		$e = new Zend_Form_Element( 'text' );
 		$e->setRequired( true )
 		  ->setLabel( 'OpenID' )
-		  ->setAttrib( 'id', 'open-id' )
-		  ->setName('open_id');
+		  ->setAttrib( 'id', 'open-id' );
 		
 		$elements[] = $e;
 		

@@ -4,6 +4,11 @@
 	<div id="comment-date"><?php echo date("jS F Y G:H:s",strtotime($comment['created'])) ?></div>
 	<div id="comment-user"><?php echo $comment['name'] ?></div>
 	<div id="comment-content"><?php echo $comment['comment'] ?></div>
+	<?php if ( isset( $comment['value'] ) ): ?>
+	<p>User Rated this recipe as <?php echo $comment['value'] . '/' . Rating::MAX_RATING ?></p>
+	<?php else: ?>
+	<p>User has not rated this</p>
+	<?php endif ?>
 	<?php endforeach ?>
 </div>
 
