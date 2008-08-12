@@ -3,7 +3,8 @@
 class Comment extends Zend_Db_Table_Abstract {
 	
 	protected $_name = "comments";
-	protected $_primary = "id";	   
+	protected $_primary = "id";
+	protected $_rowClass = 'CommentRow';
 
 	# Primary does Auto Inc
 	protected $_sequence = true;
@@ -13,7 +14,13 @@ class Comment extends Zend_Db_Table_Abstract {
 			'columns'		=> 'user_id',
 			'refTableClass' => 'User',
 			'refColumns'	=> 'id'
+		),
+		'Recipe' => array(
+			'columns'		=> 'recipe_id',
+			'refTableClass' => 'Recipe',
+			'refColumns'	=> 'id'
 		)
+			
 	);
 
 	// May be able to delete this
@@ -41,6 +48,7 @@ class Comment extends Zend_Db_Table_Abstract {
 		$select = $this->db->select()
 				->from( array( 'c' => 'comments') )
 				->join( 'users', 'c.user_id = users.id', array('name','email') )
+				->join( 'recipes', 'recipes.id = c.recipe_id', 'creator_id' )
 				->joinLeft( 
 					array( 'r' => 'ratings' ), 
 					'c.recipe_id = r.recipe_id AND c.user_id = r.user_id',

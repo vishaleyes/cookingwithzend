@@ -44,7 +44,7 @@ This recipe is unrated
 </div>
 
 <?php if ($this->loggedIn()): ?>
-	<?php if ((! $r->checkIfUserHasRated($this->recipe['id'])) && (! $this->checkOwner($this->recipe['creator_id']))): ?>
+<?php $r = new Rating(); if ((! $r->checkIfUserHasRated($this->recipe['id'])) && (! $this->checkOwner($this->recipe['creator_id']))): ?>
 		<?php echo $r->getRatingForm(); ?>
 	<?php endif ?>
 <?php else: ?>
