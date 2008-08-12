@@ -16,7 +16,7 @@ class CommentController extends DefaultController
 	public function preDispatch() {
 		
 		// Held in DefaultController. Params are actions allowed as guest.
-		$this->loggedIn( array( ) );
+		$this->loggedIn();
 
 	}
 
@@ -60,6 +60,18 @@ class CommentController extends DefaultController
 		}
 		
 		
+	}
+
+	public function deleteAction()
+	{
+		$id = $this->_getParam( 'id' );
+		$c = new Comment();
+		$rowset = $c->find( $id );
+		if ($rowset)
+			$rowset->current()->delete();
+
+		// go back :)
+		$this->_redirect( $_SERVER['HTTP_REFERER'] );
 	}
 	
 	/**
