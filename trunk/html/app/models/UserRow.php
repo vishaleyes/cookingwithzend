@@ -20,4 +20,27 @@ class UserRow extends Zend_Db_Table_Row_Abstract {
 		$table->update( $params, $where );
 	}
 
+	public function checkStatus()
+	{
+		$message = false;
+
+		switch ($this->status)
+		{
+			case 'pending':
+				$message = 'Your account has not been confirmed, please click the e-mail you received from us';
+				break;
+			case 'banned':
+				$message = 'Your account has been banned, you need to get in touch with us to find out why';
+				break;
+			case 'suspended':
+				$message = 'Your account has been suspended, you should of been mailed the reason';
+				break;
+			case 'admin':
+			case 'active':
+				break;
+		}
+
+		return $message;
+	}
+
 }
