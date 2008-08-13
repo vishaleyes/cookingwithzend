@@ -55,10 +55,11 @@ class LoginController extends DefaultController
 			$u = new User();
 			$user = $u->getByEmail( $values['email'] );
 			
-			if ( ! $user->confirmed )
+			if ( $msg = $user->checkStatus() )
 			{
 				$this->message->setNamespace( 'error' );
-				$this->message->addMessage( 'You have not confirmed your account, did you click the link in the email?' );
+				$this->message->addMessage( $msg );
+				$this->message->resetNamespace();
 				$this->redirect();
 			}
 			
