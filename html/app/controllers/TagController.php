@@ -9,7 +9,7 @@ class TagController extends DefaultController
 		$this->loggedIn( array( 'index' ) );
 	}
 
-	public function indexAction()
+	public function tagsAction()
 	{
 		$tags = explode( ' ', $this->_getParam( 'name' ) );
 		$t = new Tag();
