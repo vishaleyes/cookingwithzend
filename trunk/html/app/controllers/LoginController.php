@@ -55,8 +55,11 @@ class LoginController extends DefaultController
 			$u = new User();
 			$user = $u->getByEmail( $values['email'] );
 			
-			if ( $msg = $user->checkStatus() )
+			$msg = $user->checkStatus();
+			
+			if ( $msg != false )
 			{
+				$this->log->info('User '.sq_brackets( $this->session->user['name'] ).' tried to login but got ' . sq_brackets( $msg ) );
 				$this->message->setNamespace( 'error' );
 				$this->message->addMessage( $msg );
 				$this->message->resetNamespace();

@@ -1,3 +1,7 @@
+<?php if ( $this->loggedIn() ): ?>
+	<a href="/recipe/new">Add a recipe</a>
+<?php endif ?>
+
 <?php foreach( $this->recipes as $recipe ): ?>
 <div style="border: dashed 2px black;margin-bottom: 10px;">
 	<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $recipe ) ?>
@@ -7,6 +11,7 @@
 	<div><?php echo "This recipe is rated: " . $recipe['rating'] . " / " . Rating::MAX_RATING; ?></div>
 </div>
 <?php endforeach ?>
+
 <?php if ( $this->pagination( $this->pagination_config )->total_pages > 1 ): ?>
 <?php echo $this->pagination( $this->pagination_config )->create_links(); ?>
 <?php endif ?>

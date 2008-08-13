@@ -6,7 +6,7 @@ class UserController extends DefaultController
 	public function preDispatch()
 	{
 		// Held in DefaultController
-		$this->loggedIn( array( 'login', 'new', 'create', 'logout' ) );
+		$this->loggedIn( array( 'new', 'create' ) );
 	}
 	
 	public function init()
@@ -39,8 +39,10 @@ class UserController extends DefaultController
 	{
 		$this->view->title = 'Create an account';
 		$this->view->pageContent = $this->pagesFolder.'/user/new.phtml';
+		$this->form->removeElement( 'open_id' );
 		
 		if (! $this->form->isValid($_POST)) {
+			$this->log->debug( 'Form failed '. var_export( $this->form->getMessages(), true ) );
 			$this->_redirect( '/user/new' );
 		}
 
@@ -54,13 +56,14 @@ class UserController extends DefaultController
 		try {
 			$u = new User();
 			$u->insert( $params );
-			if ( $user = $u->getByEmail( $params['email'] ) )
-				$this->session->user = $user->toArray();
-			$this->log->info( 'Inserted user ' . $user->name . ' user id : ' . $user->id );
+			$this->message->addMessage( 'Please check your email for a confirmation link' );
+			$this->log->debug( 'Inserted user ' . $values['email'] );
 			$this->_redirect( '/' );
-			exit;
 		} catch(Exception $e) {
-			$this->session->error = 'Email address already exists';
+			$this->message->setNamespace( 'error' );
+			$this->message->addMessage( $e->getMessage() );
+			$this->message->resetNamespace();
+			$this->log->debug( 'Failed to insert user ' .$values['email'] . ' : ' . var_export( $e, true ) );
 			$this->_redirect( '/user/new' );
 		}
 
@@ -116,6 +119,7 @@ class UserController extends DefaultController
 		);
 		
 		$this->db->update( 'users', $params );
+		$this->message->addMessage( 'Details updated' );
 		$this->_redirect( '/user/account/user_id/'.$this->_getParam( 'user_id' ) );
 	}
 	

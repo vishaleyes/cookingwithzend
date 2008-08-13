@@ -3,8 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
+	
+	<?php if ($this->config->online == true): ?>
 	<script type="text/javascript" charset="utf-8" src="http://jqueryjs.googlecode.com/files/jquery-1.2.6.pack.js"></script>
+	<?php else: ?>
+	<script type="text/javascript" charset="utf-8" src="/public/js/jquery-1.2.6.pack.js"></script>
+	<?php endif ?>
+
 	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.autocomplete.pack.js"></script>
 	<?php if ( $this->textfield === true ): ?>
 	<script type="text/javascript" src="/public/js/jquery.FCKEditor.js" language="Javascript" charset="utf-8"></script>
@@ -13,7 +18,8 @@
 			$('textarea.fck').fck( {
 				path: '/public/fck/',
 				toolbar: 'Cookery',
-				width: 700
+				width: 700,
+				height: 200
 			});
 		});
 	</script>
