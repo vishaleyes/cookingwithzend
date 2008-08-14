@@ -269,6 +269,12 @@ class RecipeController extends DefaultController
 		if ( $methods )
 			$this->view->methods = $methods->toArray();
 
+		if ( $this->recipe->ratings_count > 0 ) {
+			$r = new Rating();
+			$this->view->rating = $r->getRating( $this->recipe->id );
+			$this->view->rating_form = $r->getRatingForm();
+		}
+
 		$tag = new Tag();
 		$tags = $tag->getTags( $this->recipe );
 		$this->view->tags = $tags;

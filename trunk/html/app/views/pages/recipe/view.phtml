@@ -36,16 +36,17 @@
 <!-- Rating -->
 <h3>Rating</h3>
 <div>
-<?php if ( $this->rating > 0 ): ?> 
-<?php echo "This recipe is rated: " . $this->rating . " / " . Rating::MAX_RATING ?>)
+<?php if ( $this->rating ): 
+?>
+<?php echo "This recipe is rated: " . $this->rating . " / " . Rating::MAX_RATING ?>
 <?php else: ?>
 This recipe is unrated
 <?php endif ?>
 </div>
 
 <?php if ($this->loggedIn()): ?>
-<?php $r = new Rating(); if ((! $r->checkIfUserHasRated($this->recipe['id'])) && (! $this->checkOwner($this->recipe['creator_id']))): ?>
-		<?php echo $r->getRatingForm(); ?>
+<?php if ((! $this->checkUserRated( $this->recipe['id'] )) && (! $this->checkOwner($this->recipe['creator_id']))): ?>
+		<?php echo $this->rating_form; ?>
 	<?php endif ?>
 <?php else: ?>
 	<p><a href="/login/login">Login</a> to rate this recipe</p>

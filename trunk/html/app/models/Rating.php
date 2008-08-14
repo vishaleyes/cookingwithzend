@@ -52,8 +52,6 @@ class Rating extends Zend_Db_Table_Abstract {
 	public function getRating($recipe_id)
 	{
 		
-		
-		
 		/*	Get average rating for recipe_ip	*/
 		$select = $this->db->select()->from('ratings',array("rating" => "AVG(value)"))->where('recipe_id = ?',$recipe_id);
 		$avg = $this->db->fetchOne($select);
@@ -63,28 +61,11 @@ class Rating extends Zend_Db_Table_Abstract {
 		
 	}
 	
-	/* Check if current user has rated a recipe already */
-	
-	public function checkIfUserHasRated($recipe_id)
-	{
-		// Multiple WHERE clauses = AND, use ?'s and pass the parameter as a variable this way Zend quotes it for you - CL
-		$select = $this->db->select()
-		  ->from('ratings',array("numberOfRatings" => "COUNT(*)"))
-		  ->where("recipe_id = ?", $recipe_id)
-		  ->where("user_id = ?", Zend_Registry::get('session')->user['id'] );
-
-		if ($this->db->fetchOne($select) > 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-		
-	}
-	
-	/* Check if anyone has rated a recipe already */
+	/**
+	 * Check if anyone has rated a recipe already 
+	 * 
+     * @depreciated we can use recipe['ratings_count']
+	 */
 	
 	public function isRated($recipe_id)
 	{
