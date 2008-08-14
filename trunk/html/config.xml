@@ -2,6 +2,8 @@
 <data>
 	<production>
 		<hosts></hosts>
+		<!-- Switch this to false if you want to work away from the internet -->
+		<online>true</online>
 		<database>
 			<type>pdo_mysql</type>
 			<host>localhost</host>
@@ -24,6 +26,15 @@
 		<logs>
 			<application></application>
 		</logs>
+		<routes>
+			<index>
+				<route>/</route>
+				<defaults>
+					<controller>recipe</controller>
+					<action>index</action>
+				</defaults>
+			</index>
+		</routes>
 		<locale>en_UK</locale>			
 	</production>
 	
