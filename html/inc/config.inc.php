@@ -44,8 +44,8 @@ if ( array_key_exists( 'HTTP_HOST', $_SERVER ) ) {
 }
 
 // Add the routes
-//$router = $controller->getRouter();
-//$router->addConfig( $config, 'routes' );
+$router = $controller->getRouter();
+$router->addConfig( $config, 'routes' );
 
 Zend_Registry::set('environment', $environment);
 Zend_Registry::set('config', $config);

@@ -106,6 +106,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->view->setScriptPath('app/views');
 		$this->view->addHelperPath('notech/view/helper', 'Notech_View_Helper');
 
+		$this->view->online = $this->config->online;
 		$this->view->release_no = $this->release_no;
 		$this->view->version = $this->environment;
 		$this->view->session = $this->session;
