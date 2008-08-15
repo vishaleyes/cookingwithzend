@@ -6,7 +6,7 @@ class UserController extends DefaultController
 	public function preDispatch()
 	{
 		// Held in DefaultController
-		$this->loggedIn( array( 'new', 'create' ) );
+		$this->loggedIn( array( 'new', 'create', 'confirm' ) );
 	}
 	
 	public function init()
@@ -17,10 +17,6 @@ class UserController extends DefaultController
 		parent::init();
 	}
 
-	public function confirmAction()
-	{
-		
-	}
 
 	public function newAction()
 	{
@@ -55,7 +51,9 @@ class UserController extends DefaultController
 		
 		try {
 			$u = new User();
+			$e = new Email();
 			$u->insert( $params );
+			$e->sendConfirmationEmail($values['email']);
 			$this->message->addMessage( 'Please check your email for a confirmation link' );
 			$this->log->debug( 'Inserted user ' . $values['email'] );
 			$this->_redirect( '/' );
@@ -122,6 +120,58 @@ class UserController extends DefaultController
 		$this->message->addMessage( 'Details updated' );
 		$this->_redirect( '/user/account/user_id/'.$this->_getParam( 'user_id' ) );
 	}
+	
+	/*
+	 * Executes sendConfirmationEmail function. Used for testing, can be deleted or modified.
+	 */
+	public function sendconfirmationAction()
+	{
+		$e = new Email();
+		$emailResult = $e->sendConfirmationEmail($this->session->user['email']);
+	
+		if ($emailResult)
+		{
+			$this->message->addMessage( 'Confirmation e-mail sent.' );
+			$this->message->setNamespace( 'message' );	
+			$this->_redirect('/');
+		}
+	}
+		
+		/*
+		 * Allows user to confirm e-mail address.
+		 */
+		public function confirmAction()
+		{
+		
+			$code = $this->_getParam('code');
+			$userId = $this->_getParam('userid');
+			
+			$u = new User();
+			$user = $u->getByUserId($userId);
+			$email = $user->email;
+			
+		
+			if ( strcasecmp($code,Email::getVerificationCode($email)) == 0 )
+			{
+				// Code matches, update DB
+				$this->db->update("users",array("status" => "active"),"id = $userId");			
+				
+				$this->message->addMessage( 'You have now confirmed your account.' );
+				$this->message->setNamespace( 'message' );
+				$this->_redirect('/');
+			}
+			else
+			{
+				// Code doesn't match, bitch at user.
+				$this->message->setNamespace( 'error' );
+				$this->message->addMessage( 'Incorrect confirmation code supplied.' );
+				$this->_redirect('/');
+			}
+		
+		}		
+	
+	
+	
 	
 	public function postDispatch() {
 		exit;
