@@ -36,21 +36,12 @@
 <!-- Rating -->
 <h3>Rating</h3>
 <div>
-<?php if ( $this->rating ): 
-?>
-<?php echo "This recipe is rated: " . $this->rating . " / " . Rating::MAX_RATING ?>
-<?php else: ?>
-This recipe is unrated
+<?php echo $this->starRating( $this->rating ); ?>
+<?php if (! $this->loggedIn() ): ?>
+<p><a href="/login/login">Login</a> to leave a comment</p>
 <?php endif ?>
 </div>
 
-<?php if ($this->loggedIn()): ?>
-<?php if ((! $this->checkUserRated( $this->recipe['id'] )) && (! $this->checkOwner($this->recipe['creator_id']))): ?>
-		<?php echo $this->rating_form; ?>
-	<?php endif ?>
-<?php else: ?>
-	<p><a href="/login/login">Login</a> to rate this recipe</p>
-<?php endif ?>
 
 
 <!-- End of rating -->
@@ -59,6 +50,7 @@ This recipe is unrated
 
 <?php if ( $this->recipe['comments_count'] > 0 ): ?>
 <script type="text/javascript">
+
 	function commentPage( page )
 	{
 		$.ajax({
