@@ -79,6 +79,29 @@ class Recipe extends Zend_Db_Table_Abstract {
 		return $elements;
 	}
 
+	public function isOwner( $recipeId )
+	{
+		$session = Zend_Registry::get( 'session' );
+		if ( ! $session->user )
+			return false;
+		
+		$select = $this->select()
+			->from( 'recipes' )
+			->where( 'id = ?', $recipeId )
+			->where( 'creator_id = ?', $session->user['id']);
+
+		$row = $this->fetchRow();
+		if ( ! $row ) {
+			$this->log->info( 'No row' );
+			return false;
+		}
+
+		if ( $session->user['id'] == $row->creator_id )
+			return true;
+
+		return false;
+	}	
+
 	public function insert( $params )
 	{
 		$params['creator_id'] = Zend_Registry::get( 'session')->user['id'];

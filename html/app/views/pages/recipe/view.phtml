@@ -35,8 +35,22 @@
 	
 <!-- Rating -->
 <h3>Rating</h3>
+<script type="text/javascript">
+$(function(){
+	$('.auto-submit-star').rating({ 
+		callback: function(value, link){
+			this.form.submit();
+	    } 
+	});
+});
+</script>
 <div>
-<?php echo $this->starRating( $this->rating ); ?>
+	<form id="rating-form" method="post" action="/rating/add">
+		<input type="hidden" name="recipe_id" value="<?php echo $this->recipe['id'] ?>"/>
+		<div id="rating-stars-holder">
+			<?php echo $this->starRating( $this->recipe['id'] ); ?>
+		</div>
+	</form>
 <?php if (! $this->loggedIn() ): ?>
 <p><a href="/login/login">Login</a> to leave a comment</p>
 <?php endif ?>
