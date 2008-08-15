@@ -11,6 +11,7 @@
 	<?php endif ?>
 
 	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.autocomplete.pack.js"></script>
+	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.rating.pack.js"></script>
 	<?php if ( $this->textfield === true ): ?>
 	<script type="text/javascript" src="/public/js/jquery.FCKEditor.js" language="Javascript" charset="utf-8"></script>
 	<script type="text/javascript">
@@ -27,6 +28,7 @@
 	<?php endif ?>
 
 	<link rel="stylesheet" type="text/css" href="/public/css/jquery.autocomplete.css" />
+	<link rel="stylesheet" type="text/css" href="/public/css/jquery.rating.css" />
 	<link rel="stylesheet" type="text/css" href="/public/css/recipe.css" />
 
 	<title><?php echo $this->title ?></title>
