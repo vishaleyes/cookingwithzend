@@ -3,13 +3,21 @@
 class Zend_View_Helper_StarRating
 {
 
-	public function starRating( $number )
+	public function starRating( $recipeId )
 	{
 		$session = Zend_Registry::get('session');
-		
+	
+		// fetch the rating
+		$ra = new Rating();
+		$rating = $ra->getRating( $recipeId );
+
 		// Logged in?
 		if ( ! $session->user )
-			return $this->displayRating( $number );
+			return $this->displayRating( $rating );
+
+		$r = new Recipe();
+		if ( $r->isOwner( $recipeId ) )
+			return $this->displayRating( $rating );
 
 		// Has this user already rated?
 		$db = Zend_Registry::get('db');
@@ -19,10 +27,12 @@ class Zend_View_Helper_StarRating
 		  ->where("recipe_id = ?", $recipeId)
 		  ->where("user_id = ?", $session->user['id'] );
 
-		if ($db->fetchOne($select) > 0)
-			return $this->displayRating( $number );
+		// If we get a result show the user the overall rating
+		if (count($db->fetchOne($select)) > 0)
+			return $this->displayRating( $rating );
 
-		return $this->displayRating( $number, false );		
+		// Otherwise show the rating but make it clickable
+		return $this->displayRating( $rating, false );		
 	}
 
 	public function displayRating( $number, $readOnly = true )
@@ -30,7 +40,8 @@ class Zend_View_Helper_StarRating
 		$output = '';
 
 		for( $i = 1; $i <= Rating::MAX_RATING; $i++ ) {
-			$output .= '<input name="rating_star" type="radio" class="star"';
+			$output .= '<input name="rating_star" type="radio" class="auto-submit-star"';
+			$output .= ' value="'.$i.'"';
 			if ( $readOnly === true )
 				$output .= ' disabled="disabled"';
 
