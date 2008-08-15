@@ -37,7 +37,8 @@
 <h3>Rating</h3>
 <script type="text/javascript">
 $(function(){
-	$('.auto-submit-star').rating({ 
+	$('.auto-submit-star').rating({
+		required: true,
 		callback: function(value, link){
 			this.form.submit();
 	    } 
