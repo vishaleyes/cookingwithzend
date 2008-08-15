@@ -86,6 +86,14 @@ class User extends Zend_Db_Table_Abstract {
 		$user = $this->fetchRow( $select );
 		return $user;
 	}
+	
+	public function getByUserID( $id )
+	{
+		$user = null;
+		$select = $this->select()->where( 'id = ?', $id );
+		$user = $this->fetchRow( $select );
+		return $user;
+	}
 
 
 }
