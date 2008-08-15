@@ -85,7 +85,7 @@ class UserController extends DefaultController
 		
 		$this->form->getElement('name')->setValue( $this->view->user['name'] );
 		$this->form->getElement('email')->setValue( $this->view->user['email'] );
-		$this->form->getElement('openid')->setValue( $this->view->user['openid'] );
+		$this->form->getElement('open_id')->setValue( $this->view->user['openid'] );
 		$this->form->setAction( '/user/update/user_id/' . $this->view->user['id'] );
 		$this->form->addElement( 'submit', 'Update' );
 		
