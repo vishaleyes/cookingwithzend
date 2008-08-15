@@ -32,7 +32,7 @@ class RatingController extends DefaultController
 
 		$params = array(
 			'recipe_id'   => $this->recipe->id,
-			'value'       => $this->_getParam('rating_value'),
+			'value'       => $this->_getParam('rating_star'),
 		);
 
 		
@@ -52,6 +52,7 @@ class RatingController extends DefaultController
 			
 		} catch(Exception $e) {
 			/*	Broken constraints = throws exception. Display error and return to recipe		*/
+			$this->log->debug( $e->getMessage() );
 			$this->message->setNamespace( 'error' );
 			$this->message->addMessage( 'You have already rated this recipe.' );
 			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
