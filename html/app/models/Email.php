@@ -30,20 +30,16 @@ class Email extends Zend_Mail
 	 * @todo set e-mail message body & set return e-mails. Possibly extra headers.
 	 */
 
-	public function sendConfirmationEmail($email)
+	public function sendConfirmationEmail($email,$userId)
 	{
 	
 	
-	$verificationCode = $this->getVerificationCode($email);
+	$verificationCode = $this->getVerificationCode($email,$userId);
 	
-	$u = new User();
-	$u = $u->getByEmail($email);
-	$userId = $u->id;
-		
-	$message = "<html><body>Thank you for registering with us.\n\nVerification code: <a href=\"http://" . $_SERVER["HTTP_HOST"] . "/user/confirm/userid/$userId/code/$verificationCode\">$verificationCode</a></body></html>";
+	$message = "<html><body>Thank you for registering with us.\n\nVerification code: <a href=\"http://" . $_SERVER["HTTP_HOST"] . "/user/confirm/$verificationCode\">$verificationCode</a></body></html>";
 	$headers .= self::FROM_EMAIL . "\r\n";
 	
-	$headers .= "Message-ID: <".$now."root@".$_SERVER['SERVER_NAME'].">"."\r\n";
+	$headers .= "Message-ID: <".$now."mail@".$_SERVER['SERVER_NAME'].">"."\r\n";
 	
 	// Only for HTML emails
 	$headers .= 'MIME-Version: 1.0' . "\r\n";
@@ -58,10 +54,10 @@ class Email extends Zend_Mail
 	 * Generate verification code to be e-mailed. Code is mixed hash of the email and salt defined above.
 	 */
 
-	public function getVerificationCode($emailAddress)
+	public function getVerificationCode($emailAddress, $userId)
 	{
 		
-		return (MD5(MD5($emailAddress) . MD5(self::SALT)));	
+		return (MD5(MD5($emailAddress) . MD5(self::SALT)) . "$userId");	
 		
 	}
 	

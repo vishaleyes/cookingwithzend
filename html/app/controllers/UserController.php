@@ -53,9 +53,10 @@ class UserController extends DefaultController
 			$u = new User();
 			$e = new Email();
 			$u->insert( $params );
-			$e->sendConfirmationEmail($values['email']);
 			$this->message->addMessage( 'Please check your email for a confirmation link' );
 			$this->log->debug( 'Inserted user ' . $values['email'] );
+			$theUser = $u->getByEmail($values['email']);
+			$e->sendConfirmationEmail($values['email'],$theUser->id);
 			$this->_redirect( '/' );
 		} catch(Exception $e) {
 			$this->message->setNamespace( 'error' );
@@ -142,16 +143,16 @@ class UserController extends DefaultController
 		 */
 		public function confirmAction()
 		{
-		
-			$code = $this->_getParam('code');
-			$userId = $this->_getParam('userid');
+			$param = $this->_getParam("code");
+			$userId = substr($param,32,strlen($param)-32);
+			
 			
 			$u = new User();
 			$user = $u->getByUserId($userId);
 			$email = $user->email;
 			
 		
-			if ( strcasecmp($code,Email::getVerificationCode($email)) == 0 )
+			if ( strcasecmp($param,Email::getVerificationCode($email,$user->id)) == 0 )
 			{
 				// Code matches, update DB
 				$this->db->update("users",array("status" => "active"),"id = $userId");			
