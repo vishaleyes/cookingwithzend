@@ -47,15 +47,5 @@ if ( array_key_exists( 'HTTP_HOST', $_SERVER ) ) {
 $router = $controller->getRouter();
 $router->addConfig( $config, 'routes' );
 
-// route for account confirmation
-$route = new Zend_Controller_Router_Route(
-    'user/confirm/:code',
-    array(
-        'controller' => 'user',
-        'action'     => 'confirm'
-    )
-);
-$router->addRoute("confirm",$route);
-
 Zend_Registry::set('environment', $environment);
 Zend_Registry::set('config', $config);
