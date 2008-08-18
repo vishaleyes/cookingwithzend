@@ -17,7 +17,7 @@ class CommentController extends DefaultController
 		
 		// Held in DefaultController. Params are actions allowed as guest.
 		$this->loggedIn();
-
+		$this->pendingAccount();
 	}
 
 	public function indexAction() {
@@ -44,7 +44,6 @@ class CommentController extends DefaultController
 			
 			
 			/* Set successful notice */
-			$this->message->setNamespace( 'notice' );
 			$this->message->addMessage( 'Comment added successful.' );
 			
 			/*	If successful go back to last recipe		*/
@@ -56,6 +55,7 @@ class CommentController extends DefaultController
 			
 			$this->message->setNamespace( 'error' );
 			$this->message->addMessage( 'Something went horribly wrong' );
+			$this->message->resetNamespace();
 			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
 		}
 		

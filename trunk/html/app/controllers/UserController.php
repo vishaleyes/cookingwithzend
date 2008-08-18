@@ -7,7 +7,8 @@ class UserController extends DefaultController
 	{
 		// Held in DefaultController
 		// @todo We might havve to rethink the login, Id want the confirm/sendconfirmation to force people to login first
-		$this->loggedIn( array( 'new', 'create', 'confirm', 'sendconfirmation' ) );
+		$this->loggedIn( array( 'new', 'create' ) );
+		$this->pendingAccount( array( 'confirm', 'sendconfirmation', 'account', 'update' ) );
 	}
 	
 	public function init()

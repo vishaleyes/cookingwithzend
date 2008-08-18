@@ -7,6 +7,7 @@ class TagController extends DefaultController
 	{
 		// Held in DefaultController
 		$this->loggedIn( array( 'index' ) );
+		$this->pendingAccount( array( 'index' ) );
 	}
 
 	public function tagsAction()

@@ -10,6 +10,7 @@ class MethodController extends DefaultController
 	{
 		// Held in DefaultController
 		$this->loggedIn();
+		$this->pendingAccount();
 	}
 
 	/**

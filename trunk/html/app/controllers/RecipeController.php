@@ -11,6 +11,7 @@ class RecipeController extends DefaultController
 	{
 		// Held in DefaultController
 		$this->loggedIn( array( 'view', 'index' ) );
+		$this->pendingAccount( array( 'index' ) );
 		$this->authorised( array( 'edit' ) );
 	}
 

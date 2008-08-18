@@ -14,10 +14,9 @@ class RatingController extends DefaultController
 	 */
 
 	public function preDispatch() {
-		
 		// Held in DefaultController. Params are actions allowed as guest.
-		$this->loggedIn( array( 'view', 'index' ) );
-
+		$this->loggedIn();
+		$this->pendingAccount();
 	}
 
 	public function indexAction() {
