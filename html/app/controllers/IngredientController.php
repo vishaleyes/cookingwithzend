@@ -11,6 +11,7 @@ class IngredientController extends DefaultController
 	{
 		// Held in DefaultController
 		$this->loggedIn();
+		$this->pendingAccount();
 	}
 
 	private function ingredientForm()

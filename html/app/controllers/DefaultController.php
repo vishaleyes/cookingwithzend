@@ -162,6 +162,21 @@ abstract class DefaultController extends Zend_Controller_Action {
 				$this->_forward( 'login', 'user' );
 			}
 		}
+
+	}
+
+	protected function pendingAccount( $exclusions = array() )
+	{
+		$action = $this->_request->getActionName();
+		if ( ! in_array( $action, $exclusions ) ) {
+			// Are we logged in but not confirmed
+			if ( $this->session->user['status'] == 'pending' ) {
+				$this->message->setNamespace( 'error' );
+				$this->message->addMessage( 'Your account has not been confirmed, please click the e-mail you received from us do you need it <a href="/user/sendconfirmation/'.$this->name.'">resending?</a>');
+				$this->message->resetNamespace();
+				$this->_redirect('/');
+			}
+		}
 	}
 
 	/**

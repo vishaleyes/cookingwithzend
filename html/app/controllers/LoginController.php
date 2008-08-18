@@ -63,7 +63,7 @@ class LoginController extends DefaultController
 				$this->message->setNamespace( 'error' );
 				$this->message->addMessage( $msg );
 				$this->message->resetNamespace();
-				$this->redirect();
+				$this->_redirect('/');
 			}
 			
 			// We should be okay from hereon in
