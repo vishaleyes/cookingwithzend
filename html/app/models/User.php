@@ -70,7 +70,11 @@ class User extends Zend_Db_Table_Abstract {
 		
 		return parent::insert( $params );
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
+
 	public function getByEmail( $email )
 	{
 		$user = null;
@@ -78,6 +82,10 @@ class User extends Zend_Db_Table_Abstract {
 		$user = $this->fetchRow( $select );
 		return $user;
 	}
+	
+	/**
+	 * @deprecated
+	 */
 	
 	public function getByOpenID( $id )
 	{
@@ -87,6 +95,10 @@ class User extends Zend_Db_Table_Abstract {
 		return $user;
 	}
 	
+	/**
+	 * @deprecated
+	 */
+	
 	public function getByUserID( $id )
 	{
 		$user = null;
@@ -95,5 +107,26 @@ class User extends Zend_Db_Table_Abstract {
 		return $user;
 	}
 
+	/**
+	 * Generic function to aquire user data by any of the fields listed
+	 * @param $field string The field you want to search by
+	 * @param $value mixed The value you want the field to be
+	 * @return $user UserRow
+	 */
+
+	public function getByField( $field, $value )
+	{
+		$fields = array( 'email', 'name', 'id', 'openid' );
+		$user = null;
+
+		$field = strtolower( $field );
+
+		if ( ! in_array( $field, $fields ) )
+			return $user;
+
+		$select = $this->select()->where( $field . ' = ?', $value );
+		$user = $this->fetchRow( $select );
+		return $user;
+	}
 
 }

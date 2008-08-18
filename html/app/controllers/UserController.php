@@ -6,7 +6,8 @@ class UserController extends DefaultController
 	public function preDispatch()
 	{
 		// Held in DefaultController
-		$this->loggedIn( array( 'new', 'create', 'confirm' ) );
+		// @todo We might havve to rethink the login, Id want the confirm/sendconfirmation to force people to login first
+		$this->loggedIn( array( 'new', 'create', 'confirm', 'sendconfirmation' ) );
 	}
 	
 	public function init()
@@ -55,7 +56,7 @@ class UserController extends DefaultController
 			$u->insert( $params );
 			$this->message->addMessage( 'Please check your email for a confirmation link' );
 			$this->log->debug( 'Inserted user ' . $values['email'] );
-			$theUser = $u->getByEmail($values['email']);
+			$theUser = $u->getByField('email', $values['email']);
 			$e->sendConfirmationEmail($values['email'],$theUser->id);
 			$this->_redirect( '/' );
 		} catch(Exception $e) {
@@ -128,12 +129,19 @@ class UserController extends DefaultController
 	public function sendconfirmationAction()
 	{
 		$e = new Email();
-		$emailResult = $e->sendConfirmationEmail($this->session->user['email']);
+
+		if ( $this->session->user ) {
+			$emailResult = $e->sendConfirmationEmail($this->session->user['email'], $this->session->user['id']);
+		} else {
+			$u = new User();
+			$user = $u->getByField( 'name', $this->_getParam( 'name' ) );
+			
+			$emailResult = $e->sendConfirmationEmail($this->session->user['email'], $user->id);
+		}
 	
 		if ($emailResult)
 		{
 			$this->message->addMessage( 'Confirmation e-mail sent.' );
-			$this->message->setNamespace( 'message' );	
 			$this->_redirect('/');
 		}
 	}
@@ -148,7 +156,7 @@ class UserController extends DefaultController
 			
 			
 			$u = new User();
-			$user = $u->getByUserId($userId);
+			$user = $u->getByField('id', $userId);
 			$email = $user->email;
 			
 		
