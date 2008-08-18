@@ -34,13 +34,20 @@
 					<action>index</action>
 				</defaults>
 			</index>
-				<confirm>
+			<confirm>
 				<route>user/confirm/:code</route>
 				<defaults>
-				<controller>user</controller>
-        		<action>confirm</action>
+					<controller>user</controller>
+    	    		<action>confirm</action>
 				</defaults>
-				</confirm>
+			</confirm>
+			<sendconfirm>
+				<route>user/sendconfirmation/:name</route>
+				<defaults>
+					<controller>user</controller>
+    	    		<action>sendconfirmation</action>
+				</defaults>
+			</sendconfirm>
 		</routes>
 		<locale>en_UK</locale>			
 	</production>

@@ -53,7 +53,7 @@ class LoginController extends DefaultController
 		if( $result->isValid() )
 		{
 			$u = new User();
-			$user = $u->getByEmail( $values['email'] );
+			$user = $u->getByField( 'email', $values['email'] );
 			
 			$msg = $user->checkStatus();
 			
@@ -125,7 +125,7 @@ class LoginController extends DefaultController
 		$u = new User;
 		$consumer = new Zend_OpenId_Consumer();
 		if ($consumer->verify($_GET, $id)) {
-			if ( $user = $u->getByOpenID( htmlspecialchars($id) ) ) {
+			if ( $user = $u->getByField('openid', htmlspecialchars($id) ) ) {
 				$user->last_login = new Zend_Db_Expr('NOW()');
 				$user->save();
 				$this->session->user = $user->toArray();
