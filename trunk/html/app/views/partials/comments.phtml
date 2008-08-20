@@ -5,7 +5,7 @@
 		<div id="comment-user"><?php echo $comment['name'] ?></div>
 		<div id="comment-content"><?php echo $comment['comment'] ?></div>
 		<?php if ( isset( $comment['value'] ) ): ?>
-			<p>User Rated this recipe as <?php echo $comment['value'] . '/' . Rating::MAX_RATING ?></p>
+			<p>User Rated this recipe as <?php echo $this->starRating( $comment['recipe_id'], $comment['value'] ) ?></p>
 		<?php else: ?>
 			<p>User has not rated this</p>
 		<?php endif ?>

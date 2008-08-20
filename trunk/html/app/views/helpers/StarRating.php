@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * Uses a Jquery plugin to provide a nice user interface to rate things
+ * Requires http://www.fyneworks.com/jquery/star-rating/
+ * @param $itemId int
+ * @return $output string HTML output to be echo'ed to browser
+ */
+
 class Zend_View_Helper_StarRating
 {
 
-	public function starRating( $recipeId )
+	public function starRating( $recipeId, $value = null )
 	{
 		$session = Zend_Registry::get('session');
 		$log = Zend_Registry::get('log');
@@ -15,6 +22,10 @@ class Zend_View_Helper_StarRating
 		// Logged in?
 		if ( ! $session->user )
 			return $this->displayRating( $rating );
+
+		// If were passing through a value we already know what to display and are probably read only
+		if ( isset( $value ) )
+			return $this->displayRating( $value );
 
 		//$log->debug( $session->user['name'] . ' is logged in' );
 
