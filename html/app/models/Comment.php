@@ -65,12 +65,12 @@ class Comment extends Zend_Db_Table_Abstract {
 		return ($this->db->fetchAll($select));
 	}
 	
-	public function getCommentForm()
+	public function getCommentForm( $recipeId )
 	{
 		/* Submit comment form */
 
 		$submitCommentForm = new Zend_Form();
-		$submitCommentForm->setAction('/comment/add/recipe_id/' . $this->recipe->id)
+		$submitCommentForm->setAction('/comment/add/recipe_id/' . $recipeId )
 										->setMethod('post')
 										->setAttrib('name','submit_comment')
 										->setAttrib('id','submit-comment');

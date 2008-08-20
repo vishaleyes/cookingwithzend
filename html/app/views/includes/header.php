@@ -6,8 +6,10 @@
 	
 	<?php if ($this->config->online == true): ?>
 	<script type="text/javascript" charset="utf-8" src="http://jqueryjs.googlecode.com/files/jquery-1.2.6.pack.js"></script>
+	<script type="text/javascript" charset="utf-8" src="http://jqueryjs.googlecode.com/svn/trunk/plugins/form/jquery.form.js"></script>
 	<?php else: ?>
 	<script type="text/javascript" charset="utf-8" src="/public/js/jquery-1.2.6.pack.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/public/js/jquery.form.js"></script>
 	<?php endif ?>
 
 	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.autocomplete.pack.js"></script>
