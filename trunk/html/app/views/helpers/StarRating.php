@@ -10,7 +10,7 @@
 class Zend_View_Helper_StarRating
 {
 
-	public function starRating( $recipeId, $value = null )
+	public function starRating( $recipeId, $id = null, $value = null )
 	{
 		$session = Zend_Registry::get('session');
 		$log = Zend_Registry::get('log');
@@ -19,13 +19,13 @@ class Zend_View_Helper_StarRating
 		$ra = new Rating();
 		$rating = $ra->getRating( $recipeId );
 
+		// If were passing through a value we already know what to display and are probably read only
+		if ( isset( $value ) )
+			return $this->displayRating( $value, $id );
+			
 		// Logged in?
 		if ( ! $session->user )
 			return $this->displayRating( $rating );
-
-		// If were passing through a value we already know what to display and are probably read only
-		if ( isset( $value ) )
-			return $this->displayRating( $value );
 
 		//$log->debug( $session->user['name'] . ' is logged in' );
 
@@ -53,15 +53,17 @@ class Zend_View_Helper_StarRating
 		//$log->debug( $session->user['name'] . ' has not already rated this' );
 
 		// Otherwise show the rating but make it clickable
-		return $this->displayRating( $rating, false );		
+		return $this->displayRating( $rating, null, false );		
 	}
 
-	public function displayRating( $number, $readOnly = true )
+	public function displayRating( $number, $id = null, $readOnly = true )
 	{
 		$output = '';
+		$inputName = ( isset($id) ? 'rating_star_'.$id : 'rating_star' );
+		Zend_Registry::get('log')->debug( $id );
 
 		for( $i = 1; $i <= Rating::MAX_RATING; $i++ ) {
-			$output .= '<input name="rating_star" type="radio" class="auto-submit-star"';
+			$output .= '<input name="'.$inputName.'" type="radio" class="auto-submit-star"';
 			$output .= ' value="'.$i.'"';
 			if ( $readOnly === true )
 				$output .= ' disabled="disabled"';
@@ -71,6 +73,8 @@ class Zend_View_Helper_StarRating
 
 			$output .= '/>';
 		}
+		
+		Zend_Registry::get('log')->debug( $output );
 
 		return $output;
 	}
