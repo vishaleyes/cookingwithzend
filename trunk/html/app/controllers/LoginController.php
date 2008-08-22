@@ -23,7 +23,6 @@ class LoginController extends DefaultController
 		
 		$this->openid = $e;
 		
-		
 		parent::init();
 	}
 
@@ -37,7 +36,8 @@ class LoginController extends DefaultController
 		$this->form->removeElement( 'open_id' );
 		$this->form->addElement( 'submit', 'Login' );
 
-		if ( ! $this->form->isValid($_POST) ) {
+
+		if ( ( ! $_POST ) || ( ! $this->form->isValid($_POST) ) ) {
 			$this->view->form = $this->form;
 			echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 			exit;

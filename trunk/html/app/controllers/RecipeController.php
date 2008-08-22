@@ -26,6 +26,7 @@ class RecipeController extends DefaultController
 		$this->form = new Zend_Form;
 		$this->form->addElements( $r->getFormElements() );
 		$this->form->addElements( $t->_form_fields_config );
+		 
 		parent::init();
 	}
 
@@ -104,9 +105,10 @@ class RecipeController extends DefaultController
 
 	public function createAction()
 	{
-		if (! $this->form->isValid($_POST)) {
-			$this->log->info( var_export( $this->form->getMessages(), true) );
-			$this->_redirect( '/recipe/new' );
+		if ( ( ! $_POST ) || ( ! $this->form->isValid($_POST) ) ) {
+			$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
+		
+			$this->renderModelForm( '/recipe/create', 'Add' );
 		}
 
 		$params = $this->form->getValues();
@@ -176,8 +178,9 @@ class RecipeController extends DefaultController
 
 	public function updateAction()
 	{
-		if ( ! $this->form->isValid($_POST) ) {
-			$this->_redirect( '/recipe/edit/recipe_id/' . $this->recipe->id );	
+		if ( (! $_POST) || (! $this->form->isValid($_POST)) ) {
+			$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
+			$this->renderModelForm( '/recipe/update/recipe_id/'.$this->recipe->id, 'edit' );
 		}
 	
 		$params = $this->form->getValues();
