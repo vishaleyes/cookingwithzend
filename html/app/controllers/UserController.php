@@ -53,12 +53,12 @@ class UserController extends DefaultController
 		
 		try {
 			$u = new User();
-			$e = new Email();
 			$u->insert( $params );
 			$this->message->addMessage( 'Please check your email for a confirmation link' );
 			$this->log->debug( 'Inserted user ' . $values['email'] );
 			$theUser = $u->getByField('email', $values['email']);
-			$e->sendConfirmationEmail($values['email'],$theUser->id);
+			$theUser->sendConfirmationEmail();
+
 			$this->_redirect( '/' );
 		} catch(Exception $e) {
 			$this->message->setNamespace( 'error' );

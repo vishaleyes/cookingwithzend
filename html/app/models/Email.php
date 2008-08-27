@@ -13,55 +13,104 @@
 
 class Email extends Zend_Mail
 {
-	
-	const SALT = "aSalt";
-	const FROM_EMAIL = "From: Recipes Site Name <email@site.name>";
+	const FROM_EMAIL = "email@site.name";
+
+	var $files;
+	var $cc;
+	var $template;
+	var $html;
+
+
+	public function __construct( $to, $toName = '', $subject = '', $from = '', $fromName = '', $encoding = 'UTF-8' )
+	{
+		parent::__construct();
+
+		$this->addTo($to, $toName);
+
+		$from = ( empty( $from ) ? FROM_EMAIL : $from );
+		$this->setFrom($from, $fromName);
+
+		$this->setSubject($subject);
+#		$this->setEncoding($encoding);
+		$this->html = false;
+	}
 	
 	/**
-	 * Sends out e-mail to use to verify e-mail
-	 * @todo set e-mail message body & set return e-mails. Possibly extra headers.
-	 * @param $email string Email address
-	 * @param $userid int id for the user
-	 * @return bool
+	 * Creates a view object to use as the text body
+	 * @param string $template
 	 */
 
-	public function sendConfirmationEmail($email,$userId)
-	{
-	
-		$verificationCode = $this->getVerificationCode($email,$userId);
-	
-		$message = "<html><body>Thank you for registering with us.\n\nVerification code: <a href=\"http://" . $_SERVER["HTTP_HOST"] . "/user/confirm/$verificationCode\">$verificationCode</a></body></html>";
-		$headers .= self::FROM_EMAIL . "\r\n";
-	
-		$headers .= "Message-ID: <".$now."mail@".$_SERVER['SERVER_NAME'].">"."\r\n";
-	
-		// Only for HTML emails
-		$headers .= 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-	
-		return (mail($email,"Email verification",$message,$headers));
+	public function setTemplate($template) {
+		$this->view = new Zend_View();
+		$this->view->setScriptPath('app/views/templates/email/');
+		$this->template = $template;
 	}
-	
-	
-	/*
-	 * Generate verification code to be e-mailed. Code is mixed hash of the email and salt defined above.
-	 * @param $email string Email address
-	 * @param $userid int id for the user
-	 * @return string
+
+	/**
+	 * Returns the current template
+	 * @return string $template
 	 */
 
-	public function getVerificationCode($emailAddress, $userId)
-	{
-		
-		return (MD5(MD5($emailAddress) . MD5(self::SALT)) . "$userId");	
-		
+
+	public function getTemplate($template) {
+		return $this->template;
 	}
 	
+	/**
+	 * Sets a HTML flag or not to decide if the email should be sent in HTML or not
+	 * @param bool $var
+	 */
 
+	public function setHTML( $var )
+	{
+		$this->html = $var;
+	}
+
+	/**
+	 * Uses Zend_Mail to send off the mail
+	 * @param string $textBody
+	 */
+
+	public function sendMail($txtBody = null) {
+
+		if (!$txtBody) {
+			if ($this->template)
+			{
+				$txtBody = $this->view->render($this->template);
+			}
+		}
 		
+		if ( $this->html ) {
+			$this->setBodyTxt(strip_tags( $txtBody ));
+		} else {
+			$this->setBodyHtml($txtBody);
+		}
 
+		// add attachments
+		if (count($this->files) > 0) {
+			foreach($this->files as $file) {
+				$this->createAttachment($file);
+			}
+		}
 
-	
+		// add cc
+		if (count($this->cc) > 0) {
+			foreach($this->cc as $cc) {
+				$this->addCc($cc);
+			}
+		}
+
+		try {
+			if ($this->send()) return true;
+		} catch (Exception $e) {
+			$this->log->crit($e->getMessage() . "\n" . $e->getTraceAsString());
+			return false;
+		}
+
+		return false;
+
+	}
+
 }
 	
 	
