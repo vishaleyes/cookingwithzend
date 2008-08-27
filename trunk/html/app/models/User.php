@@ -50,10 +50,8 @@ class User extends Zend_Db_Table_Abstract {
 		return $elements;
 	}
 
-	// May be able to delete this
 	function __construct( $prefetch = true )
 	{
-		if ( ! $prefetch === false ) unset( $_rowClass );
 		$this->db = Zend_Registry::get("db");
 		Zend_Db_Table_Abstract::setDefaultAdapter($this->db);
 		

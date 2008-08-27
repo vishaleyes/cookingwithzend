@@ -152,6 +152,37 @@ class LoginController extends DefaultController
 		unset( $this->session->user );
 		$this->_redirect( '/' );
 	}
+
+	public function resetAction()
+	{
+		$this->view->pageContent = $this->pagesFolder.'/login/password-reset.phtml';
+		$this->view->title = 'Reset your password';
+		
+		// Dont need the username
+		$this->form->removeElement( 'name' );
+		$this->form->removeElement( 'open_id' );
+		$this->form->removeElement( 'password' );
+		$this->form->addElement( 'submit', 'Get New Password' );
+
+		$this->view->form = $this->form;
+
+		if ( $_POST )
+		{
+			$u = new User();
+			$user = $u->getByField( 'email', $_POST['email'] );
+			if ( $user ) {
+				$m = new Email( $user['email'], $user['name'], 'Forgotten Password');
+				$m->setTemplate( 'forgotten-password.tmpl' );
+				$m->sendMail();
+				$this->message->addMessage( 'We have sent you an email of the new password to the address ' . $user['email'] er['email'] );
+			} else {
+				$this->message->addMessage( 'Unable to find your Email address in our system, emsure you typed it correctly' )
+			}
+		}
+
+		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
+		exit;
+	}
 	
 	public function postDispatch() {
 		exit;
