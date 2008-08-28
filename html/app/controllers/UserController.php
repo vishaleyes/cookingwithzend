@@ -51,12 +51,15 @@ class UserController extends DefaultController
 			'password'   => new Zend_Db_Expr('PASSWORD("'.$values['password'].'")')
 		);
 		
+		//$this->db->beginTransaction();
+		
 		try {
 			$u = new User();
 			$u->insert( $params );
+			//$this->db->commit();
 			$this->message->addMessage( 'Please check your email for a confirmation link' );
 			$this->log->debug( 'Inserted user ' . $values['email'] );
-			$theUser = $u->getByField('email', $values['email']);
+			$theUser = $u->getByField( 'email', $values['email'] );
 			$theUser->sendConfirmationEmail();
 
 			$this->_redirect( '/' );
@@ -65,6 +68,7 @@ class UserController extends DefaultController
 			$this->message->addMessage( $e->getMessage() );
 			$this->message->resetNamespace();
 			$this->log->debug( 'Failed to insert user ' .$values['email'] . ' : ' . var_export( $e, true ) );
+			//$this->db->rollback();
 			$this->_redirect( '/user/new' );
 		}
 
