@@ -13,7 +13,8 @@
 
 class Email extends Zend_Mail
 {
-	const FROM_EMAIL = "email@site.name";
+	const FROM_EMAIL = "admin@simplcook.org";
+	const FROM_NAME  = "SimplyCook.org";
 
 	var $files;
 	var $cc;
@@ -29,6 +30,7 @@ class Email extends Zend_Mail
 		$this->addTo($to, $toName);
 
 		$from = ( empty( $from ) ? self::FROM_EMAIL : $from );
+		$fromName = ( empty( $name ) ? self::FROM_NAME : $name );
 		$this->setFrom($from, $fromName);
 
 		$this->setSubject($subject);
@@ -101,7 +103,7 @@ class Email extends Zend_Mail
 			}
 		}
 
-		$this->log->debug( var_export( $this, true ) );
+		$this->log->debug( 'Sending email to ' . $this->_to[0] . ' using template ' . $this->template );
 
 		try {
 			if ($this->send()) return true;
