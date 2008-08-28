@@ -162,7 +162,7 @@ class LoginController extends DefaultController
 		$this->form->removeElement( 'name' );
 		$this->form->removeElement( 'open_id' );
 		$this->form->removeElement( 'password' );
-		$this->form->addElement( 'submit', 'Get New Password' );
+		$this->form->addElement( 'submit', 'Password' );
 
 		$this->view->form = $this->form;
 
@@ -171,17 +171,16 @@ class LoginController extends DefaultController
 			$u = new User();
 			$user = $u->getByField( 'email', $_POST['email'] );
 			if ( $user ) {
-				$m = new Email( $user['email'], $user['name'], 'Forgotten Password');
-				$m->setTemplate( 'forgotten-password.tmpl' );
-				$m->sendMail();
-				$this->message->addMessage( 'We have sent you an email of the new password to the address ' . $user['email'] er['email'] );
+				$user->forgottenPasswordMail();
+				$this->message->addMessage( 'We have sent you an email of the new password to the address ' . $user->email );
 			} else {
-				$this->message->addMessage( 'Unable to find your Email address in our system, emsure you typed it correctly' )
+				$this->message->addMessage( 'Unable to find your Email address in our system, ensure you typed it correctly' );
 			}
+			$this->_redirect( '/' );
+		} else {
+			echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
+			exit;
 		}
-
-		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
-		exit;
 	}
 	
 	public function postDispatch() {
