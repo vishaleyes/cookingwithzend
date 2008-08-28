@@ -48,14 +48,14 @@ class UserRow extends Zend_Db_Table_Row_Abstract {
 	 * @return bool
 	 */
 
-	protected function sendConfirmationEmail()
+	public function sendConfirmationEmail()
 	{
 	
 		$verificationCode = $this->getVerificationCode( $this->email, $this->id );
-		$e = new Email( $this->email, $this->name );
-		$e->setTemplate( 'user-registration/phtml' );
+		$e = new Email( $this->email, $this->name, 'Registration' );
+		$e->setTemplate( 'user-registration.phtml' );
 
-		$this->view->verificationURL = 'http://' . $_SERVER['HTTP_HOST'] . '/user/confirm' . $verificationCode ;
+		$e->view->verificationURL = 'http://' . $_SERVER['HTTP_HOST'] . '/user/confirm/' . $verificationCode ;
 	
 		return $e->sendMail();
 	}

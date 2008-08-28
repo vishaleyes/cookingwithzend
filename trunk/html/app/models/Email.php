@@ -25,9 +25,10 @@ class Email extends Zend_Mail
 	{
 		parent::__construct();
 
+		$this->log = Zend_Registry::get( 'log' );
 		$this->addTo($to, $toName);
 
-		$from = ( empty( $from ) ? FROM_EMAIL : $from );
+		$from = ( empty( $from ) ? self::FROM_EMAIL : $from );
 		$this->setFrom($from, $fromName);
 
 		$this->setSubject($subject);
@@ -99,6 +100,8 @@ class Email extends Zend_Mail
 				$this->addCc($cc);
 			}
 		}
+
+		$this->log->debug( var_export( $this, true ) );
 
 		try {
 			if ($this->send()) return true;
