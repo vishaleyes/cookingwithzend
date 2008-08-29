@@ -133,16 +133,9 @@ class UserController extends DefaultController
 	 */
 	public function sendconfirmationAction()
 	{
-		$e = new Email();
-
-		if ( $this->session->user ) {
-			$emailResult = $e->sendConfirmationEmail($this->session->user['email'], $this->session->user['id']);
-		} else {
-			$u = new User();
-			$user = $u->getByField( 'name', $this->_getParam( 'name' ) );
-			
-			$emailResult = $e->sendConfirmationEmail($this->session->user['email'], $user->id);
-		}
+		$u = new User();
+		$user = $u->getByField( 'id', $this->session->user['id'] );
+		$emailResult = $user->sendConfirmationEmail();
 	
 		if ($emailResult)
 		{
@@ -151,38 +144,33 @@ class UserController extends DefaultController
 		}
 	}
 		
-		/*
-		 * Allows user to confirm e-mail address.
-		 */
-		public function confirmAction()
+	/**
+	 * Allows user to confirm e-mail address.
+	 */
+	
+	public function confirmAction()
+	{
+		$code = $this->_getParam("code");
+		$userId = substr( $code, 32, strlen( $code ) - 32 );
+
+		$u = new User();
+		$user = $u->getByField( 'id', $this->session->user['id'] );
+			
+		if ( $code === $user->getVerificationCode() )
 		{
-			$param = $this->_getParam("code");
-			$userId = substr($param,32,strlen($param)-32);
-			
-			
-			$u = new User();
-			$user = $u->getByField('id', $userId);
-			$email = $user->email;
-			
+			// Code matches, update DB
+			$this->db->update( "users", array( "status" => "active" ), "id = $userId" );
+			$this->message->addMessage( 'You have now confirmed your account.' );
+			$this->_redirect('/');
+		} else {
+			// Code doesn't match, bitch at user.
+			$this->message->setNamespace( 'error' );
+			$this->message->addMessage( 'Incorrect confirmation code supplied.' );
+			$this->message->resetNamespace();
+			$this->_redirect('/');
+		}
 		
-			if ( strcasecmp($param,Email::getVerificationCode($email,$user->id)) == 0 )
-			{
-				// Code matches, update DB
-				$this->db->update("users",array("status" => "active"),"id = $userId");			
-				
-				$this->message->addMessage( 'You have now confirmed your account.' );
-				$this->message->setNamespace( 'message' );
-				$this->_redirect('/');
-			}
-			else
-			{
-				// Code doesn't match, bitch at user.
-				$this->message->setNamespace( 'error' );
-				$this->message->addMessage( 'Incorrect confirmation code supplied.' );
-				$this->_redirect('/');
-			}
-		
-		}		
+	}		
 	
 	
 	

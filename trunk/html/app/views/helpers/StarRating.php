@@ -60,7 +60,7 @@ class Zend_View_Helper_StarRating
 	{
 		$output = '';
 		$inputName = ( isset($id) ? 'rating_star_'.$id : 'rating_star' );
-		Zend_Registry::get('log')->debug( $id );
+		// Zend_Registry::get('log')->debug( $id );
 
 		for( $i = 1; $i <= Rating::MAX_RATING; $i++ ) {
 			$output .= '<input name="'.$inputName.'" type="radio" class="auto-submit-star"';
@@ -74,7 +74,7 @@ class Zend_View_Helper_StarRating
 			$output .= '/>';
 		}
 		
-		Zend_Registry::get('log')->debug( $output );
+		//Zend_Registry::get('log')->debug( $output );
 
 		return $output;
 	}

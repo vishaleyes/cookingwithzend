@@ -88,7 +88,7 @@ class UserRow extends Zend_Db_Table_Row_Abstract {
 	public function sendConfirmationEmail()
 	{
 	
-		$verificationCode = $this->getVerificationCode( $this->email, $this->id );
+		$verificationCode = $this->getVerificationCode();
 		$e = new Email( $this->email, $this->name, 'Registration' );
 		$e->setTemplate( 'user-registration.phtml' );
 
@@ -99,17 +99,16 @@ class UserRow extends Zend_Db_Table_Row_Abstract {
 	
 	
 	/**
-	 * We prolly should move this to the User model
 	 * Generate verification code to be e-mailed. Code is mixed hash of the email and salt defined above.
 	 * @param $email string Email address
 	 * @param $userid int id for the user
 	 * @return string
 	 */
 
-	protected function getVerificationCode($emailAddress, $userId)
+	public function getVerificationCode()
 	{
 		
-		return (MD5(MD5($emailAddress) . MD5(self::SALT)) . "$userId");	
+		return (MD5(MD5($this->email) . MD5(self::SALT)));	
 		
 	}
 

@@ -159,7 +159,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 			// Were not excluded so are we logged in?
 			if ( ! $this->session->user ) {
 				// and forward the request to the login page
-				$this->_forward( 'login', 'user' );
+				$this->_forward( 'login', 'login' );
 			}
 		}
 
@@ -168,6 +168,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 	protected function pendingAccount( $exclusions = array() )
 	{
 		$action = $this->_request->getActionName();
+		//$this->log->debug( 'Checking action '.$action . var_export( $exclusions, true ) );
 		if ( ! in_array( $action, $exclusions ) ) {
 			// Are we logged in but not confirmed
 			if ( $this->session->user['status'] == 'pending' ) {
