@@ -48,6 +48,7 @@ class RecipeController extends DefaultController
 
 	public function indexAction()
 	{
+		$this->view->title = 'Viewing recipes';
 
 		$items_per_page = ( $this->session->pagination['items_per_page'] ? $this->session->pagination['items_per_page'] : 5 );
 
@@ -55,9 +56,12 @@ class RecipeController extends DefaultController
 		$select = $r->select();
 		$total_select = $this->db->select()->from( 'recipes', array( 'count' => 'COUNT(id)' ) );
 		
-		if ( $this->_getParam( 'user_id' ) > 0 ) {
-			$select->where( 'creator_id = ?', $this->_getParam( 'user_id' ) );
-			$total_select->where( 'creator_id = ?', $this->_getParam( 'user_id' ) );
+		if ( $this->_getParam( 'userId' ) ) {
+			$u = new User();
+			$user = $u->getByField( 'name', $this->_getParam( 'userId' ) );
+			$this->view->title = 'Viewing recipes for ' . $user->name;
+			$select->where( 'creator_id = ?', $user->id );
+			$total_select->where( 'creator_id = ?', $user->id );
 		}
 
 		if ( $this->_getParam( 'page' ) > 1 ) {
@@ -93,7 +97,6 @@ class RecipeController extends DefaultController
 
 		$this->view->recipes = $output;
 		
-		$this->view->title = 'Viewing recipes';
 		$this->view->pageContent = $this->pagesFolder.'/recipe/index.phtml';
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 	}

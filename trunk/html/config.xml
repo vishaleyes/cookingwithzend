@@ -34,6 +34,13 @@
 					<action>index</action>
 				</defaults>
 			</index>
+			<user_recipes>
+				<route>recipe/:userId</route>
+				<defaults>
+					<controller>recipe</controller>
+					<action>index</action>
+				</defaults>
+			</user_recipes>
 			<confirm>
 				<route>user/confirm/:code</route>
 				<defaults>
