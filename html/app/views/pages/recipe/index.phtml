@@ -2,13 +2,19 @@
 	<a href="/recipe/new">Add a recipe</a>
 <?php endif ?>
 
+<script type="text/javascript">
+$(function(){
+	$('.auto-submit-star').rating();
+});
+</script>
+
 <?php foreach( $this->recipes as $recipe ): ?>
 <div style="border: dashed 2px black;margin-bottom: 10px;">
 	<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $recipe ) ?>
 
 	<?php echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $recipe['tags'], 'creator' => $recipe['creator_id'] ) ) ?>
 
-	<div><?php echo "This recipe is rated: " . $recipe['rating'] . " / " . Rating::MAX_RATING; ?></div>
+	<div><?php echo $this->starRating( $recipe['rating'] ); ?></div>
 </div>
 <?php endforeach ?>
 
