@@ -143,7 +143,11 @@ abstract class DefaultController extends Zend_Controller_Action {
 		
 		if ( ( $action != 'login' ) && ( $controller != 'ajax' ) ) {
 			// Nope, keep hold of where we were asking for
-			$this->session->referrer = '/'.$controller.'/'.$action;
+			$this->session->referrer = '/'.$controller;
+			// If its an index page dont add the action
+			if ( $action != 'index' )
+				$this->session->referrer .= '/'.$action;
+
 			foreach( $this->_getAllParams() as $k => $v )
 			{
 				if ( in_array( $k, $keys ) )
