@@ -56,7 +56,7 @@ class MethodController extends DefaultController
 			$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
 			$this->db->commit();
 			$this->log->info( 'Added MethodItem to recipe ' . sq_brackets( $this->recipe->id ) ); 
-			$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
+			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
 		} catch (Exception $e) {
 			$this->log->info( $e->getMessage() );
 			$this->db->rollBack();
