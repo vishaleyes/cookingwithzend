@@ -106,7 +106,7 @@ class IngredientController extends DefaultController
 			$this->message->addMessage( 'Added Ingredient ' . sq_brackets( $values['ingredient_name'] ) . ' to ' . sq_brackets( $this->recipe->name ) . ' <a href="'.$url.'">Click Here</a> to add another' );
 			$this->log->info( 'Added Ingredient ' . sq_brackets( $values['ingredient_name'] ) . ' to RecipeID ' . sq_brackets( $this->recipe->id ) ); 
 			// All is well send us to the ingredient list for this recipe
-			$this->_redirect( '/recipe/new/recipe_id/' . $this->recipe->id );
+			$this->_redirect( '/ingredient/new/recipe_id/' . $this->recipe->id );
 		} catch (Exception $e) {
 			$this->log->info( $e->getMessage() );
 			$this->db->rollBack();
