@@ -5,7 +5,7 @@ class AjaxController extends DefaultController
 
 	public function preDispatch()
 	{
-		$this->loggedIn( array( 'getcomments', 'userlookup' ) );
+	//	$this->loggedIn( array( 'getcomments', 'userlookup' ) );
 	}
 
 	/**

@@ -47,8 +47,6 @@ class IngredientController extends DefaultController
 			$this->view->ingredients[] = $ingredient->toArray();
 		}
 
-		$this->view->recipe_id = $this->recipe->id;
-		
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 	}
 	
@@ -146,7 +144,6 @@ class IngredientController extends DefaultController
 			$form->getElement('ingredient_name')->setValue( $row->findParentIngredient()->name );
 		}
 		$this->view->form = $form;
-		$this->view->recipe_id = $this->recipe->id;
 
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 
