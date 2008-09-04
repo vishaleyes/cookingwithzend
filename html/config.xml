@@ -35,7 +35,7 @@
 				</defaults>
 			</index>
 			<user_recipes>
-				<route>recipe/:userId</route>
+				<route>recipe/user/:userId</route>
 				<defaults>
 					<controller>recipe</controller>
 					<action>index</action>
@@ -99,7 +99,7 @@
 			<host>10.0.3.62</host>
 			<username>root</username>
 			<password></password>
-			<name>recipe_development</name>
+			<name>recipes_production</name>
 			<profiler>true</profiler>
 		</database>
 		<upload_path>uploads</upload_path>
