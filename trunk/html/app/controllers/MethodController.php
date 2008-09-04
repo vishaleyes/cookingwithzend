@@ -28,6 +28,7 @@ class MethodController extends DefaultController
 	
 	public function newAction()
 	{
+		$this->view->textfield = true;
 		$this->view->title = 'Create a method';
 		$this->view->pageContent = $this->pagesFolder.'/method/new.phtml';
 		$this->renderModelForm( '/method/create/recipe_id/' . $this->recipe->id, 'Add' );
@@ -47,7 +48,6 @@ class MethodController extends DefaultController
 		
 		$this->db->beginTransaction();
 		// Switch textfield JS on
-		$this->view->textfield = true;
 		
 		// Put the insert into a transaction
 		try {
