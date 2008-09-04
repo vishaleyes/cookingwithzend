@@ -238,6 +238,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 				$this->_redirect( '/recipe/index' );
 
 			$this->recipe = $rowset->current();
+			$this->view->recipe_id = $this->recipe->id;
 		}
 	}
 
