@@ -91,6 +91,48 @@ class AjaxController extends DefaultController
 	}
 
 	/**
+	 *  Suggest tags to the user via a like match
+	 *  @todo Not finished
+	 */
+
+	public function suggesttagAction()
+	{
+		$text = $this->_getParam('q');
+		$textArray = split( ' ', strtolower( $text ) );
+		$this->log->debug( 'TextArray: ' . var_export( $textArray, true ) );
+		$text = array_pop( $textArray );
+		$this->log->debug( 'Text: ' . $text );
+		
+		$select = $this->db->select()
+		  ->from( 'tags', array( 'name' ) )
+		  ->where( 'name LIKE ?', '%'.$text.'%' )
+		  ->limit(5);
+
+		$stmt = $select->query();
+		$rowset = $stmt->fetchAll();
+
+		if ( $rowset )
+			echo json_encode( $rowset ); 
+	
+	}
+
+	/**
+	 * Sorts the method items how the user wants them
+	 */
+
+	public function sortmethodsAction()
+	{
+		$methods = $this->_getParam( 'method' );
+		$this->log->info( var_export( $methods, true ) );
+		$count = 0;
+		foreach( $methods as $item )
+		{
+			$this->db->update( 'method_items', array( 'position' => $count ), 'id = '. $item );
+			$count++;
+		}
+	}
+
+	/**
 	 * We are existing after the action is dispatched
 	 *
 	 */
