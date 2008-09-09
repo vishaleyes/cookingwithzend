@@ -11,7 +11,7 @@
 	<script type="text/javascript" charset="utf-8" src="/public/js/jquery-1.2.6.pack.js"></script>
 	<script type="text/javascript" charset="utf-8" src="/public/js/jquery.form.js"></script>
 	<?php endif ?>
-
+	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery-ui-personalized-1.6b.packed.js"></script>
 	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.autocomplete.pack.js"></script>
 	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.rating.pack.js"></script>
 	<?php if ( $this->textfield === true ): ?>

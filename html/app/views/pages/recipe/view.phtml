@@ -13,12 +13,35 @@
 <?php endif ?>
 <!-- End of Ingredients -->
 
+
 <!-- Method Items -->
 <?php if ( count( $this->methods ) > 0 ): ?>
+	<?php if ( $this->checkOwner( $this->recipe['creator_id'] ) ): ?>
+	<script type="text/javascript">
+		$().ready(function() { 
+			$("#method-list").sortable( {
+				axis: 'y',
+				update: sortMethods
+			});
+		});
+
+		function sortMethods( e, ui )
+		{
+			$.ajax({
+				type: "POST",
+				url: "/ajax/sortmethods",
+				data: $(this).sortable("serialize"),
+				success: alert( 'Saved' )
+			});
+		}
+	</script>
+	<?php endif ?>
+
 	<h3>Method</h3>
-	<ol>
+	<ol id="method-list">
 	<?php foreach( $this->methods as $method ): ?>
-		<li id="<?php echo "method-" . $method['id'] ?>"><?php echo $method['description'] ?>
+		<li class="method" id="<?php echo "method-" . $method['id'] ?>">
+		<?php echo $method['description'] ?>
 		<?php if ( $this->checkOwner( $this->recipe['creator_id'] ) ): ?>
 		<a href="<?php echo "/method/edit/recipe_id/" . $method['recipe_id'] . "/method_id/" . $method['id'] ?>">Edit</a> | <a href="<?php echo "/method/delete/recipe_id/" . $method['recipe_id'] . "/method_id/" . $method['id'] ?>">Delete</a>
 		<?php endif ?>

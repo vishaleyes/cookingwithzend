@@ -272,7 +272,14 @@ class RecipeController extends DefaultController
 		}
 			
 		$this->view->recipe      = $this->recipe->toArray();
-		$methods                 = $this->recipe->findMethodItem();
+
+		// Fetch the Methods
+		$m = new MethodItem();
+		$methodSelect = $m->select()
+			->where( 'recipe_id = ?', $this->recipe->id )
+			->order( array( 'position', 'id' ) );
+		
+		$methods                 = $m->fetchAll( $methodSelect );
 		if ( $methods )
 			$this->view->methods = $methods->toArray();
 
