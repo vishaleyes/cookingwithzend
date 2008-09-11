@@ -34,6 +34,13 @@
 					<action>index</action>
 				</defaults>
 			</index>
+			<tags>
+				<route>tag/tags/:name</route>
+				<defaults>
+					<controller>tag</controller>
+					<action>tags</action>
+				</defaults>
+			</tags>
 			<user_recipes>
 				<route>recipe/user/:userId</route>
 				<defaults>

@@ -58,7 +58,8 @@ class Tag extends Zend_Db_Table_Abstract {
 		{
 			$class = new $row['taggable_type'];
 			$object = $class->find( $row['taggable_id'] )->current();
-			$output[$row['name']][]= $object;
+			// $output[$row['name']][]= $object;
+			$output[]= $object->toArray();
 		}
 		return $output;
 	}

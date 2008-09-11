@@ -9,7 +9,7 @@ class Recipe extends Zend_Db_Table_Abstract {
 	# Primary does Auto Inc
 	protected $_sequence = true;
 	
-	protected $_dependentTables = array('RecipeIngredient', 'MethodItem');
+	protected $_dependentTables = array('RecipeIngredient', 'MethodItem', 'Rating');
 	
 	protected $_referenceMap = array(
 		'User' => array(

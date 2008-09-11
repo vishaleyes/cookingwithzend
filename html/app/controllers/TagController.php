@@ -6,7 +6,7 @@ class TagController extends DefaultController
 	public function preDispatch()
 	{
 		// Held in DefaultController
-		$this->loggedIn( array( 'index' ) );
+		$this->loggedIn( array( 'index', 'tags' ) );
 		$this->pendingAccount( array( 'index' ) );
 	}
 
@@ -14,9 +14,15 @@ class TagController extends DefaultController
 	{
 		$tags = explode( ' ', $this->_getParam( 'name' ) );
 		$t = new Tag();
-		print_r( $t->getTagObjects( $tags ) );
+		$this->view->recipes = $t->getTagObjects( $tags );
+		$this->view->tags = $tags;
+
+		#print_r( $tags );
+		#print_r( $this->view->recipes );
 		
 		// Not sure what to do with this view just yet
+		$this->view->pageContent = $this->pagesFolder.'/tags/index.phtml';
+		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 	}
 
 	/**
