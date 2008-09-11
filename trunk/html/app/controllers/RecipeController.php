@@ -80,22 +80,18 @@ class RecipeController extends DefaultController
 			'style'          => 'digg'
 		);
 
-		$rat = new Rating();
-		$tag = new Tag();
-		
-		$output = array();
+		/**
+		 * @todo Move this into RecipeRowset perhaps so that the ratings and tags ar in the rowset
+		 */
 		
 		$rowset = $r->fetchAll( $select );
 
+		// Dunno why this is still needed
 		foreach( $rowset as $row ) {
-			$temp = array();
-			$temp = $row->toArray();
-			$temp['tags'] = $tag->getTags( $row );
-			$temp['rating'] = $rat->getRating( $row->id );
-			$output[] = $temp;
 		}
+		// ----------------
 
-		$this->view->recipes = $output;
+		$this->view->recipes = $rowset->toArray();
 		
 		$this->view->pageContent = $this->pagesFolder.'/recipe/index.phtml';
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));

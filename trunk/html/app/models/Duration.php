@@ -18,7 +18,6 @@ class Duration
 		return Duration::array2string($duration);
 	}
 
-
 	/**
 	* Return an array of date segments.
 	*
