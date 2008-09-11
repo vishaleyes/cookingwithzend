@@ -12,7 +12,7 @@ class TagController extends DefaultController
 
 	public function tagsAction()
 	{
-		$tags = explode( ' ', $this->_getParam( 'name' ) );
+		$tags = $this->_getParam( 'name' );
 		$t = new Tag();
 		$this->view->recipes = $t->getTagObjects( $tags );
 		$this->view->tags = $tags;

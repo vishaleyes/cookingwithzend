@@ -41,25 +41,36 @@ class Tag extends Zend_Db_Table_Abstract {
 	 * @param $tags array The tag names you want to find
 	 */
 
-	public function getTagObjects( $tags = array() )
+	public function getTagObjects( $tags = null )
 	{
-		if ( count( $tags ) == 0 )
+		if ( $tags === null )
 			return null;
 
+		$tagArray = explode( ' ', $tags );
+		sort( $tagArray );
+
 		$select = $this->getAdapter()->select();
-		$select->from( 'tags' )
+
+		$select->from( 'tags', array( 'mytags' => 'GROUP_CONCAT(tags.name SEPARATOR " ")' )  )
 		       ->join( 'taggings', 'tags.id = taggings.tag_id' )
-		       ->where( 'name IN (?)', $tags );
+		       ->where( 'name IN (?)', $tagArray )
+			   ->group( 'taggings.taggable_id' )
+			   ->order( 'mytags' );
+
+		$this->log->debug( var_export( $tagArray, true ) );
+		$this->log->debug( $select->__toString() );
 
 		$stmt = $this->getAdapter()->query( $select );
 		$rowset = $stmt->fetchAll();
 		$output = array();
 		foreach( $rowset as $row )
 		{
-			$class = new $row['taggable_type'];
-			$object = $class->find( $row['taggable_id'] )->current();
-			// $output[$row['name']][]= $object;
-			$output[]= $object->toArray();
+			if ( join( ' ', $tagArray) === $row['mytags'] ) {
+				$class = new $row['taggable_type'];
+				$object = $class->find( $row['taggable_id'] )->current();
+				// $output[$row['name']][]= $object;
+				$output[]= $object->toArray();
+			}
 		}
 		return $output;
 	}
