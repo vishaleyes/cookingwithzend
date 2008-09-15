@@ -1,4 +1,4 @@
-	<h2><?php echo $this->name . ' ' . round_brackets( $this->view_count ) ?></h2>
+	<h2><?php echo $this->escape( $this->name ) . ' ' . round_brackets( $this->view_count ) ?></h2>
 	<div>
 		<ul>
 			<li><?php echo 'Difficulty: ' . $this->difficulty ?></li>

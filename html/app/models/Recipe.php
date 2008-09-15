@@ -38,8 +38,7 @@ class Recipe extends Zend_Db_Table_Abstract {
 		$e->setLabel( 'Name' )
 		  ->setRequired( true )
 		  ->addValidator( new Zend_Validate_NotEmpty(), true )
-		  ->addValidator( new Zend_Validate_StringLength( array( 3, 255 ) ) )
-		  ->addFilter( new Zend_Filter_HtmlEntities() );
+		  ->addValidator( new Zend_Validate_StringLength( array( 3, 255 ) ) );
 		$elements[] = $e;
 
 		$e = new Zend_Form_Element_Text( 'cooking_time' );

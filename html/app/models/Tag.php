@@ -52,12 +52,15 @@ class Tag extends Zend_Db_Table_Abstract {
 		$select = $this->getAdapter()->select();
 
 		$select->from( 'tags', array( 'mytags' => 'GROUP_CONCAT(tags.name SEPARATOR " ")' )  )
-		       ->join( 'taggings', 'tags.id = taggings.tag_id' )
-		       ->where( 'name IN (?)', $tagArray )
-			   ->group( 'taggings.taggable_id' )
-			   ->order( 'mytags' );
+		       ->joinLeft( 'taggings', 'tags.id = taggings.tag_id' )
+			   ->group( 'taggings.taggable_id' );
+	
+		foreach ( $tagArray as $tag ) {
+			$select->having( 'GROUP_CONCAT(tags.name) LIKE ?', '%'.$tag.'%');
+		}
 
-		$this->log->debug( var_export( $tagArray, true ) );
+		$select->order( 'mytags' );
+
 		$this->log->debug( $select->__toString() );
 
 		$stmt = $this->getAdapter()->query( $select );
@@ -65,12 +68,9 @@ class Tag extends Zend_Db_Table_Abstract {
 		$output = array();
 		foreach( $rowset as $row )
 		{
-			if ( join( ' ', $tagArray) === $row['mytags'] ) {
-				$class = new $row['taggable_type'];
-				$object = $class->find( $row['taggable_id'] )->current();
-				// $output[$row['name']][]= $object;
-				$output[]= $object->toArray();
-			}
+			$class = new $row['taggable_type'];
+			$object = $class->find( $row['taggable_id'] )->current();
+			$output[]= $object->toArray();
 		}
 		return $output;
 	}
