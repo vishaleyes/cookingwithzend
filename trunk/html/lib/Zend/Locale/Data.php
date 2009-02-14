@@ -16,18 +16,18 @@
  * @package    Zend_Locale
  * @subpackage Data
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Data.php 9255 2008-04-19 11:19:22Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Data.php 12057 2008-10-21 17:19:43Z thomas $
  */
-
 
 /**
  * include needed classes
  */
 require_once 'Zend/Locale.php';
 
-
 /**
+ * Locale data reader, handles the CLDR
+ *
  * @category   Zend
  * @package    Zend_Locale
  * @subpackage Data
@@ -37,31 +37,28 @@ require_once 'Zend/Locale.php';
 class Zend_Locale_Data
 {
     /**
-     * locale files
+     * Locale files
      *
      * @var ressource
      * @access private
      */
     private static $_ldml = array();
 
-
     /**
-     * list of values which are collected
+     * List of values which are collected
      *
      * @var array
      * @access private
      */
     private static $_list = array();
 
-
     /**
-     * internal cache for ldml values
+     * Internal cache for ldml values
      * 
      * @var Zend_Cache_Core
      * @access private
      */
     private static $_cache = null;
-
 
     /**
      * Read the content from locale
@@ -274,15 +271,12 @@ class Zend_Locale_Data
             $locale = new Zend_Locale();
         }
 
-        if ($locale instanceof Zend_Locale) {
-            $locale = $locale->toString();
+        if (!(Zend_Locale::isLocale((string) $locale, null, false))) {
+            require_once 'Zend/Locale/Exception.php';
+            throw new Zend_Locale_Exception("Locale (" . (string) $locale . ") is a unknown locale");
         }
 
-        if (!($locale = Zend_Locale::isLocale($locale))) {
-            require_once 'Zend/Locale/Exception.php';
-            throw new Zend_Locale_Exception("Locale ($locale) is a unknown locale");
-        }
-        return $locale;
+        return (string) $locale;
     }
 
     /**
@@ -297,12 +291,12 @@ class Zend_Locale_Data
     public static function getList($locale, $path, $value = false)
     {
         $locale = self::_checkLocale($locale);
-
         if (isset(self::$_cache)) {
             $val = $value;
             if (is_array($value)) {
                 $val = implode('_' , $value);
             }
+
             $val = urlencode($val);
             $id = strtr('Zend_LocaleL_' . $locale . '_' . $path . '_' . $val, array('-' => '_', '%' => '_', '+' => '_'));
             if ($result = self::$_cache->load($id)) {
@@ -1158,14 +1152,57 @@ class Zend_Locale_Data
         return $temp;
     }
 
+    /**
+     * Returns the set cache
+     * 
+     * @return Zend_Cache_Core The set cache
+     */
+    public static function getCache()
+    {
+        return self::$_cache;
+    }
 
     /**
      * Set a cache for Zend_Locale_Data
      * 
-     * @param Zend_Cache_Core $cache a cache frontend
+     * @param Zend_Cache_Core $cache A cache frontend
      */
     public static function setCache(Zend_Cache_Core $cache)
     {
         self::$_cache = $cache;
+    }
+
+    /**
+     * Returns true when a cache is set
+     *
+     * @return boolean
+     */
+    public static function hasCache()
+    {
+        if (self::$_cache !== null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Removes any set cache
+     *
+     * @return void
+     */
+    public static function removeCache()
+    {
+        self::$_cache = null;
+    }
+
+    /**
+     * Clears all set cache data
+     *
+     * @return void
+     */
+    public static function clearCache()
+    {
+        self::$_cache->clean();
     }
 }

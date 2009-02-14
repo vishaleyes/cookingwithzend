@@ -16,7 +16,7 @@
  * @package    Zend_Loader
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Loader.php 8906 2008-03-19 19:15:30Z darby $
+ * @version    $Id: Loader.php 12507 2008-11-10 16:29:09Z matthew $
  */
 
 /**
@@ -152,6 +152,11 @@ class Zend_Loader
      * This function uses the PHP include_path, where PHP's is_readable()
      * does not.
      *
+     * Note from ZF-2900:
+     * If you use custom error handler, please check whether return value
+     *  from error_reporting() is zero or not.
+     * At mark of fopen() can not suppress warning if the handler is used.
+     *
      * @param string   $filename
      * @return boolean
      */
@@ -160,7 +165,7 @@ class Zend_Loader
         if (!$fh = @fopen($filename, 'r', true)) {
             return false;
         }
-
+        @fclose($fh);
         return true;
     }
 
