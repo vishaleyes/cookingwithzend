@@ -17,7 +17,7 @@
  * @subpackage Zend_InfoCard_Cipher
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Cipher.php 9125 2008-04-03 21:22:31Z thomas $
+ * @version    $Id: Cipher.php 11747 2008-10-08 18:33:58Z norm2782 $
  */
 
 /**
@@ -63,7 +63,7 @@ class Zend_InfoCard_Cipher
      * @return void
      * @codeCoverageIgnoreStart
      */
-    private function __construct()
+    protected function __construct()
     {
     }
     // @codeCoverageIgnoreEnd
