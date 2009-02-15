@@ -35,14 +35,14 @@ CREATE TABLE `comments` (
 -- Table structure for table `ingredient_measurements`
 --
 -- Removed for the time being - CL 16/07/08
---DROP TABLE IF EXISTS `ingredient_measurements`;
---CREATE TABLE `ingredient_measurements` (
+-- DROP TABLE IF EXISTS `ingredient_measurements`;
+-- CREATE TABLE `ingredient_measurements` (
 --  `id` int(11) NOT NULL auto_increment,
 --  `ingredient_id` int(11) default NULL,
 --  `measurement_id` int(11) default NULL,
 --  `position` int(11) default NULL,
 --  PRIMARY KEY  (`id`)
---) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `ingredients`
