@@ -1,0 +1,77 @@
+<?= $this->doctype() ?> <!-- This Line will output the doctype we set inside the bootstrap file -->
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+	<title><?php echo $this->title ?></title>
+  <!--
+      The line below demonstrates usage of the headLink() view helper
+      @see http://framework.zend.com/manual/en/zend.view.helpers.html
+      -->
+  <?= $this->headLink()->appendStylesheet('/css/global.css') ?>
+	<link rel="stylesheet" type="text/css" href="/public/css/jquery.autocomplete.css" />
+	<link rel="stylesheet" type="text/css" href="/public/css/jquery.rating.css" />
+	<link rel="stylesheet" type="text/css" href="/public/css/recipe.css" />
+
+	<script type="text/javascript" charset="utf-8" src="/public/js/jquery-1.2.6.pack.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/public/js/jquery.form.js"></script>
+
+	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery-ui-personalized-1.6b.packed.js"></script>
+	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.autocomplete.pack.js"></script>
+	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery.rating.pack.js"></script>
+	<?php if ( $this->textfield === true ): ?>
+	<script type="text/javascript" src="/public/js/jquery.FCKEditor.js" language="Javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){ 
+			$('textarea.fck').fck( {
+				path: '/public/fck/',
+				toolbar: 'Cookery',
+				width: 700,
+				height: 200
+			});
+		});
+	</script>
+
+	<?php endif ?>
+
+</head> 
+<body>
+
+	<!-- Messages to users -->
+	<div>
+		<div id="error" style="background: #c2c2c2">
+	<?php foreach( $this->message->getMessages() as $msg ):?>
+	<?php echo $msg; ?>
+	<?php endforeach ?>
+	</div>
+	<?php $this->message->setNameSpace('error') ?>
+		<div id="notice" style="background: #72bf72">
+	<?php foreach( $this->message->getMessages() as $msg ):?>
+	<?php echo $msg; ?>
+	<?php endforeach ?>
+	</div>
+	<!-- end Messages to users -->
+	</div>
+	
+	<!-- Navigation -->
+	<ul>
+		<li><a href="/">Home</a></li>
+	<?php if ( $this->loggedIn() ): ?>
+		<li><a href="/user/account">My Account</a></li>	
+		<li><a href="<?php echo '/recipe/user/'.$this->session->user['name'] ?>">My Recipes</a></li>	
+		<li><a href="/recipe/new">New Recipe</a></li>
+	<?php else: ?>
+		<li><a href="/login/login">Login</a> / <a href="/user/new">Register</a></li>
+	<?php endif ?>
+		<li><a href="http://cookingwithzend.blogspot.com/">Blog</a></li>
+	</ul>
+	<!-- End Navigation -->
+
+<!-- This next call will now include any content that was generated in the
+     dispatching of a controllers action (or series of actions).  -->
+<?= $this->layout()->content ?>
+
+<!-- if your application requires it, this would be a great place to put a
+     footer for all pages. -->
+
+</body>
+</html>

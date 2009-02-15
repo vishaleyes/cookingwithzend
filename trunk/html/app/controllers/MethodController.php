@@ -31,6 +31,8 @@ class MethodController extends DefaultController
 		$this->view->textfield = true;
 		$this->view->title = 'Create a method';
 		$this->view->pageContent = $this->pagesFolder.'/method/new.phtml';
+		$this->view->recipe_id = $this->recipe->id;
+		$this->view->textfield = true;
 		$this->renderModelForm( '/method/create/recipe_id/' . $this->recipe->id, 'Add' );
 	}
 	
@@ -42,21 +44,30 @@ class MethodController extends DefaultController
 
 		$params = $this->form->getValues();
 		$params['recipe_id'] = $this->recipe->id;
-		
+
 		$m = new MethodItem();
 		$r = $this->recipe->getTable();
-		
+
 		$this->db->beginTransaction();
+<<<<<<< .mine
+
+=======
 		// Switch textfield JS on
 		
+>>>>>>> .r166
 		// Put the insert into a transaction
 		try {
 			$m->insert( $params );
 			$params = array();
 			$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
 			$this->db->commit();
+<<<<<<< .mine
+			$this->message->addMessage( 'Added a method to ' . sq_brackets( $this->recipe->name ) );
+			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
+=======
 			$this->log->info( 'Added MethodItem to recipe ' . sq_brackets( $this->recipe->id ) ); 
 			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
+>>>>>>> .r166
 		} catch (Exception $e) {
 			$this->log->info( $e->getMessage() );
 			$this->db->rollBack();

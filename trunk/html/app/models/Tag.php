@@ -1,6 +1,6 @@
 <?php
 
-class Tag extends Zend_Db_Table_Abstract {
+class Models_Tag extends Zend_Db_Table_Abstract {
 	
 	protected $_name = "tags";
 	protected $_primary = "id";
