@@ -1,4 +1,7 @@
 <?php
+
+require_once( APPLICATION_PATH . '/../inc/functions.inc.php' );
+
 // APPLICATION CONSTANTS - Set the constants to use in this application.
 // These constants are accessible throughout the application, even in ini 
 // files. We optionally set APPLICATION_PATH here in case our entry point 
