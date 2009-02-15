@@ -1,34 +1,9 @@
 <?php
 
-class RecipeController extends DefaultController  
+require_once( APPLICATION_PATH . '/controllers/DefaultController.php' );
+
+class RecipeController extends DefaultController
 {
-
-	/**
-	 * This happens before the page is dispatched
-	 */
-
-	public function preDispatch()
-	{
-		// Held in DefaultController
-		$this->loggedIn( array( 'view', 'index' ) );
-		$this->pendingAccount( array( 'index' ) );
-		$this->authorised( array( 'edit' ) );
-	}
-
-	/**
-	 * Setup this controller specifically and then call the parent
-	 */
-
-	public function init()
-	{
-		$r = new Recipe();
-		$t = new Tag();
-		$this->form = new Zend_Form;
-		$this->form->addElements( $r->getFormElements() );
-		$this->form->addElements( $t->_form_fields_config );
-		 
-		parent::init();
-	}
 
 	/**
 	 * Display the build a new recipe page
@@ -37,27 +12,23 @@ class RecipeController extends DefaultController
 	public function newAction()
 	{
 		$this->view->title = 'Create a recipe';
-		$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
+		// $this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
 		
-		$this->renderModelForm( '/recipe/create', 'Add' );
+		// $this->renderModelForm( '/recipe/create', 'Add' );
 	}
-
-	/**
-	 * Main index page, you can optionally 
-	 */
 
 	public function indexAction()
 	{
 		$this->view->title = 'Viewing recipes';
 
-		$items_per_page = ( $this->session->pagination['items_per_page'] ? $this->session->pagination['items_per_page'] : 5 );
+		$items_per_page = ( $this->_session->pagination['items_per_page'] ? $this->_session->pagination['items_per_page'] : 5 );
 
-		$r = new Recipe();
+		$r = new Models_DbTable_Recipe();
 		$select = $r->select();
-		$total_select = $this->db->select()->from( 'recipes', array( 'count' => 'COUNT(id)' ) );
+		$total_select = $this->_db->select()->from( 'recipes', array( 'count' => 'COUNT(id)' ) );
 		
 		if ( $this->_getParam( 'userId' ) ) {
-			$u = new User();
+			$u = new Models_User();
 			$user = $u->getByField( 'name', $this->_getParam( 'userId' ) );
 			$this->view->title = 'Viewing recipes for ' . $user->name;
 			$select->where( 'creator_id = ?', $user->id );
@@ -71,7 +42,7 @@ class RecipeController extends DefaultController
 			$select->limit( $items_per_page );
 		}
 
-		$stmt = $this->db->query( $total_select );
+		$stmt = $this->_db->query( $total_select );
 		$total_entries = $stmt->fetch();
 		
 		$this->view->pagination_config = array(
@@ -92,10 +63,8 @@ class RecipeController extends DefaultController
 		// ----------------
 
 		$this->view->recipes = $rowset->toArray();
-		
-		$this->view->pageContent = $this->pagesFolder.'/recipe/index.phtml';
-		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 	}
+
 
 	/**
 	 * Put a new recipe in the database
@@ -297,13 +266,12 @@ class RecipeController extends DefaultController
 
 	}
 	
-	/**
-	 * We are existing after the action is dispatched
-	 */
-
-	public function postDispatch() {
-		exit;
+	public function addtagAction()
+	{
+		$tags = $this->getParam( 'tag' );
+		$t = new Tag();
+		$t->splitTags( $tags, $row );
+		$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
 	}
-	
 }
 

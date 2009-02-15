@@ -1,15 +1,6 @@
 <?php
 
-class User extends Zend_Db_Table_Abstract {
-
-	protected $_name = "users";
-	protected $_primary = "id";
-	protected $_rowClass = "UserRow";
-
-	# Primary does Auto Inc
-	protected $_sequence = true;
-
-	protected $_dependentTables = array('Recipe');
+class Models_User extends Zend_Db_Table_Abstract {
 
 	public function getFormElements()
 	{
@@ -50,24 +41,6 @@ class User extends Zend_Db_Table_Abstract {
 		return $elements;
 	}
 
-	function __construct( $prefetch = true )
-	{
-		$this->db = Zend_Registry::get("db");
-		Zend_Db_Table_Abstract::setDefaultAdapter($this->db);
-		
-		$this->log = Zend_Registry::get('log');
-		
-		$this->_setup();
-	}
-
-	public function insert( $params )
-	{
-		$params['created'] = new Zend_Db_Expr('NOW()');
-		$params['updated'] = new Zend_Db_Expr('NOW()');
-		$params['last_login'] = new Zend_Db_Expr('NOW()');
-		
-		return parent::insert( $params );
-	}
 
 	/**
 	 * @deprecated

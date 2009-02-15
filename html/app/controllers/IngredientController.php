@@ -27,6 +27,16 @@ class IngredientController extends DefaultController
 		return $form;
 	}
 	
+	private function prepareIndgredients()
+	{
+		$ingredients_output = array();
+		$ingredients = $this->recipe->findRecipeIngredient();
+		foreach( $ingredients as $ingredient ) { 
+			$ingredients_output[] = $ingredient->toArray();
+		}
+		return $ingredients_output;
+	}
+	
 	/**
 	 * Display the build a new ingredient page
 	 */
@@ -41,12 +51,7 @@ class IngredientController extends DefaultController
 		$form->addElement( 'submit', 'Add' );
 		$this->view->form = $form;
 
-		$this->view->ingredients = array();
-		$ingredients = $this->recipe->findRecipeIngredient();
-		foreach( $ingredients as $ingredient ) { 
-			$this->view->ingredients[] = $ingredient->toArray();
-		}
-
+		$this->view->ingredients = $this->prepareIndgredients();
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 	}
 	
@@ -58,9 +63,16 @@ class IngredientController extends DefaultController
 	public function createAction()
 	{
 		$form = $this->ingredientForm();
-		if (! $form->isValid($_POST)) {
-			$this->log->info( 'Ingredient form is invalid '.var_export( $form->getMessages(), true ) );
-			$this->_redirect( '/ingredient/new/recipe_id/'.$this->recipe->id );
+		if ( (! $_POST) || (! $form->isValid($_POST)) ) {
+			
+			$this->view->ingredients = $this->prepareIndgredients();
+			$form->setAction( '/ingredient/create/recipe_id/' . $this->recipe->id );
+			$form->addElement( 'submit', 'Add' );
+			$this->view->form = $form;
+			$this->view->pageContent = $this->pagesFolder.'/ingredient/new.phtml';
+			$this->view->recipe_id = $this->recipe->id;
+			echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
+			exit;
 		}
 		
 		$values = $form->getValues();
@@ -101,8 +113,9 @@ class IngredientController extends DefaultController
 
 			$this->db->commit();
 			$url = "/ingredient/new/recipe_id/".$this->recipe->id;
-			$this->message->addMessage( 'Added Ingredient ' . sq_brackets( $values['ingredient_name'] ) . ' to ' . sq_brackets( $this->recipe->name ) . ' <a href="'.$url.'">Click Here</a> to add another' );
+			$this->message->addMessage( 'Added Ingredient ' . sq_brackets( $values['ingredient_name'] ) . ' to ' . sq_brackets( $this->recipe->name ) );
 			$this->log->info( 'Added Ingredient ' . sq_brackets( $values['ingredient_name'] ) . ' to RecipeID ' . sq_brackets( $this->recipe->id ) ); 
+
 			// All is well send us to the ingredient list for this recipe
 			$this->_redirect( '/ingredient/new/recipe_id/' . $this->recipe->id );
 		} catch (Exception $e) {

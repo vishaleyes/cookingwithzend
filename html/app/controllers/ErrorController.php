@@ -1,86 +1,60 @@
-<?php
-class ErrorController extends DefaultController 
+<?php 
+
+/**
+ * ErrorController
+ */ 
+class ErrorController extends Zend_Controller_Action
 {
-    protected $_error = null; 
-     
 	/**
-	 * Folder where all pages should be stored
-	 *
-	 * @var string
-	 */
-	protected $pagesFolder;
-	/**
-	 * Folder where all temlpates should be stored
-	 *
-	 * @var string
-	 */
-	protected $templatesFolder;
-	/**
-	 * Folder where all other application's specific include files should be stored
-	 *
-	 * @var string
-	 */
-	protected $includesFolder;
-	/**
-	* Logger Object (usage : $this->log->log("Message to log", 0);)
-	*
-	* @var Zend_Log
-	*/
-	protected $log;
-		    
-    public function errorAction() 
-    { 
-        $this->_error = $this->_getParam('error_handler');
-        
-    	switch ($this->_error->type) { 
-            case 'EXCEPTION_NO_CONTROLLER': 
-            case 'EXCEPTION_NO_ACTION': 
-                $this->notFoundAction();
-                return;
-            case 'EXCEPTION_OTHER':
-                $this->serverErrorAction();
-                return; 
-        } 
-    }
+     * errorAction() is the action that will be called by the "ErrorHandler" 
+     * plugin.  When an error/exception has been encountered
+     * in a ZF MVC application (assuming the ErrorHandler has not been disabled
+     * in your bootstrap) - the Errorhandler will set the next dispatchable 
+     * action to come here.  This is the "default" module, "error" controller, 
+     * specifically, the "error" action.  These options are configurable, see 
+     * {@link http://framework.zend.com/manual/en/zend.controller.plugins.html#zend.controller.plugins.standard.errorhandler the docs on the ErrorHandler Plugin}
+     *
+     * @return void
+     */
+	public function errorAction()
+	{
+		// Ensure the default view suffix is used so we always return good
+		// content
+		$this->_helper->viewRenderer->setViewSuffix('phtml');
 
-    public function notFoundAction() 
-    { 
-		// First check if an html page exists - if so, use that with the default controller
-		$exists = false;
-		foreach($this->view->getScriptPaths() as $script_path)
-		{
-			if (file_exists($script_path.$this->pagesFolder.$this->_request->getRequestUri().'.php'))
-			{
-				$exists = true;
+		// Grab the error object from the request
+		$errors = $this->_getParam('error_handler');
+
+		// $errors will be an object set as a parameter of the request object,
+		// type is a property
+		$pageName = $this->_request->getControllerName() . '/' . $this->_request->getActionName();
+
+		switch ($errors->type) {
+			case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
+			case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
+
+				// 404 error -- controller or action not found
+				$this->getResponse()->setHttpResponseCode(404);
+				$this->view->message = 'Page not found';
 				break;
-			}
+			default:
+				// application error
+				$this->getResponse()->setHttpResponseCode(500);
+				$this->view->error_message = 'Application error';
+				break;
 		}
-		
-		if ($exists)
-		{
-			$this->view->pageContent = $this->pagesFolder.$this->_request->getRequestUri().'.php';
-		} else {
-			$this->log->info("Page not found" . " : " . $this->_request->getRequestUri());
-			print_r($this->_error);
-			#$this->_redirect( '/' );
-		}
-        echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));	
-    }
 
-    public function serverErrorAction() 
-    { 
-    	$exception = $this->_error->exception;
-        $this->log->debug($exception->getMessage() . "\n" .  $exception->getTraceAsString());
-        $this->view->title = 'Error';
-        $this->view->errorType = 'Server';
-		print "<p>".$exception->getMessage() .  $exception->getTraceAsString()."</p>";
-    }
-	
-	public function postDispatch() {
-		exit;
+		$this->_helper->layout->disableLayout();
+		$this->view->setScriptPath( APPLICATION_PATH . '/views/' );
+
+		// pass the environment to the view script so we can conditionally
+		// display more/less information
+		$this->view->env       = $this->getInvokeArg('env');
+
+		// pass the actual exception object to the view
+		$this->view->exception = $errors->exception;
+
+		// pass the request to the view
+		$this->view->request   = $errors->request;
 	}
-
-    public function checkAuthorisation()
-    {
-    }
 }

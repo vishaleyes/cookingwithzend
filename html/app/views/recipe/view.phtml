@@ -1,10 +1,19 @@
 <?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $this->recipe ) ?>
 
+<?php echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $this->tags, 'creator' => $this->recipe['creator_id'] ) ) ?>
+
+<?php if ( $this->checkOwner( $this->recipe['creator_id'] ) ): ?>
+<form method="post" action="/recipe/addtag/<?php echo $this->recipe['id'] ?>">
+	<label>Add a tag</label>
+	<input type="text" name="tag" value="" id="add-tag"/>
+</form>
+<?php endif ?>
+
 <!-- Ingredients -->
 <?php if ( count( $this->ingredients ) > 0 ): ?>
 	<h3>Ingredients</h3>
 	<!-- Ingredient ID's are recipe_id-ingredient_id -->
-	<ul>
+	<ul id="ingredients-list">
 	<?php echo $this->partialLoop( $this->partialsFolder . '/ingredient.phtml', $this->ingredients ); ?>
 	</ul>
 	<p><a href="<?php echo "/ingredient/new/recipe_id/" . $this->recipe['id'] ?>">Add ingredients</a></p>
@@ -12,7 +21,6 @@
 	<p>No ingredients, why not <a href="<?php echo "/ingredient/new/recipe_id/" . $this->recipe['id'] ?>">Add one</a></p>
 <?php endif ?>
 <!-- End of Ingredients -->
-
 
 <!-- Method Items -->
 <?php if ( count( $this->methods ) > 0 ): ?>
@@ -53,8 +61,6 @@
 	<p>Well I can't tell you how to make it, why not add some <a href="<?php echo "/method/new/recipe_id/" . $this->recipe['id'] ?>">Instructions</a></p>
 <?php endif ?>
 <!-- End of Method Items -->
-
-<?php echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $this->tags, 'creator' => $this->recipe['creator_id'] ) ) ?>
 	
 <!-- Rating -->
 <h3>Rating</h3>
@@ -63,14 +69,21 @@ $(function(){
 	$('.auto-submit-star').rating({
 		required: true,
 		callback: function(value, link){
-			this.form.submit();
+			$.ajax({
+				type: "POST",
+				url: "/ajax/sendrating",
+				data: "recipe_id=" + $('#rating-recipe-id').val() + '&value=' + value,
+				success: function(html) {
+					alert('fooooo');	
+				}
+			});
 	    } 
 	});
 });
 </script>
 <div>
 	<form id="rating-form" method="post" action="/rating/add">
-		<input type="hidden" name="recipe_id" value="<?php echo $this->recipe['id'] ?>"/>
+		<input type="hidden" id="rating-recipe-id" name="recipe_id" value="<?php echo $this->recipe['id'] ?>"/>
 		<div id="rating-stars-holder">
 			<?php echo $this->starRating( $this->recipe['id'] ); ?>
 		</div>

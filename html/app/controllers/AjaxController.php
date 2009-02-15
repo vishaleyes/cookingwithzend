@@ -89,6 +89,39 @@ class AjaxController extends DefaultController
 		echo $this->view->partial( $this->partialsFolder . '/comments.phtml', array( 'comments' => $rowset, 'pagination_config' => $this->view->pagination_config ) );
 		
 	}
+	
+	public function sendratingsAction()
+	{
+		echo 'foo';
+		$params = array(
+			'recipe_id'   => $this->recipe->id,
+			'value'       => $this->_getParam('value'),
+		);
+
+		/*	Try and insert them into DB	*/
+		try {
+			$r = new Rating();
+			$r->insert($params);
+			
+			/* Incease ratings counters */
+			$this->db->update("users",array("ratings_count" => new Zend_Db_Expr("(ratings_count + 1)")),"id = " . $this->session->user['id']);
+			$this->db->update("recipes",array("ratings_count" => new Zend_Db_Expr("(ratings_count + 1)")),"id = " . $params['recipe_id']);
+			
+			/*	If successful go back to last recipe		*/
+			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
+			
+			exit;
+			
+		} catch(Exception $e) {
+			/*	Broken constraints = throws exception. Display error and return to recipe		*/
+			$this->log->debug( $e->getMessage() );
+			$this->message->setNamespace( 'error' );
+			$this->message->addMessage( 'You have already rated this recipe.' );
+			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
+		}
+		
+		
+	}
 
 	/**
 	 *  Suggest tags to the user via a like match

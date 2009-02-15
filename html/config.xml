@@ -1,17 +1,26 @@
 <?xml version="1.0"?>
 <data>
 	<production>
-		<hosts></hosts>
+		<hosts>simplycook.org</hosts>
 		<!-- Switch this to false if you want to work away from the internet -->
 		<online>true</online>
 		<database>
-			<type>pdo_mysql</type>
-			<host>localhost</host>
-			<username>root</username>
-			<password></password>
-			<name></name>
-			<profiler>false</profiler>
+			<adapter>pdo_mysql</adapter>
+			<params>
+				<host>localhost</host>
+				<username>root</username>
+				<password></password>
+				<dbname>clock_simplycook</dbname>
+			</params>
 		</database>
+		<sessions>
+			<name>sessions</name>
+			<primary>id</primary>
+			<modifiedColumn>modified</modifiedColumn>
+			<dataColumn>data</dataColumn>
+			<lifetimeColumn>lifetime</lifetimeColumn>
+			<lifetime>3600</lifetime>
+		</sessions>
 		<authentication>
 			<tableName>users</tableName>
 			<identityColumn>email</identityColumn>
@@ -23,98 +32,34 @@
 		<session>
 			<remember_me_seconds>2592000</remember_me_seconds>
 		</session>
-		<logs>
-			<application></application>
-		</logs>
-		<routes>
-			<index>
-				<route>/</route>
-				<defaults>
-					<controller>recipe</controller>
-					<action>index</action>
-				</defaults>
-			</index>
-			<tags>
-				<route>tag/tags/:name</route>
-				<defaults>
-					<controller>tag</controller>
-					<action>tags</action>
-				</defaults>
-			</tags>
-			<user_recipes>
-				<route>recipe/user/:userId</route>
-				<defaults>
-					<controller>recipe</controller>
-					<action>index</action>
-				</defaults>
-			</user_recipes>
-			<confirm>
-				<route>user/confirm/:code</route>
-				<defaults>
-					<controller>user</controller>
-    	    		<action>confirm</action>
-				</defaults>
-			</confirm>
-			<sendconfirm>
-				<route>user/sendconfirmation/:name</route>
-				<defaults>
-					<controller>user</controller>
-    	    		<action>sendconfirmation</action>
-				</defaults>
-			</sendconfirm>
-		</routes>
-		<locale>en_UK</locale>			
+		<log>
+			<file>/var/www/vhosts/simplycook.org/httpdocs/logs/application_log</file>
+		</log>
+		<locale>en_UK</locale>
 	</production>
-	
 	<staging extends="production">
 		<database>
-			<host>localhost</host>
-			<username>root</username>
-			<password></password>
-			<name>motorsfinder</name>
+			<adapter>pdo_mysql</adapter>
+			<params>
+				<host>localhost</host>
+				<username>root</username>
+				<password></password>
+				<dbname>simplycook</dbname>
+			</params>
 		</database>
 	</staging>
-
-	<qa extends="production">
-		<database>
-			<host>localhost</host>
-			<username>root</username>
-			<password></password>
-			<name></name>
-		</database>
-		<logs>
-			 <application></application>
-		</logs>
-	</qa>
-
 	<development extends="staging">
 		<database>
-			<host>localhost</host>
-			<username>root</username>
-			<password></password>
-			<name></name>
-			<profiler>true</profiler>
+			<adapter>pdo_mysql</adapter>
+			<params>
+				<host>localhost</host>
+				<username>root</username>
+				<password></password>
+				<dbname>recipes</dbname>
+			</params>
 		</database>
-		<logs>
-			<application></application>
-		</logs>
+		<log>
+			<file>/Users/shopping/code/cookingwithzend/logs/application_log</file>
+		</log>
 	</development>
-
-	<local extends="development">
-		<database>
-			<!-- <host>localhost</host> -->
-			<host>10.0.3.62</host>
-			<username>root</username>
-			<password></password>
-			<name>recipes_production</name>
-			<profiler>true</profiler>
-		</database>
-		<upload_path>uploads</upload_path>
-		<logs>
-			<!--
-			<application>/Users/cathar/code/cookingwithzend/logs/application_log</application>
-			-->
-			<application>/home/clock/cookingwithzend/logs/application_log</application>
-		</logs>
-	</local>	
 </data>

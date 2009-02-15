@@ -1,4 +1,0 @@
-RewriteEngine on
-RewriteBase /
-RewriteRule !\.(js|ico|gif|jpg|png|css|php|htm|html|swf|jpeg|xml|txt)$ index.php
-RewriteRule config.xml index.php

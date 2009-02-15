@@ -1,16 +1,13 @@
 <?php
 
+require_once( APPLICATION_PATH . '/controllers/DefaultController.php' );
+
 class LoginController extends DefaultController
 {
-	public function predispatch()
-	{
-		// held in defaultcontroller
-		// $this->loggedin( array( 'login', 'logout' ) );
-	}
 
 	public function init()
 	{
-		$u = new User();
+		$u = new Models_User();
 		$this->form = new Zend_Form;
 		$this->form->addElements( $u->getFormElements() );
 		

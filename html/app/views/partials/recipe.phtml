@@ -1,6 +1,6 @@
 	<h2><?php echo $this->escape( $this->name ) . ' ' . round_brackets( $this->view_count ) ?></h2>
 	<div>
-		<ul>
+		<ul id="recipe-summary">
 			<li><?php echo 'Difficulty: ' . $this->difficulty ?></li>
 			<li><?php echo 'Serves: ' . $this->serves ?></li>
 			<li><?php echo 'Cooking Time: ' . $this->cooking_time ?></li>
@@ -28,6 +28,7 @@
 <?php if ( $this->checkOwner( $this->creator_id ) ): ?>
 		<a href="<?php echo "/recipe/edit/recipe_id/".$this->id ?>">Edit</a>
 		<a href="<?php echo "/recipe/delete/recipe_id/".$this->id ?>">Delete</a>
+		<a href="<?php echo "/ingredient/new/recipe_id/".$this->id ?>">Add Ingredient</a>
 <?php endif ?>
 	</div>
 

@@ -1,36 +1,7 @@
 <?php
 
-class Recipe extends Zend_Db_Table_Abstract {
+class Models_Recipe {
 	
-	protected $_name = "recipes";
-	protected $_primary = "id";
-	protected $_rowClass = "RecipeRow";
-
-	# Primary does Auto Inc
-	protected $_sequence = true;
-	
-	protected $_dependentTables = array('RecipeIngredient', 'MethodItem', 'Rating');
-	
-	protected $_referenceMap = array(
-		'User' => array(
-			'columns'       => 'creator_id',
-			'refTableClass' => 'User',
-			'refColumns'	=> 'id'
-		)
-	);
-
-	// May be able to delete this
-	function __construct( $prefetch = true )
-	{
-		if ( ! $prefetch === false ) unset( $_rowClass );
-		$this->db = Zend_Registry::get("db");
-		Zend_Db_Table_Abstract::setDefaultAdapter($this->db);
-		
-		$this->log = Zend_Registry::get('log');
-		
-		$this->_setup();
-	}
-
 	public function getFormElements()
 	{
 		$elements = array();
@@ -100,20 +71,5 @@ class Recipe extends Zend_Db_Table_Abstract {
 
 		return false;
 	}	
-
-	public function insert( $params )
-	{
-		$params['creator_id'] = Zend_Registry::get( 'session')->user['id'];
-		$params['created'] = new Zend_Db_Expr('NOW()');
-		$params['updated'] = new Zend_Db_Expr('NOW()');
-		
-		return parent::insert( $params );
-	}
-
-	public function update( $params, $where )
-	{
-		$params['updated'] = new Zend_Db_Expr('NOW()');
-		return parent::update( $params, $where );
-	}
 
 }
