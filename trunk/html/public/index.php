@@ -5,6 +5,8 @@
 define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../app/'));
 set_include_path( 
 	APPLICATION_PATH . '/../lib' . PATH_SEPARATOR . 
+	APPLICATION_PATH . '/models' . PATH_SEPARATOR .
+	APPLICATION_PATH . '/controllers' . PATH_SEPARATOR .
 	APPLICATION_PATH . PATH_SEPARATOR .
 	get_include_path()
 );

@@ -1,32 +1,47 @@
 <?php
 
-require_once( APPLICATION_PATH . '/controllers/DefaultController.php' );
-
 class RecipeController extends DefaultController
 {
 
 	/**
-	 * Display the build a new recipe page
-	 */
-	
+		* Display the build a new recipe page
+		*/
+
 	public function newAction()
 	{
+		$model = new Models_Recipe();
 		$this->view->title = 'Create a recipe';
-		// $this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
-		
-		// $this->renderModelForm( '/recipe/create', 'Add' );
+		$form = $model->getForm('RecipeNew');
+		$this->view->form = $form;
+
+		if ($this->getRequest()->isPost()) {
+
+			// now check to see if the form submitted exists, and
+			// if the values passed in are valid for this form
+			if ($form->isValid($this->_request->getPost())) {
+				// Get the values from the DB
+				$data = $form->getValues();
+
+				// Unset the buttons
+				unset( $data['submit'] );
+
+				// Save it into the DB
+				$model->table->insert( $data );
+				$this->_flashMessenger->addMessage( 'Added new recipe ' . $data['name'] );
+				$this->_redirector->gotoUrl( $this->_helper->url( 'index' ) );
+			}
+		}
 	}
 
-	public function indexAction()
+/**	public function indexAction()
 	{
-		$this->view->title = 'Viewing recipes';
 
 		$items_per_page = ( $this->_session->pagination['items_per_page'] ? $this->_session->pagination['items_per_page'] : 5 );
 
 		$r = new Models_DbTable_Recipe();
 		$select = $r->select();
 		$total_select = $this->_db->select()->from( 'recipes', array( 'count' => 'COUNT(id)' ) );
-		
+
 		if ( $this->_getParam( 'userId' ) ) {
 			$u = new Models_User();
 			$user = $u->getByField( 'name', $this->_getParam( 'userId' ) );
@@ -44,17 +59,17 @@ class RecipeController extends DefaultController
 
 		$stmt = $this->_db->query( $total_select );
 		$total_entries = $stmt->fetch();
-		
+
 		$this->view->pagination_config = array(
 			'total_items'    => $total_entries['count'],
-		    'items_per_page' => $items_per_page,
+			'items_per_page' => $items_per_page,
 			'style'          => 'digg'
-		);
+			);
 
 		/**
 		 * @todo Move this into RecipeRowset perhaps so that the ratings and tags ar in the rowset
-		 */
-		
+		 
+
 		$rowset = $r->fetchAll( $select );
 
 		// Dunno why this is still needed
@@ -64,42 +79,55 @@ class RecipeController extends DefaultController
 
 		$this->view->recipes = $rowset->toArray();
 	}
+*/
+	
+	public function indexAction()
+	{
+		$this->view->title = 'Viewing recipes';
+		
+		$model = new Models_Recipe();
+		
+		$select = $model->table->select()
+			->limit('30');
+		
+		$this->view->recipes = $model->table->fetchAll($select);
+	}
 
 
 	/**
-	 * Put a new recipe in the database
-	 * @todo Pass form params back to /recipe/new if fail
-	 */
+		* Put a new recipe in the database
+		* @todo Pass form params back to /recipe/new if fail
+		*/
 
 	public function createAction()
 	{
 		if ( ( ! $_POST ) || ( ! $this->form->isValid($_POST) ) ) {
 			$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
-		
+
 			$this->renderModelForm( '/recipe/create', 'Add' );
 		}
 
 		$params = $this->form->getValues();
 		$tags = $params['tag_name'];
 		unset( $params['tag_name'] );
-		
+
 		$r = new Recipe();
 		$row = null;
 		$this->db->beginTransaction();
-		
+
 		// Put the insert into a transaction
 		try {
 			$r->insert( $params );
 			// grab the last recipe inserted by this user
 			$select = $r->select()
-			            ->where( 'name = ?', $params['name'] )
-			            ->where( 'creator_id = ?', $this->session->user['id'] )
-			            ->order( 'created DESC' )
-			            ->limit(1);
-			            
+				->where( 'name = ?', $params['name'] )
+				->where( 'creator_id = ?', $this->session->user['id'] )
+				->order( 'created DESC' )
+				->limit(1);
+
 			$row = $r->fetchRow( $select );
 			$user = $row->user->adjustColumn( 'recipes_count', 'increase' );
-			
+
 			$t = new Tag();
 			$t->splitTags( $tags, $row );
 
@@ -113,15 +141,15 @@ class RecipeController extends DefaultController
 			$this->db->rollBack();
 			$this->_redirect( '/recipe/new' );
 		}
-		
+
 		$this->message->addMessage( 'Added Recipe ' . sq_brackets( $params['name'] ) );
 
 		$this->_redirect( '/ingredient/new/recipe_id/' . $row->id );
 	}
 
 	/**
-	 * Display the edit form
-	 */
+		* Display the edit form
+		*/
 
 	public function editAction()
 	{
@@ -141,8 +169,8 @@ class RecipeController extends DefaultController
 	}
 
 	/**
-	 * Actually update the record
-	 */
+		* Actually update the record
+		*/
 
 	public function updateAction()
 	{
@@ -150,7 +178,7 @@ class RecipeController extends DefaultController
 			$this->view->pageContent = $this->pagesFolder.'/recipe/new.phtml';
 			$this->renderModelForm( '/recipe/update/recipe_id/'.$this->recipe->id, 'edit' );
 		}
-	
+
 		$params = $this->form->getValues();
 		$tags = $params['tag_name'];
 		unset( $params['tag_name'] );
@@ -169,7 +197,7 @@ class RecipeController extends DefaultController
 			$this->db->delete( 'taggings', array( 
 				'taggable_id = ' . $this->recipe->id,
 				'taggable_type = ' . $this->db->quote( $this->recipe->getTableClass() )
-			));
+				));
 
 			// Insert new ones
 			$t = new Tag();
@@ -180,14 +208,14 @@ class RecipeController extends DefaultController
 			$this->log->info( var_export( $e->getMessages(),true ) );
 			$this->db->rollBack();
 		}
-		
+
 		$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );	
 	}
 
 	/**
-	 * Delete the recipe, the recipe_ingredients and ratings are caught by DB FK
-	 * constraints but tags cannot be (unsure about this) so will do them manually
-	 */
+		* Delete the recipe, the recipe_ingredients and ratings are caught by DB FK
+		* constraints but tags cannot be (unsure about this) so will do them manually
+		*/
 
 	public function deleteAction()
 	{
@@ -206,12 +234,12 @@ class RecipeController extends DefaultController
 
 		$this->message->addMessage( 'Deleted recipe ' . $name );
 		$this->_redirect( '/' );
-		
+
 	}
 
 	/**
-	 * View the recipe in all its wonderful glory
-	 */
+		* View the recipe in all its wonderful glory
+		*/
 
 	public function viewAction()
 	{
@@ -235,7 +263,7 @@ class RecipeController extends DefaultController
 				$this->view->ingredients[] = $ingredient->toArray();
 			}
 		}
-			
+
 		$this->view->recipe      = $this->recipe->toArray();
 
 		// Fetch the Methods
@@ -243,7 +271,7 @@ class RecipeController extends DefaultController
 		$methodSelect = $m->select()
 			->where( 'recipe_id = ?', $this->recipe->id )
 			->order( array( 'position', 'id' ) );
-		
+
 		$methods                 = $m->fetchAll( $methodSelect );
 		if ( $methods )
 			$this->view->methods = $methods->toArray();
@@ -265,7 +293,7 @@ class RecipeController extends DefaultController
 		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
 
 	}
-	
+
 	public function addtagAction()
 	{
 		$tags = $this->getParam( 'tag' );

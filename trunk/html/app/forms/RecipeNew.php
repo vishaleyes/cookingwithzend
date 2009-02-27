@@ -60,6 +60,7 @@ class Forms_RecipeNew extends Zend_Form
 		))
 		->addElement('checkbox', 'freezable', array(
 			'label' => 'Freezable'
-		));
+		))
+		->addElement('submit', 'submit');
 	}
 }

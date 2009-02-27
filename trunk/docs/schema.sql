@@ -155,15 +155,13 @@ CREATE TABLE `recipes` (
 --
 
 DROP TABLE IF EXISTS `sessions`;
-CREATE TABLE `sessions` (
-  `id` varchar(32) collate utf8_unicode_ci NOT NULL default '',
-  `user_id` int(11) default NULL,
-  `expire` int(11) NOT NULL default '0',
-  `updated` int(11) NOT NULL default '0',
-  `data` text collate utf8_unicode_ci NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `foreign_username` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Contains web connection user sessions';
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `id` char(32) collate utf8_unicode_ci NOT NULL,
+  `modified` int(11) NOT NULL,
+  `lifetime` int(11) NOT NULL,
+  `data` text collate utf8_unicode_ci,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Contains web connection user sessions';
 
 --
 -- Table structure for table `taggings`
