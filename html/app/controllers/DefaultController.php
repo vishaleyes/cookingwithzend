@@ -83,4 +83,5 @@ abstract class DefaultController extends Zend_Controller_Action {
 		
 		$this->view->partialsFolder = 'partials/';
 	}
+	
 }

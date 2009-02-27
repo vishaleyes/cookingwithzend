@@ -28,7 +28,8 @@ class Models_DbTable_Recipe extends Zend_Db_Table_Abstract
 	
 	public function insert( array $params )
 	{
-		$params['creator_id'] = Zend_Registry::get( 'session')->user['id'];
+		//$params['creator_id'] = Zend_Registry::get( 'session')->user['id'];
+		$params['creator_id'] = 1;
 		$params['created'] = new Zend_Db_Expr('NOW()');
 		$params['updated'] = new Zend_Db_Expr('NOW()');
 		
