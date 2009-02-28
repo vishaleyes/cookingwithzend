@@ -16,9 +16,9 @@ Everybody runs linux/apache/whatever differently so I thought it would be wise f
 
 {{{
 <VirtualHost *>
-    DocumentRoot /path/to/code/html
+    DocumentRoot /path/to/code/html/public
     ServerName recipes.local
-    <Directory /path/to/code/html>
+    <Directory /path/to/code/html/public>
         Order deny,allow
         Allow from all
         DirectoryIndex index.php index.html
