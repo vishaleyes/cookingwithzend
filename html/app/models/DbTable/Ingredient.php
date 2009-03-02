@@ -30,7 +30,7 @@ class Models_DbTable_Ingredient extends Zend_Db_Table_Abstract
 	 * @return $row Zend_Db_Table_Row the row of the Ingredient table
 	 */
 
-	function insert( $data )
+	function insert( array $data )
 	{
 		try {
 			parent::insert( $data );

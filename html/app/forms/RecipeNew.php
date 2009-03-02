@@ -1,8 +1,8 @@
 <?php
 
 /**
-	* 
-	*/
+ * Used for both the New and edit recipe actions
+ */
 class Forms_RecipeNew extends Zend_Form
 {
 
@@ -61,6 +61,7 @@ class Forms_RecipeNew extends Zend_Form
 		->addElement('checkbox', 'freezable', array(
 			'label' => 'Freezable'
 		))
+		->addElement('hidden', 'id')
 		->addElement('submit', 'submit');
 	}
 }

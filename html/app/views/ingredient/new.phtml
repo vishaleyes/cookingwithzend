@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $().ready(function(){
-	$("#ingredient-name").autocomplete("/ajax/getingredients", {
+	$("#name").autocomplete("/ajax/get-ingredients", {
 		parse: function(data) {
 			return $.map(eval(data), function(row) {
 				return {
@@ -14,36 +14,7 @@ $().ready(function(){
 			return item.name;
 		}
 	});
-	$("#measurement-name").autocomplete("/ajax/getmeasurements", {
-		parse: function(data) {
-			return $.map(eval(data), function(row) {
-				return {
-					data: row,
-					value: row.id,
-					result: row.name
-				}
-			});
-		},
-		formatItem: function(item) {
-			return item.name + " (" + item.abbreviation + ")";
-		}
-	});
-
 });
 </script>
 
-<ul>
-	<li><a href="<?php echo "/recipe/view/recipe_id/".$this->recipe_id; ?>">Back to Recipe</a></li>
-	<li><a href="<?php echo "/method/new/recipe_id/".$this->recipe_id; ?>">Add instructions</a></li>
-</ul>
-
-<div>
-	<p onclick="$('#current-ingredients').toggle()">Toggle Ingredients by clicking this text</p>
-	<ul id="current-ingredients" style="display:none;">
-	<?php if ( $this->ingredients ): ?>
-	<?php echo $this->partialLoop( $this->partialsFolder . '/ingredient.phtml', $this->ingredients ); ?>
-	<?php endif ?>
-	</ul>
-</div>
-
-<?php echo $this->form ?>
+<?php echo $this->form; ?>
