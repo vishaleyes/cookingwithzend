@@ -1,6 +1,6 @@
 <?php
 
-class AjaxController extends DefaultController  
+class AjaxController extends Zend_Controller_Action
 {
 
 	public function preDispatch()
@@ -12,16 +12,16 @@ class AjaxController extends DefaultController
 	 * Ajax call to return the Ingredients that fit the criteria
 	 */
 
-	public function getingredientsAction()
+	public function getIngredientsAction()
 	{
 		$text = $this->_getParam('q');
 		
-		$i = new Ingredient();
-		$select = $i->select()
+		$i = new Models_Ingredient();
+		$select = $i->table->select()
 			->where( 'LOWER(name) LIKE ?', '%'.strtolower($text).'%' )
 			->limit(5);
 		
-		$rowset = $i->fetchAll( $select );
+		$rowset = $i->table->fetchAll( $select );
 		if ( $rowset )
 			echo json_encode( $rowset->toArray() );
 	}
@@ -30,7 +30,7 @@ class AjaxController extends DefaultController
 	 * Ajax call to return the Measurements that fit the criteria
 	 */
 
-	public function getmeasurementsAction()
+	public function getMeasurementsAction()
 	{
 		$text = $this->_getParam('q');
 		
@@ -70,7 +70,7 @@ class AjaxController extends DefaultController
 	 * Ajax call to return the comments for the relevant recipe
 	 */
 
-	public function getcommentsAction()
+	public function getCommentsAction()
 	{
 		$items_per_page = ( $this->session->pagination['items_per_page'] ? $this->session->pagination['items_per_page'] : 5 );
 

@@ -2,40 +2,6 @@
 
 class IngredientController extends DefaultController  
 {
-
-	/**
-	 * This happens before the page is dispatch
-	 */
-
-	public function preDispatch()
-	{
-		// Held in DefaultController
-		$this->loggedIn();
-		$this->pendingAccount();
-	}
-
-	private function ingredientForm()
-	{
-		$i = new Ingredient();
-		$ri = new RecipeIngredient();
-		$m = new Measurement();
-		$form = new Zend_Form();
-		$form->addElements( $i->getFormElements() );
-		$form->addElements( $ri->getFormElements() );
-		$form->addElements( $m->getFormElements() );
-		$form->removeElement( 'measurement_abbr' );
-		return $form;
-	}
-	
-	private function prepareIndgredients()
-	{
-		$ingredients_output = array();
-		$ingredients = $this->recipe->findRecipeIngredient();
-		foreach( $ingredients as $ingredient ) { 
-			$ingredients_output[] = $ingredient->toArray();
-		}
-		return $ingredients_output;
-	}
 	
 	/**
 	 * Display the build a new ingredient page
@@ -44,15 +10,36 @@ class IngredientController extends DefaultController
 	public function newAction()
 	{
 		$this->view->title = 'Add an ingredient';
-		$this->view->pageContent = $this->pagesFolder.'/ingredient/new.phtml';
-		
-		$form = $this->ingredientForm();
-		$form->setAction( '/ingredient/create/recipe_id/' . $this->recipe->id );
-		$form->addElement( 'submit', 'Add' );
-		$this->view->form = $form;
 
-		$this->view->ingredients = $this->prepareIndgredients();
-		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
+		$form = $this->model->getForm('Ingredient');
+		$this->view->form = $form;
+		
+		$ri = new Models_RecipeIngredient();
+		
+		// We start a transaction because we need to insert into two tables
+		$this->_db->beginTransaction();
+		if ($this->getRequest()->isPost()) {
+
+			// now check to see if the form submitted exists, and
+			// if the values passed in are valid for this form
+			if ($form->isValid($this->_request->getPost())) {
+				// Get the values from the DB
+				$data = $form->getValues();
+
+				// Unset the buttons
+				unset( $data['submit'] );
+				
+				$ingredient = $this->model->table->insert( $data );
+				
+				$ri->table->insert( array(
+					'recipe_id'     => $this->_getParam('recipe_id'),
+					'ingredient_id' => $ingredient->id
+				));
+				
+				print_r($ingredient->id);
+				$this->_db->rollback();
+			}
+		}
 	}
 	
 	/**
@@ -248,13 +235,4 @@ class IngredientController extends DefaultController
 
 		$this->_redirect( '/recipe/view/recipe_id/'.$this->recipe->id );
 	}
-
-	/**
-	 * We are existing after the action is dispatched
-	 *
-	 */
-	public function postDispatch() {
-		exit;
-	}
-	
 }

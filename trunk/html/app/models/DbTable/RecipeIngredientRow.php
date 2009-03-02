@@ -12,7 +12,7 @@ class RecipeIngredientRow extends Zend_Db_Table_Row_Abstract
 	{
 		$this->_data['name'] = $this->findParentIngredient()->name;
 	}
-	
+
 	private function fetchMeasurement()
 	{
 		if ( !empty( $this->measurement_id ) ) {
