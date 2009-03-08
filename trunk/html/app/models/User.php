@@ -1,46 +1,32 @@
 <?php
 
-class Models_User extends Zend_Db_Table_Abstract {
+class Models_User extends GenericModel {
 
-	public function getFormElements()
+	/**
+	 * Used to check the status of the user, based on the ENUM of the DB field
+	 * @return string
+	 */
+
+	public function checkStatus()
 	{
-		$elements = array();
-		$e = new Zend_Form_Element( 'text' );
-		$e->setRequired( true )
-		  ->setLabel( 'Username' )
-		  ->setName('name')
-		  ->setAttrib( 'id', 'user-name' )
-		  ->addValidator( new Zend_Validate_NotEmpty(), true )
-		  ->addValidator( new Zend_Validate_Alnum(), true )
-		  ->addValidator( new Zend_Validate_StringLength( array(3,255) ) );
-		$elements[] = $e;
+		$message = '';
 
-		$e = new Zend_Form_Element( 'text' );
-		$e->setRequired( true )
-		  ->setLabel( 'Email' )
-		  ->setName( 'email' )
-		  ->addValidator( new Zend_Validate_NotEmpty(), true )
-		  ->addValidator( new Zend_Validate_EmailAddress(), true );
-		$elements[] = $e;
-		
-		$e = new Zend_Form_Element_Password('password');
-		$e->setRequired( true )
-		  ->setLabel( 'Password' )
-		  ->addValidator( new Zend_Validate_NotEmpty(), true )
-		  ->addValidator( new Zend_Validate_Alnum(), true )
-		  ->addValidator( new Zend_Validate_StringLength( array(3,255) ) );
-		$elements[] = $e;
+		switch ($this->status)
+		{
+			case 'banned':
+				$message = 'Your account has been banned, you need to get in touch with us to find out why';
+				break;
+			case 'suspended':
+				$message = 'Your account has been suspended, you should of been mailed the reason';
+				break;
+			case 'pending':
+			case 'admin':
+			case 'active':
+				break;
+		}
 
-		$e = new Zend_Form_Element_Text( 'open_id' );
-		$e->setRequired( true )
-		  ->setLabel( 'OpenID' )
-		  ->setAttrib( 'id', 'open-id' );
-		
-		$elements[] = $e;
-		
-		return $elements;
+		return $message;
 	}
-
 
 	/**
 	 * @deprecated
@@ -78,26 +64,30 @@ class Models_User extends Zend_Db_Table_Abstract {
 		return $user;
 	}
 
+	
 	/**
-	 * Generic function to aquire user data by any of the fields listed
-	 * @param $field string The field you want to search by
-	 * @param $value mixed The value you want the field to be
-	 * @return $user UserRow
+	 * Login for the Employee, this sends the username/password to the Auth Adapter
+	 *
+	 * @param string $email
+	 * @param string $password
+	 * @return Zend_Auth_Result
 	 */
-
-	public function getByField( $field, $value )
+	public function login( $email, $password )
 	{
-		$fields = array( 'email', 'name', 'id', 'openid' );
-		$user = null;
+		$db = Zend_Registry::get( 'db' );
+		$config = Zend_Registry::get( 'config' );
+		$auth = Zend_Auth::getInstance();
 
-		$field = strtolower( $field );
+		// @todo Move this to bootstrap
+		$authAdapter = new Zend_Auth_Adapter_DbTable( $db );
+		$authAdapter->setTableName( $config->authentication->tableName )
+			->setIdentityColumn( $config->authentication->identityColumn )
+			->setCredentialColumn( $config->authentication->credentialColumn )
+			->setCredentialTreatment( $config->authentication->credentialTreatment )
+			->setIdentity( $email )
+			->setCredential( $password );
 
-		if ( ! in_array( $field, $fields ) )
-			return $user;
-
-		$select = $this->select()->where( $field . ' = ?', $value );
-		$user = $this->fetchRow( $select );
-		return $user;
+		return $auth->authenticate( $authAdapter );
 	}
 
 }

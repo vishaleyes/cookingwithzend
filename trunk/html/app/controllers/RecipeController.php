@@ -3,6 +3,12 @@
 class RecipeController extends DefaultController
 {
 
+	public function init()
+	{
+		parent::init();
+		$this->model = $this->getModel();
+	}
+
 	public function indexAction()
 	{
 		$this->view->title = 'Viewing recipes';

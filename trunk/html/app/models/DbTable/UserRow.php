@@ -1,6 +1,6 @@
 <?php
 
-class UserRow extends Zend_Db_Table_Row_Abstract {
+class Models_DbTable_UserRow extends Zend_Db_Table_Row_Abstract {
 
 	const SALT = "aSalt";
 	
@@ -20,27 +20,6 @@ class UserRow extends Zend_Db_Table_Row_Abstract {
 		$params[$column] = $newTotal;
 
 		$table->update( $params, $where );
-	}
-
-	public function checkStatus()
-	{
-		$message = false;
-
-		switch ($this->status)
-		{
-			case 'banned':
-				$message = 'Your account has been banned, you need to get in touch with us to find out why';
-				break;
-			case 'suspended':
-				$message = 'Your account has been suspended, you should of been mailed the reason';
-				break;
-			case 'pending':
-			case 'admin':
-			case 'active':
-				break;
-		}
-
-		return $message;
 	}
 
 	/**

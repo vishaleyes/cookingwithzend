@@ -86,15 +86,12 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->view->message = $this->_flashMessenger;
 		
 		$this->view->partialsFolder = 'partials/';
-		
-		// Hold a model in memory based upon which controller were using
-		$this->model = $this->__getModel();
 	}
 	
 	/**
 	 * Returns a new model class, derived from the current controller
 	 */
-	private function __getModel()
+	public function getModel()
 	{
 		$modelName = substr( get_class($this), 0, strpos( get_class($this), 'Controller' ) );
 		$modelClass = self::PREFIX . $modelName;
