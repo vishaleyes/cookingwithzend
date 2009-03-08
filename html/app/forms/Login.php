@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Used for both the New and edit recipe actions
- */
 class Forms_Login extends Zend_Form
 {
 

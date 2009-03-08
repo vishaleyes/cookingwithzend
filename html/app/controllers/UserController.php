@@ -2,76 +2,49 @@
 
 class UserController extends DefaultController  
 {
-	
-	public function preDispatch()
-	{
-		// Held in DefaultController
-		// @todo We might havve to rethink the login, Id want the confirm/sendconfirmation to force people to login first
-		$this->loggedIn( array( 'new', 'create' ) );
-		$this->pendingAccount( array( 'confirm', 'sendconfirmation', 'account', 'update' ) );
-	}
-	
 	public function init()
 	{
-		$u = new User();
-		$this->form = new Zend_Form;
-		$this->form->addElements( $u->getFormElements() );
 		parent::init();
+		$this->model = $this->getModel();
 	}
 
 
 	public function newAction()
 	{
 		$this->view->title = 'Create an account';
-		$this->view->pageContent = $this->pagesFolder.'/user/new.phtml';
-		$this->form->removeElement( 'open_id' );
-		$this->renderModelForm( '/user/create', 'Signup' );
-	}
-	
-	/**
-	 * Create a new user
-	 * @todo Pass form params back to /user/new
-	 */
+		$form = $this->model->getForm('UserNew');
+		$this->view->form = $form;
 
-	public function createAction()
-	{
-		$this->view->title = 'Create an account';
-		$this->view->pageContent = $this->pagesFolder.'/user/new.phtml';
-		$this->form->removeElement( 'open_id' );
+		if ($this->getRequest()->isPost()) {
+			// now check to see if the form submitted exists, and
+			// if the values passed in are valid for this form
+			if ($form->isValid($this->_request->getPost())) {
+
+				$values = $form->getValues();
+				$params = array(
+					'name'       => $values['name'],
+					'email'      => $values['email'],
+					'password'   => new Zend_Db_Expr('MD5("'.$values['password'].'")')
+				);
 		
-		if (! $this->form->isValid($_POST)) {
-			$this->log->debug( 'Form failed '. var_export( $this->form->getMessages(), true ) );
-			$this->_redirect( '/user/new' );
+				try {
+					$this->model->table->insert( $params );
+					$this->_flashMessenger->addMessage( 'Please check your email for a confirmation link' );
+					$this->_log->debug( 'Inserted user ' . $values['email'] );
+					$theUser = $this->model->getByField( 'email', $values['email'] );
+					$theUser->sendConfirmationEmail();
+
+					$this->_redirect( '/' );
+				} catch(Exception $e) {
+					$this->_flashMessenger->setNamespace( 'error' );
+					$this->_flashMessenger->addMessage( $e->getMessage() );
+					$this->_flashMessenger->resetNamespace();
+					$this->_log->debug( 'Failed to insert user ' .$values['email'] . ' : ' . var_export( $e, true ) );
+					//$this->db->rollback();
+					$this->_redirect( '/user/new' );
+				}
+			}
 		}
-
-		$values = $this->form->getValues();
-		$params = array(
-			'name'       => $values['name'],
-			'email'      => $values['email'],
-			'password'   => new Zend_Db_Expr('MD5("'.$values['password'].'")')
-		);
-		
-		//$this->db->beginTransaction();
-		
-		try {
-			$u = new User();
-			$u->insert( $params );
-			//$this->db->commit();
-			$this->message->addMessage( 'Please check your email for a confirmation link' );
-			$this->log->debug( 'Inserted user ' . $values['email'] );
-			$theUser = $u->getByField( 'email', $values['email'] );
-			$theUser->sendConfirmationEmail();
-
-			$this->_redirect( '/' );
-		} catch(Exception $e) {
-			$this->message->setNamespace( 'error' );
-			$this->message->addMessage( $e->getMessage() );
-			$this->message->resetNamespace();
-			$this->log->debug( 'Failed to insert user ' .$values['email'] . ' : ' . var_export( $e, true ) );
-			//$this->db->rollback();
-			$this->_redirect( '/user/new' );
-		}
-
 	}
 
 	/**
@@ -171,11 +144,5 @@ class UserController extends DefaultController
 		}
 		
 	}		
-	
-	
-	
-	
-	public function postDispatch() {
-		exit;
-	}
+
 }

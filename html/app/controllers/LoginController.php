@@ -12,8 +12,6 @@ class LoginController extends DefaultController
 	public function indexAction() {
 
 		$this->view->title = 'Login';
-		$auth = Zend_Auth::getInstance();
-		print_r($auth->getIdentity());
 
 		$form = $this->model->getForm('Login');
 		$this->view->form = $form;
@@ -38,10 +36,8 @@ class LoginController extends DefaultController
 				
 				$email = $result->getIdentity();
 				$user = $this->model->getByField('email', $email);
-
+				$auth = Zend_Auth::getInstance();
 				$auth->getStorage()->write($user->toArray());
-
-
 				
 			}
 		}
