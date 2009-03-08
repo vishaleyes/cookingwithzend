@@ -1,82 +1,50 @@
 <?php
 
-require_once( APPLICATION_PATH . '/controllers/DefaultController.php' );
-
 class LoginController extends DefaultController
 {
 
 	public function init()
 	{
-		$u = new Models_User();
-		$this->form = new Zend_Form;
-		$this->form->addElements( $u->getFormElements() );
-		
-		$e = new Zend_Form_Element( 'text' );
-		$e->setRequired( true )
-		  ->setLabel( 'OpenID' )
-		  ->setName('openid')
-		  ->addValidator( new Zend_Validate_NotEmpty(), true )
-		  ->addValidator( new Zend_Validate_StringLength( array(3,255) ) );
-		
-		$this->openid = $e;
-		
 		parent::init();
+		$this->model = new Models_User();
 	}
 
-	public function loginAction() {
+	public function indexAction() {
 
-		$this->view->pageContent = $this->pagesFolder.'/login/login.phtml';
 		$this->view->title = 'Login';
+		$auth = Zend_Auth::getInstance();
+		print_r($auth->getIdentity());
+
+		$form = $this->model->getForm('Login');
+		$this->view->form = $form;
 		
-		// Dont need the username
-		$this->form->removeElement( 'name' );
-		$this->form->removeElement( 'open_id' );
-		$this->form->addElement( 'submit', 'Login' );
+		if ($this->getRequest()->isPost()) {
+
+			// now check to see if the form submitted exists, and
+			// if the values passed in are valid for this form
+			if ($form->isValid($this->_request->getPost())) {
+				// Get the values from the DB
+				$data = $form->getValues();
+
+				$result = $this->model->login( $data['email'], $data['password']);
+				// Not a valid login
+				if( ! $result->isValid() ) {
+					print_r($result);
+					$this->_flashMessenger->setNamespace( 'error' );
+					$this->_flashMessenger->addMessage( 'Wrong credentials supplied.  maybe you forgot your password?' );
+					$this->_log->debug( 'User ' . sq_brackets( $data['email'] ).' failed login'. var_export( $result, true ) );
+					//$this->redirect();
+				}
+				
+				$email = $result->getIdentity();
+				$user = $this->model->getByField('email', $email);
+
+				$auth->getStorage()->write($user->toArray());
 
 
-		if ( ( ! $_POST ) || ( ! $this->form->isValid($_POST) ) ) {
-			$this->view->form = $this->form;
-			echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
-			exit;
-		}
-		
-		$values = $this->form->getValues();
-
-		$this->auth->setIdentity( $values['email'] )
-		           ->setCredential( $values['password'] );
-
-		$result = $this->auth->authenticate();
-		
-		if( $result->isValid() )
-		{
-			$u = new User();
-			$user = $u->getByField( 'email', $values['email'] );
-			
-			$msg = $user->checkStatus();
-			
-			if ( $msg != false )
-			{
-				$this->log->info('User '.sq_brackets( $this->session->user['name'] ).' tried to login but got ' . sq_brackets( $msg ) );
-				$this->message->setNamespace( 'error' );
-				$this->message->addMessage( $msg );
-				$this->message->resetNamespace();
-				$this->_redirect('/');
+				
 			}
-			
-			// We should be okay from hereon in
-			$user->last_login = new Zend_Db_Expr('NOW()');
-			$user->save();
-			$this->session->user = $user->toArray();
-			
-			$this->log->info( 'User '.sq_brackets( $this->session->user['name'] ).' logged in' );
-			$this->redirect();
-		} else {
-			$this->message->setNamespace( 'error' );
-			$this->message->addMessage( 'Wrong credentials supplied.  maybe you forgot your password?' );
-			$this->log->debug( 'User '.sq_brackets( $values['email'] ).' failed login'. var_export( $result, true ) );
-			$this->redirect();
 		}
-		
 	}
 
 	private function redirect()
@@ -179,11 +147,6 @@ class LoginController extends DefaultController
 			exit;
 		}
 	}
-	
-	public function postDispatch() {
-		exit;
-	}
-
 
 }
 

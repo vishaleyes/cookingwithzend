@@ -48,7 +48,7 @@ class UserController extends DefaultController
 		$params = array(
 			'name'       => $values['name'],
 			'email'      => $values['email'],
-			'password'   => new Zend_Db_Expr('PASSWORD("'.$values['password'].'")')
+			'password'   => new Zend_Db_Expr('MD5("'.$values['password'].'")')
 		);
 		
 		//$this->db->beginTransaction();

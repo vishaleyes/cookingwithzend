@@ -14,7 +14,7 @@ class Models_DbTable_User extends Zend_Db_Table_Abstract
 
 	protected $_dependentTables = array('Models_DbTable_Recipe');
 	
-	public function insert( $params )
+	public function insert( array $params )
 	{
 		$params['created'] = new Zend_Db_Expr('NOW()');
 		$params['updated'] = new Zend_Db_Expr('NOW()');

@@ -11,6 +11,7 @@ class IndexController extends DefaultController
 
 	public function indexAction()
 	{
+		$this->_redirect('/recipe/index');
 	}
 	
 }

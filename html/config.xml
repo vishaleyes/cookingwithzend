@@ -25,7 +25,7 @@
 			<tableName>users</tableName>
 			<identityColumn>email</identityColumn>
 			<credentialColumn>password</credentialColumn>
-			<credentialTreatment>PASSWORD(?)</credentialTreatment>
+			<credentialTreatment>MD5(?)</credentialTreatment>
 		</authentication>
 		<compressed_js>false</compressed_js>
 		<upload_path>uploads</upload_path>
