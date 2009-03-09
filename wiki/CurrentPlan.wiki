@@ -1,0 +1,23 @@
+#summary Beware the mythical plan, it exists.
+#labels Phase-Design,Phase-Implementation
+
+= Introduction =
+
+Please date stamp anything you want to change in here because it makes it easier but as it's mostly just me sorting this out it's more of a reminder to myself.  So, the plan was to switch over to the new 1.7.4 Framework and change the layout of the classes a bit to the new ways I have learned.
+
+= Goals =
+
+  * DB Classes in different files
+  * Models only contain function to do with that model
+  * Use the layout system
+  * Use the Zend Forms
+  * Rework any piece of code necessary that is currently too complex
+  * Keep it Simple!
+
+= Todo =
+
+Coming Soon
+
+= Complete =
+
+Coming Soon
