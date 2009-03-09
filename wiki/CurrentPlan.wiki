@@ -14,10 +14,15 @@ Please date stamp anything you want to change in here because it makes it easier
   * Rework any piece of code necessary that is currently too complex
   * Keep it Simple!
 
-= Todo =
+= Next =
 
-Coming Soon
+  * Make Login work properly so things start talking to the Auth object
+  * Use the Auth object to submit recipes
 
 = Complete =
 
-Coming Soon
+Below is a list of what I believe are complete parts of the re-work, feel free to test.
+
+{{{
+/login/index
+}}}
