@@ -3,7 +3,7 @@
 /**
 * 
 */
-abstract class GenericModel
+abstract class Models_GenericModel
 {
 	/**
 	 * @var $table
@@ -25,9 +25,9 @@ abstract class GenericModel
 
 	public function getForm($form)
 	{
-		$form = 'Forms_'.$form;
-		Zend_Loader::loadClass( $form );
-		return new $form();
+		$formClass = 'Forms_'.$form;
+		Zend_Loader::loadClass( 'forms_' . $form );
+		return new $formClass();
 	}
 
 	/**

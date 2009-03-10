@@ -1,6 +1,6 @@
 <?php
 
-class Models_Recipe extends GenericModel{
+class Models_Recipe extends Models_GenericModel{
 
 	/**
 	 * @param int $id ID of the recipe

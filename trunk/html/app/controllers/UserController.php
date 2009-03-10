@@ -8,7 +8,6 @@ class UserController extends DefaultController
 		$this->model = $this->getModel();
 	}
 
-
 	public function newAction()
 	{
 		$this->view->title = 'Create an account';
@@ -53,52 +52,19 @@ class UserController extends DefaultController
 
 	public function accountAction()
 	{
-		$u = new User();
-		$rowset = $u->find( $this->session->user['id'] );
+		$this->view->title = 'Your account';
+		$form = $this->model->getForm('UserAccount');
+		
+		$rowset = $this->model->getByField('id', $this->_identity['id']);
+				
 		if ( $rowset->current() )
 		{
-			$this->view->user = $rowset->current()->toArray();
+			$user = $rowset->current();
+			$form->populate($user->toArray());
+			$this->view->form = $form;
+			$this->view->user = $user->toArray();
+			$this->view->recipes_count = $user->getRecipeCount();
 		}
-		
-		// if we want to change password we can do it later
-		$this->form->removeElement('password');
-		
-		$this->form->getElement('name')->setValue( $this->view->user['name'] );
-		$this->form->getElement('email')->setValue( $this->view->user['email'] );
-		$this->form->getElement('open_id')->setValue( $this->view->user['openid'] );
-		$this->form->setAction( '/user/update/user_id/' . $this->view->user['id'] );
-		$this->form->addElement( 'submit', 'Update' );
-		
-		
-		$this->view->title = 'Your account';
-		$this->view->form = $this->form;
-		$this->view->pageContent = $this->pagesFolder.'/user/account.phtml';
-		echo $this->_response->setBody($this->view->render($this->templatesFolder."/home.tpl.php"));
-	}
-	
-	/**
-	 * Update the users account
-	 */
-	
-	public function updateAction()
-	{
-		$this->form->removeElement('password');
-		
-		if (! $this->form->isValid($_POST)) {
-			$this->log->info( var_export( $this->form->getMessages(), true ) );
-			$this->_redirect( '/user/account/user_id/'.$this->_getParam( 'user_id' ) );
-		}
-
-		$values = $this->form->getValues();
-		$params = array(
-			'name'    => $values['name'],
-			'email'   => $values['email'],
-			'updated' => new Zend_Db_Expr('NOW()')
-		);
-		
-		$this->db->update( 'users', $params );
-		$this->message->addMessage( 'Details updated' );
-		$this->_redirect( '/user/account/user_id/'.$this->_getParam( 'user_id' ) );
 	}
 	
 	/*
