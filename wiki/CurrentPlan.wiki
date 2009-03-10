@@ -16,13 +16,13 @@ Please date stamp anything you want to change in here because it makes it easier
 
 = Next =
 
-  * Make Login work properly so things start talking to the Auth object
-  * Use the Auth object to submit recipes
+  * Optionally show a form on user/account if user is owner
+  * Optionally show edit on recipe if user is owner
+  * Only allow owner to edit recipe
 
 = Complete =
 
 Below is a list of what I believe are complete parts of the re-work, feel free to test.
 
-{{{
-/login/index
-}}}
+  * Make Login work properly so things start talking to the Auth object
+  * Use the Auth object to submit recipes
