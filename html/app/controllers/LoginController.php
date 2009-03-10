@@ -15,7 +15,7 @@ class LoginController extends DefaultController
 		$this->view->title = 'Login';
 
 		if ( $this->_identity )
-			$this->redirect('/index/');
+			$this->_redirect('/index/');
 		
 		$form = $this->model->getForm('Login');
 		$this->view->form = $form;
@@ -35,47 +35,41 @@ class LoginController extends DefaultController
 					$this->_flashMessenger->setNamespace( 'error' );
 					$this->_flashMessenger->addMessage( 'Wrong credentials supplied.  maybe you forgot your password?' );
 					$this->_log->debug( 'User ' . sq_brackets( $data['email'] ).' failed login'. var_export( $result, true ) );
-					$this->redirect('/');
+					$this->_redirect('/');
 				}
 				
 				$email = $result->getIdentity();
-				$user = $this->model->getByField('email', $email);
-				$msg = $user->current()->checkStatus();
+				$rowSet = $this->model->getByField('email', $email);
+				$user = $rowSet->current();
+				$msg = $user->checkStatus();
+				$user->last_login = new Zend_Db_Expr('NOW()');
+				$user->save();
 				
 				// Check to see the user is fully logged in
-				if ( $msg != '' )
+				if ( $msg == '' )
 				{
 					$auth = Zend_Auth::getInstance();
-					$auth->getStorage()->write($user->current()->toArray());
+					$auth->getStorage()->write($user->toArray());
 				} else {
-					$this->_log->info('User '.sq_brackets( $this->session->user['name'] ).' tried to login but got ' . sq_brackets( $msg ) );
+					$this->_log->info('User '.sq_brackets( $user->current()->name ).' tried to login but got ' . sq_brackets( $msg ) );
                     $this->_flashMessenger->setNamespace( 'error' );
                     $this->_flashMessenger->addMessage( $msg );
                     $this->_flashMessenger->resetNamespace();
 				}
-				
+				$this->_redirect('/');
 			}
 		}
 	}
+	
+	/**
+	 * Logout of the system by clearing the identity
+	 */
 	
 	public function logoutAction()
 	{
 		$auth = Zend_Auth::getInstance();
 		$auth->clearIdentity();
-		$this->redirect('/');
-	}
-
-	private function redirect()
-	{
-		// Redirect to what we were asking for in the fist place or /
-		if ( ! empty( $this->session->referrer ) ) {
-			$redirect = $this->session->referrer;
-			$this->log->info( $redirect );
-			unset( $this->session->referrer );
-			$this->_redirect( $redirect );
-		} else {
-			$this->_redirect( '/' );
-		}
+		$this->_redirect('/');
 	}
 
 	public function openidAction()

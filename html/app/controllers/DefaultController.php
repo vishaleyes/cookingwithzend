@@ -73,6 +73,12 @@ abstract class DefaultController extends Zend_Controller_Action {
 	 */
 	protected $_flashMessenger;
 	
+	/**
+	 * Enter description here...
+	 * @var obj 
+	 */
+	protected $_identity;
+	
 	public $model;
 	
 	const PREFIX = 'Models_';
@@ -94,6 +100,15 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->view->message = $this->_flashMessenger;
 		
 		$this->view->partialsFolder = 'partials/';
+		$this->view->includesFolder = 'includes/';
+		
+		$auth = Zend_Auth::getInstance();
+		// If there is an identity store it in the controller and the view object
+		if ( $auth->hasIdentity() ) {
+			$this->_identity = $auth->getIdentity();
+			$this->view->identity = $this->_identity;
+		}
+		
 	}
 	
 	/**

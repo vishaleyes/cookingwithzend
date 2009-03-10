@@ -1,70 +1,7 @@
 <?php
 
-class Models_User extends GenericModel {
+class Models_User extends Models_GenericModel {
 
-	/**
-	 * Used to check the status of the user, based on the ENUM of the DB field
-	 * @return string
-	 */
-
-	public function checkStatus()
-	{
-		$message = '';
-
-		switch ($this->status)
-		{
-			case 'banned':
-				$message = 'Your account has been banned, you need to get in touch with us to find out why';
-				break;
-			case 'suspended':
-				$message = 'Your account has been suspended, you should of been mailed the reason';
-				break;
-			case 'pending':
-			case 'admin':
-			case 'active':
-				break;
-		}
-
-		return $message;
-	}
-
-	/**
-	 * @deprecated
-	 */
-
-	public function getByEmail( $email )
-	{
-		$user = null;
-		$select = $this->select()->where( 'email = ?', $email );
-		$user = $this->fetchRow( $select );
-		return $user;
-	}
-	
-	/**
-	 * @deprecated
-	 */
-	
-	public function getByOpenID( $id )
-	{
-		$user = null;
-		$select = $this->select()->where( 'openid = ?', $id );
-		$user = $this->fetchRow( $select );
-		return $user;
-	}
-	
-	/**
-	 * @deprecated
-	 */
-	
-	public function getByUserID( $id )
-	{
-		$user = null;
-		$select = $this->select()->where( 'id = ?', $id );
-		$user = $this->fetchRow( $select );
-		return $user;
-	}
-
-	
 	/**
 	 * Login for the Employee, this sends the username/password to the Auth Adapter
 	 *

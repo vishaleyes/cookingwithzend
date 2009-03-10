@@ -4,24 +4,19 @@ class Models_DbTable_UserRow extends Zend_Db_Table_Row_Abstract {
 
 	const SALT = "aSalt";
 	
-	public function adjustColumn( $column, $type = 'increase' )
-	{
-		switch($type){
-			case 'increase':
-				$newTotal = ($this->_data[$column] + 1);
-				break;
-			case 'decrease':
-				$newTotal = ($this->_data[$column] - 1);
-				break;
-		}
-
-		$table = $this->getTable();
-		$where = $table->getAdapter()->quoteInto( 'id = ?', $this->id );
-		$params[$column] = $newTotal;
-
-		$table->update( $params, $where );
+	/**
+	 * Retrieves the number of recipes owned by a user
+	 * @return int
+	 */
+	public function getRecipeCount() {
+		$db = $this->getTable()->getAdapter();
+		$select = $db->select()
+			->from('recipes', array('recipe_count' => new Zend_Db_Expr('COUNT(id)')))
+			->where('creator_id = ?', $this->id);
+		$col = $db->fetchCol($select);
+		return $col[0];
 	}
-
+	
 	/**
 	 * Prepares a forgotten password mail and sends it out the current user
 	 * @return bool
@@ -76,11 +71,34 @@ class Models_DbTable_UserRow extends Zend_Db_Table_Row_Abstract {
 		return $e->sendMail();
 	}
 	
-	
+	/**
+	 * Used to check the status of the user, based on the ENUM of the DB field
+	 * @return string
+	 */
+
+	public function checkStatus()
+	{
+		$message = '';
+
+		switch ($this->status)
+		{
+			case 'banned':
+				$message = 'Your account has been banned, you need to get in touch with us to find out why';
+				break;
+			case 'suspended':
+				$message = 'Your account has been suspended, you should of been mailed the reason';
+				break;
+			case 'pending':
+			case 'admin':
+			case 'active':
+				break;
+		}
+
+		return $message;
+	}
+
 	/**
 	 * Generate verification code to be e-mailed. Code is mixed hash of the email and salt defined above.
-	 * @param $email string Email address
-	 * @param $userid int id for the user
 	 * @return string
 	 */
 

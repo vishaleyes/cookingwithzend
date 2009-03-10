@@ -26,10 +26,18 @@ class Models_DbTable_Recipe extends Zend_Db_Table_Abstract
 		)
 	);
 	
+	/**
+	 * Overide the insert function to ensure the relevant fields get filled in
+	 *
+	 * @param array $params
+	 * @return unknown
+	 */
+	
 	public function insert( array $params )
 	{
-		//$params['creator_id'] = Zend_Registry::get( 'session')->user['id'];
-		$params['creator_id'] = 1;
+		$auth = Zend_Auth::getInstance();
+		$identity = $auth->getIdentity();
+		$params['creator_id'] = $identity['id'];
 		$params['created'] = new Zend_Db_Expr('NOW()');
 		$params['updated'] = new Zend_Db_Expr('NOW()');
 		
