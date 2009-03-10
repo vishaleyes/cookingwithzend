@@ -53,10 +53,12 @@
 	</div>
 	<!-- end Messages to users -->
 	
+	<?php echo $this->render( $this->includesFolder . '/user_details.php') ?>
+	
 	<!-- Navigation -->
 	<ul>
 		<li><a href="/">Home</a></li>
-	<?php if ( $this->loggedIn() ): ?>
+	<?php if ( $this->identity ): ?>
 		<li><a href="/user/account">My Account</a></li>	
 		<li><a href="<?php echo '/recipe/user/'.$this->session->user['name'] ?>">My Recipes</a></li>	
 		<li><a href="<?php echo $this->url( array( 
