@@ -9,10 +9,14 @@ class LoginController extends DefaultController
 		$this->model = new Models_User();
 	}
 
-	public function indexAction() {
+	public function indexAction() 
+	{
 
 		$this->view->title = 'Login';
 
+		if ( $this->_identity )
+			$this->redirect('/index/');
+		
 		$form = $this->model->getForm('Login');
 		$this->view->form = $form;
 		
@@ -25,22 +29,40 @@ class LoginController extends DefaultController
 				$data = $form->getValues();
 
 				$result = $this->model->login( $data['email'], $data['password']);
+				
 				// Not a valid login
 				if( ! $result->isValid() ) {
-					print_r($result);
 					$this->_flashMessenger->setNamespace( 'error' );
 					$this->_flashMessenger->addMessage( 'Wrong credentials supplied.  maybe you forgot your password?' );
 					$this->_log->debug( 'User ' . sq_brackets( $data['email'] ).' failed login'. var_export( $result, true ) );
-					//$this->redirect();
+					$this->redirect('/');
 				}
 				
 				$email = $result->getIdentity();
 				$user = $this->model->getByField('email', $email);
-				$auth = Zend_Auth::getInstance();
-				$auth->getStorage()->write($user->toArray());
+				$msg = $user->current()->checkStatus();
+				
+				// Check to see the user is fully logged in
+				if ( $msg != '' )
+				{
+					$auth = Zend_Auth::getInstance();
+					$auth->getStorage()->write($user->current()->toArray());
+				} else {
+					$this->_log->info('User '.sq_brackets( $this->session->user['name'] ).' tried to login but got ' . sq_brackets( $msg ) );
+                    $this->_flashMessenger->setNamespace( 'error' );
+                    $this->_flashMessenger->addMessage( $msg );
+                    $this->_flashMessenger->resetNamespace();
+				}
 				
 			}
 		}
+	}
+	
+	public function logoutAction()
+	{
+		$auth = Zend_Auth::getInstance();
+		$auth->clearIdentity();
+		$this->redirect('/');
 	}
 
 	private function redirect()
@@ -102,16 +124,6 @@ class LoginController extends DefaultController
 			$this->message->addMessage( 'OpenID told us they are not happy with you :)' );
 		}
 		$this->redirect();
-	}
-	
-	/**
-	 * Logout, nuke the user session
-	 */
-	
-	public function logoutAction()
-	{
-		unset( $this->session->user );
-		$this->_redirect( '/' );
 	}
 
 	public function resetAction()

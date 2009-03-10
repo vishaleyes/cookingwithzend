@@ -40,13 +40,13 @@ class RecipeController extends DefaultController
 				// Unset the buttons
 				unset( $data['submit'] );
 				
-				$this->model->table->save( $data );
+				$this->model->table->insert( $data );
 
-				$this->log->info( 'Added Recipe ' . sq_brackets( $data['name'] ) 	); 
-				$this->message->addMessage( 'Added recipe ' . $data['name'] );
+				$this->_log->info( 'Added Recipe ' . sq_brackets( $data['name'] ) ); 
+				$this->_flashMessenger->addMessage( 'Added recipe ' . $data['name'] );
+				$this->_redirect( '/recipe/new' );
 			}
 		}
-		$this->_redirect( '/recipe/new' );
 	}
 
 	/**
