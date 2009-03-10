@@ -204,7 +204,6 @@ CREATE TABLE `users` (
   `updated` datetime NOT NULL,
   `last_login` datetime default NULL,
   `status` enum('pending','banned','admin','active','suspended') collate utf8_unicode_ci default 'pending',
-  `recipes_count` int(11) default '0',
   `comments_count` int(11) default '0',
   `ratings_count` int(11) default '0',
   PRIMARY KEY  (`id`),
