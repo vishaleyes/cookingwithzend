@@ -16,6 +16,8 @@ Please date stamp anything you want to change in here because it makes it easier
 
 = Next =
 
+  * Implement an ACL, essential reading : http://codeutopia.net/blog/?s=ACL
+  * Add scripts to update resources?
   * Optionally show a form on user/account if user is owner
   * Optionally show edit on recipe if user is owner
   * Only allow owner to edit recipe
