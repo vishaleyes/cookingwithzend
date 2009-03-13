@@ -22,6 +22,12 @@ $frontController = Zend_Controller_Front::getInstance();
 // controller directory.
 $frontController->setControllerDirectory(APPLICATION_PATH . '/controllers');
 
+// ACL
+$acl = new Recipe_Acl();
+
+// Plugin
+$frontController->registerPlugin(new Recipe_Plugin_Acl($acl));
+
 // APPLICATION ENVIRONMENT - Set the current environment
 // Set a variable in the front controller indicating the current environment --
 // commonly one of development, staging, testing, production, but wholly
@@ -104,4 +110,4 @@ $registry->set( 'session', $session );
 // This will clear all our local boostrap variables from the global scope of 
 // this script (and any scripts that called bootstrap).  This will enforce 
 // object retrieval through the Applications's Registry
-unset($frontController, $view, $configuration, $dbAdapter, $registry);
+unset($frontController, $view, $configuration, $dbAdapter, $registry, $acl);

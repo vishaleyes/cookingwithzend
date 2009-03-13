@@ -79,6 +79,12 @@ abstract class DefaultController extends Zend_Controller_Action {
 	 */
 	protected $_identity;
 	
+	/**
+	 * The role of the current user
+	 * @var string
+	 */
+	protected $_role;
+	
 	public $model;
 	
 	const PREFIX = 'Models_';
@@ -102,11 +108,12 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->view->partialsFolder = 'partials/';
 		$this->view->includesFolder = 'includes/';
 		
-		$auth = Zend_Auth::getInstance();
+		$this->_role = 'guest';
 		// If there is an identity store it in the controller and the view object
-		if ( $auth->hasIdentity() ) {
+		if ( Zend_Auth::getInstance()->hasIdentity() ) {
 			$this->_identity = $auth->getIdentity();
 			$this->view->identity = $this->_identity;
+			$this->_role = 'user';
 		}
 		
 	}
