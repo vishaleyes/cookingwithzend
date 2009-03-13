@@ -53,17 +53,21 @@ class UserController extends DefaultController
 	public function accountAction()
 	{
 		$this->view->title = 'Your account';
-		$form = $this->model->getForm('UserAccount');
 		
 		$rowset = $this->model->getByField('id', $this->_identity['id']);
 				
 		if ( $rowset->current() )
 		{
 			$user = $rowset->current();
-			$form->populate($user->toArray());
-			$this->view->form = $form;
 			$this->view->user = $user->toArray();
 			$this->view->recipes_count = $user->getRecipeCount();
+		}
+		
+		if ($this->_acl->isAllowed( $role, 'user', 'edit')
+		{
+			$form = $this->model->getForm('UserAccount');
+			$form->populate($user->toArray());
+			$this->view->form = $form;
 		}
 	}
 	
