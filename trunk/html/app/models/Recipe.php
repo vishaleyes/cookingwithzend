@@ -3,6 +3,7 @@
 class Models_Recipe extends Models_GenericModel{
 
 	/**
+	 * Find the recipe
 	 * @param int $id ID of the recipe
 	 */
 
@@ -10,6 +11,7 @@ class Models_Recipe extends Models_GenericModel{
 	{
 		// Fetch the recipe being requested
 		$rowSet = $this->table->find( $id );
+		Zend_Registry::get('log')->info(var_export($rowSet, true));
 		
 		// Couldnt find it?  Oh dear we best throw an error
 		// @todo Move this test to somwhere else when I figure out the best place for it
@@ -22,29 +24,6 @@ class Models_Recipe extends Models_GenericModel{
 		}
 		$recipe = $rowSet->current();
 		return $recipe;
-	}
-
-	public function isOwner( $recipeId )
-	{
-		$session = Zend_Registry::get( 'session' );
-		if ( ! $session->user )
-			return false;
-		
-		$select = $this->select()
-			->from( 'recipes' )
-			->where( 'id = ?', $recipeId )
-			->where( 'creator_id = ?', $session->user['id']);
-
-		$row = $this->fetchRow();
-		if ( ! $row ) {
-			$this->log->info( 'No row' );
-			return false;
-		}
-
-		if ( $session->user['id'] == $row->creator_id )
-			return true;
-
-		return false;
 	}	
 
 }

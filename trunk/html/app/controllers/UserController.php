@@ -31,7 +31,7 @@ class UserController extends DefaultController
 					$this->_flashMessenger->addMessage( 'Please check your email for a confirmation link' );
 					$this->_log->debug( 'Inserted user ' . $values['email'] );
 					$theUser = $this->model->getByField( 'email', $values['email'] );
-					$theUser->sendConfirmationEmail();
+					//$theUser->sendConfirmationEmail();
 
 					$this->_redirect( '/' );
 				} catch(Exception $e) {
@@ -63,7 +63,7 @@ class UserController extends DefaultController
 			$this->view->recipes_count = $user->getRecipeCount();
 		}
 		
-		if ($this->_acl->isAllowed( $role, 'user', 'edit')
+		if ($this->_acl->isAllowed( $role, 'user', 'edit'))
 		{
 			$form = $this->model->getForm('UserAccount');
 			$form->populate($user->toArray());
@@ -74,12 +74,12 @@ class UserController extends DefaultController
 	/*
 	 * Executes sendConfirmationEmail function. Used for testing, can be deleted or modified.
 	 */
-	public function sendconfirmationAction()
+	public function sendConfirmationAction()
 	{
-		$u = new User();
-		$user = $u->getByField( 'id', $this->session->user['id'] );
-		$emailResult = $user->sendConfirmationEmail();
-	
+		$this->_helper->layout->disableLayout();
+		$user = $this->model->getByField( 'id', $this->_getParam('id') );
+		$emailResult = $user->current()->sendConfirmationEmail();
+		
 		if ($emailResult)
 		{
 			$this->message->addMessage( 'Confirmation e-mail sent.' );
