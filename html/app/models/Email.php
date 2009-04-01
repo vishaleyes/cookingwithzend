@@ -45,7 +45,7 @@ class Email extends Zend_Mail
 
 	public function setTemplate($template) {
 		$this->view = new Zend_View();
-		$this->view->setScriptPath('app/views/templates/email/');
+		$this->view->setScriptPath( APPLICATION_PATH . '/views/templates/email/');
 		$this->template = $template;
 	}
 

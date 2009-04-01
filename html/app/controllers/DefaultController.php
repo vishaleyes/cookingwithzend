@@ -110,10 +110,12 @@ abstract class DefaultController extends Zend_Controller_Action {
 		
 		$this->_role = 'guest';
 		// If there is an identity store it in the controller and the view object
-		if ( Zend_Auth::getInstance()->hasIdentity() ) {
+		$auth = Zend_Auth::getInstance();
+		if ( $auth->hasIdentity() ) {
 			$this->_identity = $auth->getIdentity();
 			$this->view->identity = $this->_identity;
-			$this->_role = 'user';
+			$this->_role = 'member';
+			$this->view->role = $this->_role;
 		}
 		
 	}

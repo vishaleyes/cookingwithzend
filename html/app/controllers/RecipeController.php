@@ -56,7 +56,7 @@ class RecipeController extends DefaultController
 	public function editAction()
 	{
 		// Fetch the recipe being requested
-		$recipe = $ths->model->fetchRecipe($this->_getParam('id'));
+		$recipe = $this->model->fetchRecipe($this->_getParam('id'));
 		
 		$this->view->title = 'Editing recipe - '.$recipe->name;
 		
@@ -80,8 +80,8 @@ class RecipeController extends DefaultController
 				$this->log->info( 'Edited Recipe ' . sq_brackets( $data['name'] ) 	); 
 				$this->message->addMessage( 'Edited recipe ' . $data['name'] );
 			}
+			$this->_redirect( '/recipe/view/id/' . $this->_getParam('id') );
 		}
-		$this->_redirect( '/recipe/view/id/' . $this->_getParam('id') );
 	}
 
 	/**

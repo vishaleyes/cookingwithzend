@@ -76,6 +76,7 @@ Zend_Db_Table_Abstract::setDefaultAdapter($dbAdapter);
 $registry = Zend_Registry::getInstance();
 $registry->config = $configuration;
 $registry->db     = $dbAdapter;
+//$registry->acl    = $acl;
 
 // LOG FILE - Setup the log file from the config
 // We can have multiple log files, so we need to set one up for each occurance
