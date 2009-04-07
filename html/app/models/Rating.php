@@ -1,51 +1,9 @@
 <?php
 
-class Rating extends Zend_Db_Table_Abstract {
-	
-	protected $_name = "ratings";
-	protected $_primary = array( "recipe_id", "user_id" );
-
-	# Primary does Auto Inc
-	protected $_sequence = true;
-	
-	protected $_referenceMap = array(
-		'User' => array(
-			'columns'		=> 'user_id',
-			'refTableClass' => 'User',
-			'refColumns'	=> 'id'
-		),
-		'Recipe' => array(
-			'columns'       => 'recipe_id',
-			'refTableClass' => 'Recipe',
-			'refColumns'    => 'id'
-		)
-	);
+class Rating extends Models_GenericModel {
 	
 	/*	Definite max rating allowed */
 	const MAX_RATING = 5;
-
-	// May be able to delete this
-	function __construct( $prefetch = true )
-	{
-		if ( ! $prefetch === false ) unset( $_rowClass );
-		$this->db = Zend_Registry::get("db");
-		Zend_Db_Table_Abstract::setDefaultAdapter($this->db);
-		
-		$this->log = Zend_Registry::get('log');
-		
-		$this->_setup();
-	}
-	
-	/* Add user_id to insert query. */
-	
-	public function insert($params)
-	{
-		$params['user_id'] = Zend_Registry::get('session')->user['id'];
-		
-		return parent::insert($params);
-		
-
-	}
 	
 	/* Calculate rating for recipe */
 	
@@ -74,14 +32,9 @@ class Rating extends Zend_Db_Table_Abstract {
 		  ->where("recipe_id = ?", $recipe_id);
 		
 		if ($this->db->fetchOne($select) > 0)
-		{
 			return true;
-		}
 		else
-		{
 			return false;
-		}
-			
 	}
 	
 	public function getRatingForm()

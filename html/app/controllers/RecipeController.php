@@ -75,10 +75,11 @@ class RecipeController extends DefaultController
 				// Unset the buttons
 				unset( $data['submit'] );
 				
-				$this->model->table->save( $data );
+				$recipe->setFromArray($data);
+				$recipe->save();
 
-				$this->log->info( 'Edited Recipe ' . sq_brackets( $data['name'] ) 	); 
-				$this->message->addMessage( 'Edited recipe ' . $data['name'] );
+				$this->_log->info( 'Edited Recipe ' . sq_brackets( $data['name'] ) 	); 
+				$this->_flashMessenger->addMessage( 'Edited recipe ' . $data['name'] );
 			}
 			$this->_redirect( '/recipe/view/id/' . $this->_getParam('id') );
 		}
