@@ -26,4 +26,22 @@ class Models_DbTable_RecipeIngredient extends Zend_Db_Table_Abstract {
 			'refColumns'	=> 'id'
 		)
 	);
+	
+	/**
+	 * Override the insert to try and throw an exception back if it fails
+	 * @param $data array associative array of vars to go in the db
+	 * @return $row Zend_Db_Table_Row the row of the Ingredient table
+	 */
+
+	function insert( array $data )
+	{
+		try {
+			parent::insert( $data );
+			$this->getDefaultAdapter()->update('recipes', 
+				array('ingredients_count' => new Zend_Db_Expr('ingredients_count + 1'))
+			);
+		} catch (Exception $e) {
+			throw new Zend_Db_Table_Exception($e->getMessage());
+		}
+	}
 }

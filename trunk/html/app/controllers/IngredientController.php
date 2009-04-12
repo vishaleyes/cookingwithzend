@@ -3,21 +3,35 @@
 class IngredientController extends DefaultController  
 {
 	
+	public function init()
+	{
+		parent::init();
+		$this->model = $this->getModel();
+	}
+	
 	/**
 	 * Display the build a new ingredient page
 	 */
 	
 	public function newAction()
 	{
+		if ( ! $this->_getParam('recipe_id') )
+		{ 
+			$this->_flashMessenger->addMessage( 'Unable to find recipe' );
+			$this->_redirect( '/recipe/index' );
+		}
+	
+		// fetch the Recipe
+		$recipeModel = new Models_Recipe();
+		$recipe = $recipeModel->fetchRecipe($this->_getParam('recipe_id'));
+		$this->view->recipe = $recipe;
+		
 		$this->view->title = 'Add an ingredient';
 
 		$form = $this->model->getForm('Ingredient');
+		$form->populate( array( 'recipe_id' => $recipe['id'] ) );
 		$this->view->form = $form;
-		
-		$ri = new Models_RecipeIngredient();
-		
-		// We start a transaction because we need to insert into two tables
-		$this->_db->beginTransaction();
+	
 		if ($this->getRequest()->isPost()) {
 
 			// now check to see if the form submitted exists, and
@@ -28,16 +42,25 @@ class IngredientController extends DefaultController
 
 				// Unset the buttons
 				unset( $data['submit'] );
+
+				// We start a transaction because we need to insert into two tables
+				$this->_db->beginTransaction();
 				
 				$ingredient = $this->model->table->insert( $data );
+				$ri = new Models_RecipeIngredient();
+						
+				try {
+					$ri->table->insert( array(
+						'recipe_id'     => $recipe['id'],
+						'ingredient_id' => $ingredient->id
+					));
+					$this->_db->commit();
+				} catch (Exception $e) {
+					$this->_db->rollback();
+					$this->_log->debug($e->getMessage());
+				}
 				
-				$ri->table->insert( array(
-					'recipe_id'     => $this->_getParam('recipe_id'),
-					'ingredient_id' => $ingredient->id
-				));
-				
-				print_r($ingredient->id);
-				$this->_db->rollback();
+				$this->_redirect('/recipe/view/id/'.$recipe['id']);
 			}
 		}
 	}

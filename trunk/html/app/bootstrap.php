@@ -60,6 +60,8 @@ $configuration = new Zend_Config_Xml(APPLICATION_PATH . '/../config.xml', APPLIC
 // adapter object.  In this instance, we will be using the values found in the
 // "database" section of the configuration obj.
 $dbAdapter = Zend_Db::factory($configuration->database);
+// defaule all queries to be utf8 compliant
+$dbAdapter->query('SET NAMES utf8');
 
 // DATABASE TABLE SETUP - Setup the Database Table Adapter
 // Since our application will be utilizing the Zend_Db_Table component, we need 

@@ -9,12 +9,24 @@ abstract class Models_GenericModel
 	 * @var $table
 	 */
 	public $table;
+	
+	/**
+	 * @var $db
+	 */
+	public $db;
+	
+	/**
+	 * @var log
+	 */
+	public $log;
 
 	const PREFIX = 'Models_';
 
 	public function __construct()
 	{
 		$this->table = $this->__getTable();
+		$this->db = $this->table->getDefaultAdapter();
+		$this->log = Zend_Registry::get('log');
 	}
 
 	/**

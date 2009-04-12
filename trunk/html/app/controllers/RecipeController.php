@@ -92,8 +92,14 @@ class RecipeController extends DefaultController
 	public function viewAction()
 	{
 		$recipe = $this->model->fetchRecipe($this->_getParam('id'));
-		
 		$this->view->recipe  = $recipe->toArray();
+		
+		$ingredients = $this->model->getIngredients($recipe['id']);
+		$this->view->ingredients  = $ingredients;
+		
+		$methods = $this->model->getMethods($recipe['id']);
+		$this->view->methods  = $methods;
+		
 	}
 
 }
