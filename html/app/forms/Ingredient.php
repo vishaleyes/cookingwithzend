@@ -15,7 +15,7 @@ class Forms_Ingredient extends Zend_Form
 				new Zend_Validate_StringLength( array( 3, 255 ) )
 			)
 		))
-		->addElement('hidden', 'id')
+		->addElement('hidden', 'recipe_id')
 		->addElement('submit', 'submit');
 	}
 }

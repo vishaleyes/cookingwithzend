@@ -1,4 +1,10 @@
-	<h2><?php echo $this->escape( $this->name ) . ' ' . round_brackets( $this->view_count ) ?></h2>
+	<h2><a href="<?= $this->url( array( 
+			'controller' => 'recipe', 
+			'action' => 'view',
+			'id'     => $this->id
+		), 'default' ); ?>"><?php echo $this->escape( $this->name ) . ' ' . round_brackets( $this->view_count ) ?>
+		</a></h2>
+	<h3>By <?php echo $this->user ?></h3>
 	<div>
 		<ul id="recipe-summary">
 			<li><?php echo 'Difficulty: ' . $this->difficulty ?></li>
@@ -10,5 +16,18 @@
 			<li><?php echo 'Comments count: ' . $this->comments_count ?></li>
 			<?php echo ( $this->freezable ? '<li>Freezable</li>' : null ) ?>
 		</ul>
+	</div>
+	<!-- Edit/Delete links  -->
+	<div>
+		<a href="<?= $this->url( array( 
+			'controller' => 'recipe', 
+			'action' => 'edit',
+			'id'     => $this->id
+		), 'default' ); ?>">Edit</a> | 
+		<a href="<?= $this->url( array( 
+			'controller' => 'recipe', 
+			'action' => 'delete',
+			'id'     => $this->id
+		), 'default' ); ?>">Delete</a>
 	</div>
 

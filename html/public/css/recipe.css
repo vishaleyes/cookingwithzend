@@ -2,11 +2,15 @@
 	font-family: Helvetica, Arial;
 }
 
+li.ingredients {
+	display: inline;
+}
+
 pre.comments {
-	margin:10px;
+	margin: 10px;
 	
 }
 
 td.comments {
-	padding-bottom:20px;
+	padding-bottom: 20px;
 }

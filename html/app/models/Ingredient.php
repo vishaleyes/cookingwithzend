@@ -1,4 +1,5 @@
 <?php
 
-class Models_Ingredient extends GenericModel {
+class Models_Ingredient extends Models_GenericModel
+{
 }

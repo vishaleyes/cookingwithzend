@@ -1,11 +1,38 @@
+<div>
 <?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $this->recipe ) ?>
 
-<!-- Ingredients -->
-<?php if ( count( $this->recipe['ingredients_count'] ) > 0 ): ?>
-	<h3>Ingredients</h3>
-	<p><a href="<?php echo "/ingredient/new/recipe_id/" . $this->recipe['id'] ?>">Add another ingredient?</a></p>
-<?php else: ?>
-	<p>No ingredients, why not <a href="<?php echo "/ingredient/new/recipe_id/" . $this->recipe['id'] ?>">Add one</a></p>
-<?php endif ?>
-<!-- End of Ingredients -->
-2
+	<!-- Ingredients -->
+	<ul>
+	<?php foreach ($this->ingredients as $ingredient ): ?>
+	<?php echo $this->partial( $this->partialsFolder . '/ingredient.phtml', $ingredient ); ?>
+	<?php endforeach; ?>
+	</ul>
+	<div>
+	<?php if ( count( $this->recipe['ingredients_count'] ) > 0 ): ?>
+		<h3>Ingredients</h3>
+		<p><a href="<?= $this->url( array( 
+				'controller' => 'ingredient', 
+				'action' => 'new',
+				'recipe_id' => $this->recipe['id']
+			), 'default', true ); ?>">
+			Add another ingredient?</a></p>
+	<?php else: ?>
+		<p>No ingredients, why not <a href="<?= $this->url( array( 
+				'controller' => 'ingredient', 
+				'action' => 'new',
+				'recipe_id' => $this->recipe['id']
+			), 'default', true ); ?>">Add one</a></p>
+	<?php endif ?>
+	</div>
+	<!-- End of Ingredients -->
+	
+	<!-- Methods -->
+	<a name="ingredients"></a>
+	<div>
+		<ol>
+	<?php foreach ($this->methods as $method): ?>
+			<li><?php echo $this->escape( $method['description'] ); ?></li>
+	<?php endforeach; ?>
+		</ol>
+	</div>
+</div>

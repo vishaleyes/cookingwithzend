@@ -12,19 +12,7 @@ $(function(){
 	<?php //echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $recipe['tags'], 'creator' => $recipe['creator_id'] ) ) ?>
 
 	<div><?php //echo $this->starRating( $recipe['rating'] ); ?></div>
-	<!--  -->
-	<div>
-		<a href="<?= $this->url( array( 
-			'controller' => 'recipe', 
-			'action' => 'edit',
-			'id'     => $recipe['id']
-		), 'default' ); ?>">Edit</a> | 
-		<a href="<?= $this->url( array( 
-			'controller' => 'recipe', 
-			'action' => 'delete',
-			'id'     => $recipe['id']
-		), 'default' ); ?>">Delete</a>
-	</div>
+
 </div>
 <?php endforeach ?>
 

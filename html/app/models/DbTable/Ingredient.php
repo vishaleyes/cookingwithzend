@@ -10,19 +10,21 @@ class Models_DbTable_Ingredient extends Zend_Db_Table_Abstract
 
 	# Primary does Auto Inc
 	protected $_sequence = true;
-	
+
 	/**
-	 * Fetch the row in the database that fits this particular name
-	 * @param $name string The name of the ingredient you want to fetch
-	 * @return $row Zend_Db_Table_Row the row of the Ingredient table
+	 * Returns the record you asked for by name
+	 * @param string $string
+	 * @return Zend_Db_Table_Row
 	 */
-
-	function getByName( $name )
+	
+	public function getByName( $string )
 	{
-		$select = $this->select()->where( 'name = ?', $name );
-		return $this->fetchRow( $select );
+		$select = $this->select()
+			->from('ingredients')
+			->where('name = ?', $string);
+		return $this->fetchRow($select);
 	}
-
+	
 	/**
 	 * Override the insert to try and not throw an exception back if it fails, also re-using
 	 * getByName code

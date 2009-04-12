@@ -2,20 +2,15 @@
 		<li id="<?php echo "ingredient-" . $this->recipe_id . "-" . $this->ingredient_id ?>">
 			<ul>
 				<?php if ( $this->quantity > 0 ): ?>
-				<li><?php echo $this->quantity ?></li>
+				<li class="ingredients"><?php echo $this->quantity ?></li>
 				<?php endif ?>
 				<?php if ( $this->amount > 0 ): ?>
-				<li><?php echo $this->amount ?></li>
+				<li class="ingredients"><?php echo $this->amount ?></li>
 				<?php endif ?>
 				<?php if ( !empty( $this->measurement ) ): ?>
-				<li><?php echo $this->measurement_abbr ?></li>
+				<li class="ingredients"><?php echo $this->measurement ?></li>
 				<?php endif ?>
-				<li><?php echo $this->name ?>
-				<?php if ( $this->checkOwner( $this->getHelper('PartialLoop')->view->recipe['creator_id'] ) ): ?>
-				<a href="<?php echo "/ingredient/edit/recipe_id/" . $this->recipe_id . "/ingredient_id/" . $this->ingredient_id ?>">Edit</a> | 
-				<a href="<?php echo "/ingredient/delete/recipe_id/" . $this->recipe_id . "/ingredient_id/" . $this->ingredient_id ?>">Delete</a>
-				<?php endif ?>
-				</li>
+				<li class="ingredients"><?php echo $this->name ?></li>
 			</ul>
 		</li>
 
