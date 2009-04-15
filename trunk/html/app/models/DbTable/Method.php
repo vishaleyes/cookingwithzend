@@ -3,7 +3,7 @@
 /**
 * 
 */
-class Models_DbTable_MethodItem extends Zend_Db_Table_Abstract
+class Models_DbTable_Method extends Zend_Db_Table_Abstract
 {
 	protected $_name = "method_items";
 	protected $_primary = "id";

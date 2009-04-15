@@ -2,37 +2,54 @@
 <?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $this->recipe ) ?>
 
 	<!-- Ingredients -->
-	<ul>
-	<?php foreach ($this->ingredients as $ingredient ): ?>
-	<?php echo $this->partial( $this->partialsFolder . '/ingredient.phtml', $ingredient ); ?>
-	<?php endforeach; ?>
-	</ul>
 	<div>
-	<?php if ( count( $this->recipe['ingredients_count'] ) > 0 ): ?>
-		<h3>Ingredients</h3>
-		<p><a href="<?= $this->url( array( 
+		<div>
+			<h3>Ingredients</h3>
+			<ul>
+			<?php foreach ($this->ingredients as $ingredient ): ?>
+			<?php echo $this->partial( $this->partialsFolder . '/ingredient.phtml', $ingredient ); ?>
+			<?php endforeach; ?>
+			</ul>
+		</div>
+		<div>	
+			<p><a href="<?= $this->url( array( 
 				'controller' => 'ingredient', 
 				'action' => 'new',
 				'recipe_id' => $this->recipe['id']
 			), 'default', true ); ?>">
 			Add another ingredient?</a></p>
-	<?php else: ?>
-		<p>No ingredients, why not <a href="<?= $this->url( array( 
-				'controller' => 'ingredient', 
-				'action' => 'new',
-				'recipe_id' => $this->recipe['id']
-			), 'default', true ); ?>">Add one</a></p>
-	<?php endif ?>
+		</div>
 	</div>
 	<!-- End of Ingredients -->
 	
 	<!-- Methods -->
-	<a name="ingredients"></a>
+	<a name="methods"></a>
 	<div>
+		<h3>Method</h3>
 		<ol>
 	<?php foreach ($this->methods as $method): ?>
-			<li><?php echo $this->escape( $method['description'] ); ?></li>
+			<li><?php echo $this->escape( $method['description'] ); ?>
+			<a href="<?= $this->url( array( 
+				'controller' => 'method', 
+				'action' => 'edit',
+				'id' => $method['id']
+			), 'default', true ); ?>">Edit</a>
+			|
+			<a href="<?= $this->url( array( 
+				'controller' => 'method', 
+				'action' => 'delete',
+				'id' => $method['id']
+			), 'default', true ); ?>">Delete</a>
+			</li>
 	<?php endforeach; ?>
 		</ol>
+		<div>
+			<p><a href="<?= $this->url( array( 
+				'controller' => 'method', 
+				'action' => 'new',
+				'recipe_id' => $this->recipe['id']
+			), 'default', true ); ?>">
+			Add another method?</a></p>
+		</div>
 	</div>
 </div>

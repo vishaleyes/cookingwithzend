@@ -26,7 +26,7 @@ class RecipeController extends DefaultController
 	public function newAction()
 	{
 		$this->view->title = 'Create a recipe';
-		$form = $this->model->getForm('RecipeNew');
+		$form = $this->model->getForm('Recipe');
 		$this->view->form = $form;
 
 		if ($this->getRequest()->isPost()) {
@@ -56,11 +56,17 @@ class RecipeController extends DefaultController
 	public function editAction()
 	{
 		// Fetch the recipe being requested
-		$recipe = $this->model->fetchRecipe($this->_getParam('id'));
+		if ( ! $recipe = $this->model->fetchSingleByPrimary($this->_id) )
+		{
+			$this->_flashMessenger->setNamespace( 'error' );
+			$this->_flashMessenger->addMessage( 'Unable to find recipe with id ' . $id );
+			$this->_flashMessenger->resetNamespace();
+			$this->_redirect( '/recipe/index' );
+		}
 		
 		$this->view->title = 'Editing recipe - '.$recipe->name;
 		
-		$form = $this->model->getForm('RecipeNew');
+		$form = $this->model->getForm('Recipe');
 		$form->populate($recipe->toArray());
 		$this->view->form = $form;
 		
@@ -91,9 +97,15 @@ class RecipeController extends DefaultController
 
 	public function viewAction()
 	{
-		$recipe = $this->model->fetchRecipe($this->_getParam('id'));
+		if ( ! $recipe = $this->model->fetchSingleByPrimary($this->_id) )
+		{
+			$this->_flashMessenger->setNamespace( 'error' );
+			$this->_flashMessenger->addMessage( 'Unable to find recipe with id ' . $id );
+			$this->_flashMessenger->resetNamespace();
+			$this->_redirect( '/recipe/index' );
+		}
+			
 		$this->view->recipe  = $recipe->toArray();
-		
 		$ingredients = $this->model->getIngredients($recipe['id']);
 		$this->view->ingredients  = $ingredients;
 		
