@@ -3,11 +3,16 @@
 class AjaxController extends Zend_Controller_Action
 {
 
+	/**
+	 * Ajax controller requires no layout and no view as it mostly sends back ajax
+	 * we do this in preDispatch so that we dont have to repeat ourselves
+	 */
 	public function preDispatch()
 	{
-	//	$this->loggedIn( array( 'getcomments', 'userlookup' ) );
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(true);
 	}
-
+	
 	/**
 	 * Ajax call to return the Ingredients that fit the criteria
 	 */
@@ -34,13 +39,13 @@ class AjaxController extends Zend_Controller_Action
 	{
 		$text = $this->_getParam('q');
 		
-		$m = new Measurement();
-		$select = $m->select()
+		$m = new Models_Measurement();
+		$select = $m->table->select()
 			->where( 'LOWER(name) LIKE ?', '%'.strtolower($text).'%' )
 			->orWhere( 'LOWER(abbreviation) LIKE ?', '%'.strtolower($text).'%' )
 			->limit(5);
 
-		$rowset = $m->fetchAll( $select );
+		$rowset = $m->table->fetchAll( $select );
 		if ( $rowset )
 			echo json_encode( $rowset->toArray() );
 	}
@@ -49,15 +54,15 @@ class AjaxController extends Zend_Controller_Action
 	 * Check the username is not taken since usernames need to be unique
 	 */
 
-	public function userlookupAction()
+	public function userLookupAction()
 	{
 		$text = $this->_getParam('q');
 
-		$u = new User();
-		$select = $u->select()
+		$u = new Models_User();
+		$select = $u->table->select()
 			->where( 'name = ?', $text );
 		
-		$row = $u->fetchRow( $select );
+		$row = $u->table->fetchRow( $select );
 		if ( $row ) {
 			echo json_encode( 'is not free' );
 			exit;
@@ -163,14 +168,6 @@ class AjaxController extends Zend_Controller_Action
 			$this->db->update( 'method_items', array( 'position' => $count ), 'id = '. $item );
 			$count++;
 		}
-	}
-
-	/**
-	 * We are existing after the action is dispatched
-	 *
-	 */
-	public function postDispatch() {
-		exit;
 	}
 	
 }

@@ -14,9 +14,21 @@ $().ready(function(){
 			return item.name;
 		}
 	});
+	$("#measurement").autocomplete("/ajax/get-measurements", {
+		parse: function(data) {
+			return $.map(eval(data), function(row) {
+				return {
+					data: row,
+					value: row.id,
+					result: row.name
+				}
+			});
+		},
+		formatItem: function(item) {
+			return item.name;
+		}
+	});
 });
 </script>
-
-<h2><?php echo $this->recipe['name'] ?></h2>
 
 <?php echo $this->form; ?>
