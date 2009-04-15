@@ -20,10 +20,10 @@ class IngredientController extends DefaultController
 			
 		// fetch the Recipe
 		$recipeModel = new Models_Recipe();
-		if ( ! $recipe = $this->model->fetchSingleByPrimary($this->_getParam('id')) )
+		if ( ! $recipe = $this->model->fetchSingleByPrimary($this->_getParam('recipe_id')) )
 		{
 			$this->_flashMessenger->setNamespace( 'error' );
-			$this->_flashMessenger->addMessage( 'Unable to find recipe with id ' . $id );
+			$this->_flashMessenger->addMessage( 'Unable to find recipe with id ' . $this->_getParam('recipe_id') );
 			$this->_flashMessenger->resetNamespace();
 			$this->_redirect( '/recipe/index' );
 		}
