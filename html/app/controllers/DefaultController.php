@@ -85,6 +85,12 @@ abstract class DefaultController extends Zend_Controller_Action {
 	 */
 	protected $_role;
 	
+	/**
+	 * The ID that we are currently requesting
+	 * @var int
+	 */
+	protected $_id;
+	
 	public $model;
 	
 	const PREFIX = 'Models_';
@@ -108,6 +114,8 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$this->view->partialsFolder = 'partials/';
 		$this->view->includesFolder = 'includes/';
 		
+		$this->_id = $this->_getParam('id');
+		
 		$this->_role = 'guest';
 		// If there is an identity store it in the controller and the view object
 		$auth = Zend_Auth::getInstance();
@@ -122,6 +130,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 	
 	/**
 	 * Returns a new model class, derived from the current controller
+	 * @return obj
 	 */
 	public function getModel()
 	{
@@ -129,6 +138,26 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$modelClass = self::PREFIX . $modelName;
 		$model = new $modelClass();
 		return $model;
+	}
+	
+	/**
+	 * Checks the parameters that are required
+	 *
+	 * @param array $requiredParams
+	 * @return boolean
+	 */
+	public function checkRequiredParams( array $requiredParams )
+	{
+		$return = true;
+		foreach ($requiredParams as $param)
+		{
+			if ( ! $this->_getParam($param) )
+			{ 
+				$this->_flashMessenger->addMessage( 'Unable to required field '.$param );
+				$return = false;
+			}
+		}
+		return $return;	
 	}
 	
 }

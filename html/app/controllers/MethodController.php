@@ -2,16 +2,6 @@
 
 class MethodController extends DefaultController  
 {
-	/**
-	 * This happens before the page is dispatched
-	 */
-
-	public function preDispatch()
-	{
-		// Held in DefaultController
-		$this->loggedIn();
-		$this->pendingAccount();
-	}
 
 	/**
 	 * Setup this controller specifically and then call the parent
@@ -19,120 +9,82 @@ class MethodController extends DefaultController
 
 	public function init()
 	{
-		$m = new MethodItem();
-		$this->form = new Zend_Form;
-		$this->form->addElements( $m->getFormElements() );
-
 		parent::init();
+		$this->model = $this->getModel();
 	}
 	
 	public function newAction()
 	{
-		$this->view->textfield = true;
+		if ( ! $this->checkRequiredParams(array('recipe_id')) )
+			$this->_redirect( '/recipe/index' );
+		
+		$recipeModel = new Models_Recipe();
+		$recipe = $recipeModel->fetchSingleByPrimary($this->_getParam('recipe_id'));
+		$this->view->recipe = $recipe;
+			
 		$this->view->title = 'Create a method';
-		$this->view->pageContent = $this->pagesFolder.'/method/new.phtml';
-		$this->view->recipe_id = $this->recipe->id;
-		$this->view->textfield = true;
-		$this->renderModelForm( '/method/create/recipe_id/' . $this->recipe->id, 'Add' );
+		$form = $this->model->getForm('Method');
+		$form->populate( array( 'recipe_id' => $recipe['id'] ) );
+		$this->view->form = $form;
+
+		if ($this->getRequest()->isPost()) {
+
+			// now check to see if the form submitted exists, and
+			// if the values passed in are valid for this form
+			if ($form->isValid($this->_request->getPost())) {
+				// Get the values from the DB
+				$data = $form->getValues();
+
+				// Unset the buttons
+				unset( $data['submit'] );
+								
+				$this->model->table->insert( $data );
+
+				$this->_flashMessenger->addMessage( 'Added method' );
+				$this->_redirect( '/recipe/view/id/' . $recipe['id'] );
+			}
+		}
 	}
 	
-	public function createAction()
-	{
-		if (! $this->form->isValid($_POST)) {
-			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
-		}
-
-		$params = $this->form->getValues();
-		$params['recipe_id'] = $this->recipe->id;
-
-		$m = new MethodItem();
-		$r = $this->recipe->getTable();
-
-		$this->db->beginTransaction();
-<<<<<<< .mine
-
-=======
-		// Switch textfield JS on
-		
->>>>>>> .r166
-		// Put the insert into a transaction
-		try {
-			$m->insert( $params );
-			$params = array();
-			$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
-			$this->db->commit();
-<<<<<<< .mine
-			$this->message->addMessage( 'Added a method to ' . sq_brackets( $this->recipe->name ) );
-			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
-=======
-			$this->log->info( 'Added MethodItem to recipe ' . sq_brackets( $this->recipe->id ) ); 
-			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
->>>>>>> .r166
-		} catch (Exception $e) {
-			$this->log->info( $e->getMessage() );
-			$this->db->rollBack();
-			$this->_redirect( '/method/new/recipe_id/' . $this->recipe->id );
-		}
-
-	}
-
 	/**
 	 * Edit a method item
 	 */
 
 	public function editAction()
 	{
+		// Fetch the recipe being requested
+		if ( ! $method = $this->model->fetchSingleByPrimary($this->_id) )
+		{
+			$this->_flashMessenger->setNamespace( 'error' );
+			$this->_flashMessenger->addMessage( 'Unable to find method with id ' . $this->_id );
+			$this->_flashMessenger->resetNamespace();
+			$this->_redirect( '/recipe/index' );
+		}
+		
 		$this->view->title = 'Edit the instructions';
-		$this->view->pageContent = $this->pagesFolder.'/method/new.phtml';
 		
-		// Switch textfield JS on
-		$this->view->textfield = true;
+		$form = $this->model->getForm('Method');
+		$form->populate($method->toArray());
+		$this->view->form = $form;
 		
-		$m = new MethodItem();
-		$rowset = $m->find( $this->_getParam( 'method_id' ) );
-		if ($rowset) {
-			$method = $rowset->current();
+		if ($this->getRequest()->isPost()) {
 
-			$values = $method->toArray();
-			foreach ( $this->form->getElements() as $element )
-			{
-				$element->setValue( $values[$element->getName()] );
+			// now check to see if the form submitted exists, and
+			// if the values passed in are valid for this form
+			if ($form->isValid($this->_request->getPost())) {
+				// Get the values from the DB
+				$data = $form->getValues();
+
+				// Unset the buttons
+				unset( $data['submit'] );
+				
+				$method->setFromArray($data);
+				$method->save();
+
+				$this->_flashMessenger->addMessage( 'Edited method' );
 			}
+			$this->_redirect( '/recipe/view/id/' . $this->_getParam('recipe_id') );
 		}
-
-		$this->renderModelForm( '/method/update/recipe_id/' . $method->recipe_id . '/method_id/'.$method->id, 'Update' );
-	}
-
-	/**
-	 * Update the method
-	 */
-
-	public function updateAction()
-	{
-		if ( ! $this->form->isValid($_POST) ) {
-			$this->log->info( 'Form is not valid '.var_export( $this->form->getMessages(), true ) );
-			$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
-		}
-
-		$params = $this->form->getValues();
-		$m = new MethodItem();
-		$r = $this->recipe->getTable();
-
-		$this->db->beginTransaction();
-		try {
-			$where = $m->getAdapter()->quoteInto( 'id = ?', $this->_getParam( 'method_id' ) );
-			$m->update( $params, $where );
-		
-			$params = array();
-			$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
-			$r->update( $params, $where );
-			$this->db->commit();
-		} catch (Exception $e) {
-			$this->db->rollBack();
-			$this->log->info( $e->getMessage() );
-		}
-
-		$this->_redirect( '/recipe/view/recipe_id/' . $this->recipe->id );
 	}
 
 	/**
@@ -141,33 +93,18 @@ class MethodController extends DefaultController
 
 	public function deleteAction()
 	{
-		$methodId = $this->_getParam( 'method_id' );
-		$where = $this->db->quoteInto( 'id = ?', $methodId );
-
-		$params = array();
-		$r = $this->recipe->getTable();
-
-		$this->db->beginTransaction();
-		try {
-			$this->db->delete( 'method_items', $where );
-			$where = $r->getAdapter()->quoteInto( 'id = ?', $this->recipe->id );
-			$r->update( $params, $where );
-			$this->db->commit();
-		} catch (Exception $e) {
-			$this->db->rollBack();
-			$this->log->info( $e->getMessage() );
+		if ( ! $method = $this->model->fetchSingleByPrimary($this->_id) )
+		{
+			$this->_flashMessenger->setNamespace( 'error' );
+			$this->_flashMessenger->addMessage( 'Unable to find method with id ' . $this->_id );
+			$this->_flashMessenger->resetNamespace();
+			$this->_redirect( '/recipe/index' );
 		}
 		
-		$this->message->addMessage( 'Deleted instructions from '.$this->recipe->name );
-		$this->_redirect( '/recipe/view/recipe_id/'.$this->recipe->id );
-	}
-	
-	/**
-	 * We are existing after the action is dispatched
-	 */
-
-	public function postDispatch() {
-		exit;
+		$recipe_id = $method->recipe_id;
+		$method->delete();
+		
+		$this->_redirect( '/recipe/view/id/'.$recipe_id );
 	}
 	
 }

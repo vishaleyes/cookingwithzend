@@ -38,7 +38,7 @@ abstract class Models_GenericModel
 	public function getForm($form)
 	{
 		$formClass = 'Forms_'.$form;
-		Zend_Loader::loadClass( 'forms_' . $form );
+		Zend_Loader::loadClass( 'Forms_' . $form );
 		return new $formClass();
 	}
 
@@ -52,8 +52,8 @@ abstract class Models_GenericModel
 	public function getByField( $field, $value )
 	{
 		$select = $this->table->select()->where( $field . ' = ?', $value );
-		$user = $this->table->fetchAll( $select );
-		return $user;
+		$rowSet = $this->table->fetchAll( $select );
+		return $rowSet;
 	}
 
 	/**
@@ -68,6 +68,26 @@ abstract class Models_GenericModel
 		Zend_Loader::loadClass($tableClass);
 		$table = new $tableClass();
 		return $table;
+	}
+	
+	/**
+	 * Find the record we request in the current table
+	 * @param int $id
+	 * @todo This breaks the extended functionality of find but is that a bad thing?
+	 */
+
+	public function fetchSingleByPrimary($id)
+	{
+		// Fetch the recipe being requested
+		$rowSet = $this->table->find( $id );
+		
+		// Couldnt find it?  Oh dear we best throw an error
+		// @todo Move this test to somwhere else when I figure out the best place for it
+		if (!$rowSet)
+			return false;
+		
+		$row = $rowSet->current();
+		return $row;
 	}
 }
 
