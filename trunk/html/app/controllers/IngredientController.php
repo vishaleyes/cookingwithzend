@@ -15,24 +15,15 @@ class IngredientController extends DefaultController
 	
 	public function newAction()
 	{
+		$this->view->title = 'Add an ingredient';
+		
 		if ( ! $this->checkRequiredParams(array('recipe_id')) )
 			$this->_redirect( '/recipe/index' );
 			
-		// fetch the Recipe
-		$recipeModel = new Models_Recipe();
-		if ( ! $recipe = $this->model->fetchSingleByPrimary($this->_getParam('recipe_id')) )
-		{
-			$this->_flashMessenger->setNamespace( 'error' );
-			$this->_flashMessenger->addMessage( 'Unable to find recipe with id ' . $this->_getParam('recipe_id') );
-			$this->_flashMessenger->resetNamespace();
-			$this->_redirect( '/recipe/index' );
-		}
-		$this->view->recipe = $recipe;
-		
-		$this->view->title = 'Add an ingredient';
+		$recipeID = $this->_getParam('recipe_id');
 
 		$form = $this->model->getForm('Ingredient');
-		$form->populate( array( 'recipe_id' => $recipe['id'] ) );
+		$form->populate( array( 'recipe_id' => $recipeID ) );
 		$this->view->form = $form;
 	
 		if ($this->getRequest()->isPost()) {
@@ -54,7 +45,7 @@ class IngredientController extends DefaultController
 						
 				try {
 					$ri->table->insert( array(
-						'recipe_id'     => $recipe['id'],
+						'recipe_id'     => $recipeID,
 						'ingredient_id' => $ingredient->id
 					));
 					$this->_db->commit();

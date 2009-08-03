@@ -1,11 +1,18 @@
 <div>
-	<h2><a href="<?= $this->url( array( 
+	<h2>
+		<a href="<?php echo $this->url( array( 
 			'controller' => 'recipe', 
 			'action' => 'view',
 			'id'     => $this->id
 		), 'default' ); ?>"><?php echo $this->escape( $this->name ) . ' ' . round_brackets( $this->view_count ) ?>
 		</a></h2>
-	<h3>By <?php echo $this->user ?></h3>
+	<h3>By 
+		<a href="<?php echo $this->url( array(
+			'controller' => 'recipe',
+			'action' => 'user',
+			'user_id' => strtolower($this->username)
+		), 'default' ); ?>"><?php echo $this->username ?></a>
+	</h3>
 	<div>
 		<ul id="recipe-summary">
 			<li><?php echo 'Difficulty: ' . $this->difficulty ?></li>

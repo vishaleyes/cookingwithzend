@@ -11,7 +11,7 @@ class Models_DbTable_Recipe extends Zend_Db_Table_Abstract
 
 	protected $_dependentTables = array(
 		'Models_DbTable_RecipeIngredient', 
-		'Models_DbTable_MethodItem', 
+		'Models_DbTable_Method', 
 		'Models_DbTable_Rating'
 	);
 

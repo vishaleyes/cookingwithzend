@@ -39,19 +39,21 @@ class LoginController extends DefaultController
 				}
 				
 				$email = $result->getIdentity();
-				$rowSet = $this->model->getByField('email', $email);
-				$user = $rowSet->current();
-				$msg = $user->checkStatus();
-				$user->last_login = new Zend_Db_Expr('NOW()');
-				$user->save();
+				$userRow = $this->model->getSingleByField('email', $email);
+				$msg = $this->model->checkStatus($userRow['status']);
+				$this->_db->update(
+					'users', 
+					array('last_login' => new Zend_Db_Expr('NOW()')),
+					'id = '.$userRow['id']
+				);
 				
 				// Check to see the user is fully logged in
 				if ( $msg == '' )
 				{
 					$auth = Zend_Auth::getInstance();
-					$auth->getStorage()->write($user->toArray());
+					$auth->getStorage()->write($userRow);
 				} else {
-					$this->_log->info('User '.sq_brackets( $user->current()->name ).' tried to login but got ' . sq_brackets( $msg ) );
+					$this->_log->info('User '.sq_brackets( $userRow['name'] ).' tried to login but got ' . sq_brackets( $msg ) );
                     $this->_flashMessenger->setNamespace( 'error' );
                     $this->_flashMessenger->addMessage( $msg );
                     $this->_flashMessenger->resetNamespace();
