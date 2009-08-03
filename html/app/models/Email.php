@@ -16,22 +16,16 @@ class Email extends Zend_Mail
 	const FROM_EMAIL = "admin@simplcook.org";
 	const FROM_NAME  = "SimplyCook.org";
 
-	var $files;
-	var $cc;
-	var $template;
-	var $html;
+	protected $_files;
 
-
-	public function __construct( $to, $toName = '', $subject = '', $from = '', $fromName = '', $encoding = 'UTF-8' )
+	public function __construct( $to, $toName = '', $subject = '', $encoding = 'UTF-8' )
 	{
 		parent::__construct();
 
 		$this->log = Zend_Registry::get( 'log' );
 		$this->addTo($to, $toName);
 
-		$from = ( empty( $from ) ? self::FROM_EMAIL : $from );
-		$fromName = ( empty( $name ) ? self::FROM_NAME : $name );
-		$this->setFrom($from, $fromName);
+		$this->setFrom(self::FROM_EMAIL, self::FROM_NAME);
 
 		$this->setSubject($subject);
 #		$this->setEncoding($encoding);
@@ -54,21 +48,10 @@ class Email extends Zend_Mail
 	 * @return string $template
 	 */
 
-
 	public function getTemplate($template) {
 		return $this->template;
 	}
 	
-	/**
-	 * Sets a HTML flag or not to decide if the email should be sent in HTML or not
-	 * @param bool $var
-	 */
-
-	public function setHTML( $var )
-	{
-		$this->html = $var;
-	}
-
 	/**
 	 * Uses Zend_Mail to send off the mail
 	 * @param string $textBody

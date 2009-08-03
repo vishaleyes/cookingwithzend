@@ -13,10 +13,8 @@ class RecipeController extends DefaultController
 	{
 		$this->view->title = 'Viewing recipes';
 		
-		$select = $this->model->table->select()
-			->limit('30');
-
-		$this->view->recipes = $this->model->table->fetchAll($select);
+		$recipes = $this->model->getRecipes(null, 'created DESC');
+		$this->view->recipes = $recipes;
 	}
 
 	/**
@@ -81,6 +79,7 @@ class RecipeController extends DefaultController
 				// Unset the buttons
 				unset( $data['submit'] );
 				
+				$data = array_merge($recipe->toArray(), $data);
 				$recipe->setFromArray($data);
 				$recipe->save();
 
@@ -112,6 +111,21 @@ class RecipeController extends DefaultController
 		$methods = $this->model->getMethods($recipe['id']);
 		$this->view->methods  = $methods;
 		
+	}
+	
+	public function userAction()
+	{
+		if ( ! $this->checkRequiredParams(array('user_id')) )
+			$this->_redirect( '/recipe/index' );
+			
+		$userID = $this->_getParam('user_id');
+		$this->view->title = 'Viewing recipes for user';
+		$u = new Models_User();
+		$user = $u->getSingleByField('name', $userID);
+		$this->view->user = $user;
+
+		$recipes = $this->model->getRecipes($userID);
+		$this->view->recipes = $recipes;
 	}
 
 }

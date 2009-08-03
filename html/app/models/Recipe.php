@@ -4,6 +4,34 @@ class Models_Recipe extends Models_GenericModel
 {
 	
 	/**
+	 * Return all the recipies with a username thrown in
+	 *
+	 * @param string $userID
+	 * @param string $order
+	 * @return array
+	 */
+	public function getRecipes($userID = null, $order = null)
+	{
+		$select = $this->db->select()
+			->from(array('r' => 'recipes'))
+			->joinLeft(array('u' => 'users'), 'r.creator_id = u.id', array(
+				'username' => 'u.name'
+			));
+		
+		if (null !== $userID)
+			$select->where('u.name = ?', $userID);
+		
+		if (null !== $order)
+			$select->order('r.'.$order);
+		else
+			$select->order('r.name');
+			
+		$stmt = $this->db->query($select);
+		$rowSet = $stmt->fetchALl();
+		return $rowSet;
+	}
+	
+	/**
 	 * Rebuilds the ingredient from the joining tables
 	 *
 	 * @param int $id

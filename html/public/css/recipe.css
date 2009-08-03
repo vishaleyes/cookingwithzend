@@ -2,6 +2,22 @@
 	font-family: Helvetica, Arial;
 }
 
+.numeric {
+	text-align: right;
+}
+
+.center {
+	text-align: center;
+}
+
+.odd {
+	background-color: #dad4d3;
+}
+
+.even {
+	background-color: #a0a0a0;
+}
+
 li.ingredients {
 	display: inline;
 }
@@ -13,4 +29,12 @@ pre.comments {
 
 td.comments {
 	padding-bottom: 20px;
+}
+
+table * {
+	padding: 2px;
+}
+
+thead {
+	font-weight: bold;
 }

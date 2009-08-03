@@ -44,8 +44,9 @@ abstract class Models_GenericModel
 
 	/**
 	 * Generic function to aquire data by any of the fields in the table
-	 * @param $field string The field you want to search by
-	 * @param $value mixed The value you want the field to be
+	 * 
+	 * @param string $field The field you want to search by
+	 * @param mixed $value The value you want the field to be
 	 * @return $rows Zend_Db_Table_Rowset
 	 */
 
@@ -53,7 +54,27 @@ abstract class Models_GenericModel
 	{
 		$select = $this->table->select()->where( $field . ' = ?', $value );
 		$rowSet = $this->table->fetchAll( $select );
-		return $rowSet;
+		if ($rowSet)
+			return $rowSet->toArray();
+		return false;
+	}
+	
+	/**
+	 * Generic function to aquire data by any of the fields in the table, 
+	 * returns a single row
+	 *
+	 * @param string $field
+	 * @param mixed $value
+	 * @return array
+	 */
+	
+	public function getSingleByField( $field, $value )
+	{
+		$select = $this->table->select()->where( $field . ' = ?', $value );
+		$row = $this->table->fetchRow( $select );
+		if ( $row )
+			return $row->toArray();
+		return false;
 	}
 
 	/**
@@ -68,6 +89,19 @@ abstract class Models_GenericModel
 		Zend_Loader::loadClass($tableClass);
 		$table = new $tableClass();
 		return $table;
+	}
+	
+	/**
+	 * Runs a fetch all on the table and returns an array
+	 *
+	 * @param Zend_Db_Select|string $select
+	 * @return array
+	 */
+	public function fetchAll($select)
+	{
+		$results = $this->table->fetchAll($select);
+		if ($results)
+			return $results->toArray();
 	}
 	
 	/**

@@ -1,0 +1,38 @@
+<h3>Viewing recipies for <?php echo $this->user['name'] ?></h3>
+
+<table class="fullborder">
+	<thead>
+		<tr>
+			<td>Name</td>
+			<td>Cooking Time</td>
+			<td>Prep</td>
+			<td>Serves</td>
+			<td>Difficulty</td>
+			<td>Freeze</td>
+			<td>Comments</td>
+			<td>Rated</td>
+			<td>Views</td>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach( $this->recipes as $recipe ): ?>
+		<tr class="<?php echo $this->cycleCss(); ?>">
+			<td><a href="<?php echo $this->url( array( 
+				'controller' => 'recipe', 
+				'action' => 'view',
+				'id'     => $recipe['id']
+			), 'default' ); ?>"><?php echo $recipe['name']; ?></a></td>
+			<td class="numeric"><?php echo $recipe['cooking_time']; ?></td>
+			<td class="numeric"><?php echo $recipe['preparation_time']; ?></td>
+			<td class="numeric"><?php echo $recipe['serves']; ?></td>
+			<td class="numeric"><?php echo $recipe['difficulty']; ?></td>
+			<td class="center"><?php echo ($recipe['freezable'] ? 'Yes' : 'No'); ?></td>
+			<td class="numeric"><?php echo $recipe['comments_count']; ?></td>
+			<td></td>
+			<td class="numeric"><?php echo $recipe['view_count']; ?></td>
+		</tr>
+	<?php endforeach ?>
+	</tbody>
+</table>
+
+

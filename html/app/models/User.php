@@ -1,9 +1,12 @@
 <?php
 
-class Models_User extends Models_GenericModel {
+class Models_User extends Models_GenericModel
+{
 
+	const SALT = "aSalt";
+	
 	/**
-	 * Login for the Employee, this sends the username/password to the Auth Adapter
+	 * Login for the User, this sends the username/password to the Auth Adapter
 	 *
 	 * @param string $email
 	 * @param string $password
@@ -23,8 +26,97 @@ class Models_User extends Models_GenericModel {
 			->setCredentialTreatment( $config->authentication->credentialTreatment )
 			->setIdentity( $email )
 			->setCredential( $password );
-
+	
 		return $auth->authenticate( $authAdapter );
 	}
+	
+	/**
+	 * Prepares a forgotten password mail and sends it out the current user
+	 * @return bool
+	 */
 
+	public function forgottenPasswordMail()
+	{
+		$newpass = $this->generatePassword();
+		$this->password = new Zend_Db_Expr('PASSWORD("'.$newpass.'")');
+		$this->save();
+		
+		$e = new Email( $this->email, $this->name, 'Forgotten Password' );
+		$e->setTemplate( 'forgotten-password.phtml' );
+		$e->view->password = $this->password;
+
+		return $e->sendMail();
+	}
+
+	/**
+	 * Sends out e-mail to use to verify e-mail
+	 * @return bool
+	 */
+
+	public function sendConfirmationEmail()
+	{
+	
+		$verificationCode = $this->getVerificationCode();
+		$e = new Email( $this->email, $this->name, 'Registration' );
+		$e->setTemplate( 'user-registration.phtml' );
+
+		$e->view->verificationURL = 'http://' . $_SERVER['HTTP_HOST'] . '/user/confirm/' . $verificationCode ;
+	
+		return $e->sendMail();
+	}
+	
+	/**
+	 * Used to check the status of the user, based on the ENUM of the DB field
+	 * @return string
+	 */
+
+	public function checkStatus($status)
+	{
+		$message = '';
+
+		switch ($status)
+		{
+			case 'banned':
+				$message = 'Your account has been banned, you need to get in touch with us to find out why';
+				break;
+			case 'suspended':
+				$message = 'Your account has been suspended, you should of been mailed the reason';
+				break;
+			case 'pending':
+			case 'admin':
+			case 'active':
+				break;
+		}
+
+		return $message;
+	}
+
+	/**
+	 * Generate verification code to be e-mailed. Code is mixed hash of the email and salt defined above.
+	 * @return string
+	 */
+
+	public function getVerificationCode()
+	{
+		return (MD5(MD5($this->email) . MD5(self::SALT)));	
+	}
+	
+	/**
+	 * Generates a password between 6 and 12 characters
+	 * @return string
+	 */
+
+	private function generatePassword()
+	{
+	    $chars = "1234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$i = 0;
+		$length = mt_rand( 6, 12 );
+	    $password = "";
+	    while ($i <= $length) {
+			$password .= $chars{mt_rand(0,strlen($chars))};
+			$i++;
+		}
+
+		return $password;
+	}
 }

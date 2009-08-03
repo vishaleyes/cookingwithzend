@@ -60,7 +60,7 @@
 		<li><a href="/">Home</a></li>
 	<?php if ( $this->identity ): ?>
 		<li><a href="/user/account">My Account</a></li>	
-		<li><a href="<?php echo '/recipe/user/'.$this->session->user['name'] ?>">My Recipes</a></li>	
+		<li><a href="<?php echo '/recipe/user/user_id/'.strtolower($this->identity['name']) ?>">My Recipes</a></li>	
 		<li><a href="<?php echo $this->url( array( 
 			'controller' => 'recipe', 
 			'action' => 'new',
