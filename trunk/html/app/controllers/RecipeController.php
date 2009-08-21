@@ -53,14 +53,7 @@ class RecipeController extends DefaultController
 
 	public function editAction()
 	{
-		// Fetch the recipe being requested
-		if ( ! $recipe = $this->model->fetchSingleByPrimary($this->_id) )
-		{
-			$this->_flashMessenger->setNamespace( 'error' );
-			$this->_flashMessenger->addMessage( 'Unable to find recipe with id ' . $id );
-			$this->_flashMessenger->resetNamespace();
-			$this->_redirect( '/recipe/index' );
-		}
+		$recipe = $this->_getSingleRecipe();
 		
 		$this->view->title = 'Editing recipe - '.$recipe->name;
 		
@@ -96,12 +89,12 @@ class RecipeController extends DefaultController
 
 	public function viewAction()
 	{
-		if ( ! $recipe = $this->model->fetchSingleByPrimary($this->_id) )
+		$recipe = $this->_getSingleRecipe();
+		// If this is being viewed by a guest or not by the creator
+		if ( !$this->_identity || ($this->_identity['id'] != $recipe->creator_id))
 		{
-			$this->_flashMessenger->setNamespace( 'error' );
-			$this->_flashMessenger->addMessage( 'Unable to find recipe with id ' . $id );
-			$this->_flashMessenger->resetNamespace();
-			$this->_redirect( '/recipe/index' );
+			++$recipe->view_count;
+			$recipe->save();
 		}
 			
 		$this->view->recipe  = $recipe->toArray();
@@ -117,16 +110,38 @@ class RecipeController extends DefaultController
 	{
 		if ( ! $this->checkRequiredParams(array('user_id')) )
 			$this->_redirect( '/recipe/index' );
-			
+
 		$userID = $this->_getParam('user_id');
 		$this->view->title = 'Viewing recipes for user';
 		$u = new Models_User();
 		$user = $u->getSingleByField('name', $userID);
 		$this->view->user = $user;
 
-		$recipes = $this->model->getRecipes($userID);
+		$recipes = $this->model->getRecipes($userID, $this->_getParam('order'), $this->_getParam('direction'));
+		$this->view->searchCriteria = new Recipe_SearchCriteria(0, $this->_getParam('order'), $this->_getParam('direction'));
 		$this->view->recipes = $recipes;
 	}
+	
+	public function deleteAction()
+	{
+		$recipe = $this->_getSingleRecipe();
+		$this->_flashMessenger->addMessage( 'Deleted recipe : ' . $recipe->name );
+		$recipe->delete();
+		$this->_redirect( '/recipe/index' );
+	}
 
+	private function _getSingleRecipe($redirect = '/recipe/index')
+	{
+		// Fetch the recipe being requested
+		if ( ! $recipe = $this->model->fetchSingleByPrimary($this->_id) )
+		{
+			$this->_flashMessenger->setNamespace( 'error' );
+			$this->_flashMessenger->addMessage( 'Unable to find recipe with id ' . $id );
+			$this->_flashMessenger->resetNamespace();
+			$this->_redirect( '/recipe/index' );
+			return false;
+		}
+		return $recipe;
+	}
 }
 

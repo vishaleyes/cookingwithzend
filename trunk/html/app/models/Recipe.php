@@ -10,7 +10,7 @@ class Models_Recipe extends Models_GenericModel
 	 * @param string $order
 	 * @return array
 	 */
-	public function getRecipes($userID = null, $order = null)
+	public function getRecipes($userID = null, $order = null, $direction = 'ASC')
 	{
 		$select = $this->db->select()
 			->from(array('r' => 'recipes'))
@@ -22,9 +22,12 @@ class Models_Recipe extends Models_GenericModel
 			$select->where('u.name = ?', $userID);
 		
 		if (null !== $order)
-			$select->order('r.'.$order);
+		{
+			$select->order("r.$order $direction");
+			$select->order("r.name $direction");
+		}
 		else
-			$select->order('r.name');
+			$select->order("r.name");
 			
 		$stmt = $this->db->query($select);
 		$rowSet = $stmt->fetchALl();

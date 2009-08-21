@@ -39,14 +39,14 @@
 	<!-- Messages to users -->
 	<div>
 		<div id="error" style="background: #c2c2c2">
-		<?php foreach( $this->message->getMessages() as $msg ):?>
+		<?php foreach( $this->message->getMessages() as $msg ): ?>
 			<?php echo $msg; ?>
 		<?php endforeach ?>
 		</div>
 
 		<?php $this->message->setNameSpace('error') ?>
 		<div id="notice" style="background: #72bf72">
-		<?php foreach( $this->message->getMessages() as $msg ):?>
+		<?php foreach( $this->message->getMessages() as $msg ): ?>
 			<?php echo $msg; ?>
 		<?php endforeach ?>
 		</div>
