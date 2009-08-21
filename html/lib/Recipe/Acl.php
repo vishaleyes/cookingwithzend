@@ -21,6 +21,7 @@ class Recipe_Acl extends Zend_Acl {
 		
 		$this->add( new Zend_Acl_Resource( 'recipe' ) );
 		$this->add( new Zend_Acl_Resource( 'recipe:index' ) );
+		$this->add( new Zend_Acl_Resource( 'recipe:delete' ) );
 		$this->add( new Zend_Acl_Resource( 'recipe:new' ) );
 		$this->add( new Zend_Acl_Resource( 'recipe:edit' ) );
 		$this->add( new Zend_Acl_Resource( 'recipe:view' ) );
@@ -45,6 +46,7 @@ class Recipe_Acl extends Zend_Acl {
 		$this->allow( 'member', 'ajax:get-measurements' );
 		$this->allow( 'member', 'recipe:new');
 		$this->allow( 'member', 'recipe:edit');
+		$this->allow( 'member', 'recipe:delete');
 		$this->allow( 'member', 'recipe:user');
 		$this->allow( 'member', 'ingredient:new');
 		$this->allow( 'member', 'ingredient:edit');

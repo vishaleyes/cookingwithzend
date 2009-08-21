@@ -1,17 +1,17 @@
 <h3>Viewing recipies for <?php echo $this->user['name'] ?></h3>
 
-<table class="fullborder">
+<table>
 	<thead>
 		<tr>
-			<td>Name</td>
-			<td>Cooking Time</td>
-			<td>Prep</td>
-			<td>Serves</td>
-			<td>Difficulty</td>
-			<td>Freeze</td>
-			<td>Comments</td>
+			<td><?php echo $this->sortOrder( 'name', 'Name', $this->searchCriteria); ?></td>
+			<td><?php echo $this->sortOrder( 'cooking_time', 'Cooking Time', $this->searchCriteria); ?></td>
+			<td><?php echo $this->sortOrder( 'preparation_time', 'Prep', $this->searchCriteria); ?></td>
+			<td><?php echo $this->sortOrder( 'serves', 'Serves', $this->searchCriteria); ?></td>
+			<td><?php echo $this->sortOrder( 'diffficulty', 'Difficulty', $this->searchCriteria); ?></td>
+			<td><?php echo $this->sortOrder( 'freezable', 'Freeze', $this->searchCriteria); ?></td>
+			<td><?php echo $this->sortOrder( 'comments_count', 'Comments', $this->searchCriteria); ?></td>
 			<td>Rated</td>
-			<td>Views</td>
+			<td><?php echo $this->sortOrder( 'view_count', 'Views', $this->searchCriteria); ?></td>
 		</tr>
 	</thead>
 	<tbody>
