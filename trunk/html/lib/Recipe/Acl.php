@@ -22,6 +22,7 @@ class Recipe_Acl extends Zend_Acl {
 		$this->add( new Zend_Acl_Resource( 'recipe' ) );
 		$this->add( new Zend_Acl_Resource( 'recipe:index' ) );
 		$this->add( new Zend_Acl_Resource( 'recipe:delete' ) );
+		$this->add( new Zend_Acl_Resource( 'recipe:popular' ) );
 		$this->add( new Zend_Acl_Resource( 'recipe:new' ) );
 		$this->add( new Zend_Acl_Resource( 'recipe:edit' ) );
 		$this->add( new Zend_Acl_Resource( 'recipe:view' ) );
@@ -37,6 +38,7 @@ class Recipe_Acl extends Zend_Acl {
 		//             role     resource  privaleges
 		$this->allow( 'guest', 'recipe');
 		$this->allow( 'guest', 'recipe:index');
+		$this->allow( 'guest', 'recipe:popular');
 		$this->allow( 'guest', 'recipe:view');
 		$this->allow( 'guest', 'error:error');
 		$this->allow( 'guest', 'user:new');

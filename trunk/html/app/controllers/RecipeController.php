@@ -13,7 +13,7 @@ class RecipeController extends DefaultController
 	{
 		$this->view->title = 'Viewing recipes';
 		
-		$recipes = $this->model->getRecipes(null, 'created DESC');
+		$recipes = $this->model->getRecipes(null, 'created', 'DESC');
 		$this->view->recipes = $recipes;
 	}
 
@@ -128,6 +128,14 @@ class RecipeController extends DefaultController
 		$this->_flashMessenger->addMessage( 'Deleted recipe : ' . $recipe->name );
 		$recipe->delete();
 		$this->_redirect( '/recipe/index' );
+	}
+	
+	public function popularAction()
+	{
+		$this->view->title = 'Most popular recipes';
+		$recipes = $this->model->getRecipes(null, 'view_count', 'DESC');
+		$this->view->recipes = $recipes;
+		$this->_helper->viewRenderer->setScriptAction('index');
 	}
 
 	private function _getSingleRecipe($redirect = '/recipe/index')
