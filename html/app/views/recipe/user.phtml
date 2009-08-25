@@ -10,7 +10,7 @@
 			<td><?php echo $this->sortOrder( 'diffficulty', 'Difficulty', $this->searchCriteria); ?></td>
 			<td><?php echo $this->sortOrder( 'freezable', 'Freeze', $this->searchCriteria); ?></td>
 			<td><?php echo $this->sortOrder( 'comments_count', 'Comments', $this->searchCriteria); ?></td>
-			<td>Rated</td>
+			<!-- <td>Rated</td> -->
 			<td><?php echo $this->sortOrder( 'view_count', 'Views', $this->searchCriteria); ?></td>
 		</tr>
 	</thead>
@@ -28,7 +28,7 @@
 			<td class="numeric"><?php echo $recipe['difficulty']; ?></td>
 			<td class="center"><?php echo ($recipe['freezable'] ? 'Yes' : 'No'); ?></td>
 			<td class="numeric"><?php echo $recipe['comments_count']; ?></td>
-			<td></td>
+			<!-- <td></td> -->
 			<td class="numeric"><?php echo $recipe['view_count']; ?></td>
 		</tr>
 	<?php endforeach ?>
