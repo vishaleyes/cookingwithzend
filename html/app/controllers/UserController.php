@@ -8,6 +8,20 @@ class UserController extends DefaultController
 		$this->model = $this->getModel();
 	}
 
+	public function viewAction()
+	{
+		if ( ! $this->checkRequiredParams(array('id')) )
+			$this->_redirect( '/recipe/index' );
+			
+		$userID = $this->_getParam('id');
+		$user = $this->model->getSingleByField('name', $userID);
+		$this->view->title = 'Viewing user '.$user['name'];
+		$this->view->user = $user;
+		
+		$c = new Models_Comment();
+		$this->view->comments = $c->getComments('u.name', $userID);
+	}
+	
 	public function newAction()
 	{
 		$this->view->title = 'Create an account';

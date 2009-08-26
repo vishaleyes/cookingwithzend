@@ -12,7 +12,10 @@ class Models_DbTable_User extends Zend_Db_Table_Abstract
 	# Primary does Auto Inc
 	protected $_sequence = true;
 
-	protected $_dependentTables = array('Models_DbTable_Recipe');
+	protected $_dependentTables = array(
+		'Models_DbTable_Recipe',
+		'Models_DbTable_Comment'
+	);
 	
 	public function insert( array $params )
 	{

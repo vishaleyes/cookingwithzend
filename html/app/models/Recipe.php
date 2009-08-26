@@ -3,6 +3,19 @@
 class Models_Recipe extends Models_GenericModel
 {
 	
+	public function getRecipe($recipe_id)
+	{
+		$select = $this->db->select()
+			->from(array('r' => 'recipes'))
+			->joinLeft(array('u' => 'users'), 'r.creator_id = u.id', array(
+				'username' => 'u.name'
+			))
+			->where('r.id = ?', $recipe_id);
+		$stmt = $this->db->query($select);
+		$rowSet = $stmt->fetchAll();
+		return $rowSet[0];
+	}
+	
 	/**
 	 * Return all the recipies with a username thrown in
 	 *
@@ -30,7 +43,7 @@ class Models_Recipe extends Models_GenericModel
 			$select->order("r.name");
 			
 		$stmt = $this->db->query($select);
-		$rowSet = $stmt->fetchALl();
+		$rowSet = $stmt->fetchAll();
 		return $rowSet;
 	}
 	
@@ -41,7 +54,7 @@ class Models_Recipe extends Models_GenericModel
 	 * @return array
 	 */
 	
-	public function getIngredients( $id )
+	public function getIngredients( $recipe_id )
 	{
 		$select = $this->db->select()
 			->from(array('ri' => 'recipe_ingredients'))
@@ -55,7 +68,7 @@ class Models_Recipe extends Models_GenericModel
 				'ri.measurement_id = m.id',
 				array( 'measurement' => 'm.abbreviation')
 			)
-			->where('ri.recipe_id = ?', $id);
+			->where('ri.recipe_id = ?', $recipe_id);
 		return $this->db->fetchAll($select);
 	}
 	
@@ -66,11 +79,11 @@ class Models_Recipe extends Models_GenericModel
 	 * @return array
 	 */
 	
-	public function getMethods( $id )
+	public function getMethods( $recipe_id )
 	{
 		$select = $this->db->select()
 			->from(array('m' => 'method_items'))
-			->where('m.recipe_id = ?', $id);
+			->where('m.recipe_id = ?', $recipe_id);
 			
 		return $this->db->fetchAll($select);
 	}
