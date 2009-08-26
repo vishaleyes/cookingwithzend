@@ -9,59 +9,52 @@
 class CommentController extends DefaultController 
 {
 	
-	/**
-	 * This happens before the page is dispatch
-	 */
-
-	public function preDispatch() {
-		
-		// Held in DefaultController. Params are actions allowed as guest.
-		$this->loggedIn();
-		$this->pendingAccount();
-	}
-
-	public function indexAction() {
+	public function init()
+	{
+		parent::init();
+		$this->model = $this->getModel();
 	}
 	
-	public function addAction() {
+	public function newAction()
+	{
+		$recipe_id = $this->_getParam('recipe_id');
+		$form = $this->model->getForm('Comment');
+		$form->populate(array('recipe_id' => $recipe_id));
+		$this->view->form = $form;
 		
-		/* Get request variables */	
+		if ($this->getRequest()->isPost()) {
 
-		$params = array(
-			'recipe_id'   => $this->recipe->id,
-			'comment'     => $this->_getParam('comment_value'),
-		);
+			// now check to see if the form submitted exists, and
+			// 	if the values passed in are valid for this form
+			if ($form->isValid($this->_request->getPost())) {
+				// Get the values from the DB
+				$data = $form->getValues();
 
-		
-		/*	Try and insert them into DB	*/
-		try {
-			$c = new Comment();
-			$c->insert($params);
-			
-			/* Incease comment counts */
-			$this->db->update("users",array("comments_count" => new Zend_Db_Expr("(comments_count + 1)")),"id = " . $this->session->user['id']);
-			$this->db->update("recipes",array("comments_count" => new Zend_Db_Expr("(comments_count + 1)")),"id = " . $params['recipe_id']);
-			
-			
-			/* Set successful notice */
-			$this->message->addMessage( 'Comment added successful.' );
-			
-			/*	If successful go back to last recipe		*/
-			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
-			
-			exit;
-			
-		} catch(Exception $e) {
-			
-			$this->message->setNamespace( 'error' );
-			$this->message->addMessage( 'Something went horribly wrong' );
-			$this->message->resetNamespace();
-			$this->_redirect( '/recipe/view/recipe_id/' . $params['recipe_id'] );
+				// Unset the buttons
+				unset( $data['submit'] );
+				
+				$this->_db->beginTransaction();
+				try {
+					$this->model->table->insert( $data );
+						
+					$counterData = array("comments_count" => new Zend_Db_Expr("(comments_count + 1)"));
+					
+					$this->_db->update("users", $counterData, "id = " . $this->_identity['id']);
+					$this->_db->update("recipes", $counterData, "id = " . $recipe_id);
+
+					$this->_flashMessenger->addMessage( 'Comment added' );
+					$this->_db->commit();
+				} catch(Exception $e) {
+					$this->_db->rollback();
+					$this->_log->info( 'Failed to add comment to recipe ' . sq_brackets( $recipe_id ) . ' ' . $e->getMessage() );
+				}
+			}
 		}
 		
+		$this->_redirect('/recipe/view/id/'.$recipe_id);
 		
 	}
-
+	
 	public function deleteAction()
 	{
 		$id = $this->_getParam( 'id' );
@@ -74,11 +67,4 @@ class CommentController extends DefaultController
 		$this->_redirect( $_SERVER['HTTP_REFERER'] );
 	}
 	
-	/**
-	 * This happens after the page is dispatch
-	*/ 
-
-	public function postDispatch() {
-		exit;
-	}
 }

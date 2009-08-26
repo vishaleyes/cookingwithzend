@@ -38,7 +38,16 @@ class RecipeController extends DefaultController
 				// Unset the buttons
 				unset( $data['submit'] );
 				
-				$this->model->table->insert( $data );
+				$this->_db->beginTransaction();
+				try{
+					$this->model->table->insert( $data );
+					$this->_db->update("users", array(
+						"recipes_count" => new Zend_Db_Expr("(recipes_count + 1)")
+					), "id = " . $this->_identity['id']);
+					$this->_db->commit();
+				} catch(Exception $e) {
+					$this->_db->rollback();
+				}
 
 				$this->_log->info( 'Added Recipe ' . sq_brackets( $data['name'] ) ); 
 				$this->_flashMessenger->addMessage( 'Added recipe ' . $data['name'] );
@@ -89,20 +98,34 @@ class RecipeController extends DefaultController
 
 	public function viewAction()
 	{
-		$recipe = $this->_getSingleRecipe();
+		$recipe = $this->model->getRecipe($this->_id);
 		// If this is being viewed by a guest or not by the creator
-		if ( !$this->_identity || ($this->_identity['id'] != $recipe->creator_id))
+		
+		if ( !$this->_identity || ($this->_identity['id'] != $recipe['creator_id']))
 		{
-			++$recipe->view_count;
-			$recipe->save();
+			$this->_db->update("recipes", array(
+				"view_count" => new Zend_Db_Expr("(view_count + 1)")
+			), "id = " . $recipe['id']);
 		}
-			
-		$this->view->recipe  = $recipe->toArray();
-		$ingredients = $this->model->getIngredients($recipe['id']);
+		
+		// The comment form only gets made if we are logged in
+		if ( $this->_identity )
+		{
+			$form = $this->model->getForm('Comment');
+			$form->populate(array('recipe_id' => $this->_id));
+			$this->view->form = $form;
+		}
+		
+		$this->view->recipe  = $recipe;
+		$ingredients = $this->model->getIngredients($this->_id);
 		$this->view->ingredients  = $ingredients;
 		
-		$methods = $this->model->getMethods($recipe['id']);
+		$methods = $this->model->getMethods($this->_id);
 		$this->view->methods  = $methods;
+		
+		$c = new Models_Comment();
+		$this->view->comments = $c->getComments('c.recipe_id', $this->_id);
+		
 		
 	}
 	
@@ -126,7 +149,17 @@ class RecipeController extends DefaultController
 	{
 		$recipe = $this->_getSingleRecipe();
 		$this->_flashMessenger->addMessage( 'Deleted recipe : ' . $recipe->name );
-		$recipe->delete();
+		$this->_db->beginTransaction();
+		try{
+			$recipe->delete();
+			$this->_db->update("users", array(
+				"recipes_count" => new Zend_Db_Expr("(recipes_count - 1)")
+			), "id = " . $this->_identity['id']);
+			$this->_db->commit();
+		} catch(Exception $e) {
+			$this->_db->rollback();
+		}
+		
 		$this->_redirect( '/recipe/index' );
 	}
 	

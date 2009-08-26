@@ -1,0 +1,24 @@
+<h1><?php echo $this->user['name']?></h1>
+<ul>
+	<li><a href="<?php echo $this->url( array(
+			'controller' => 'recipe',
+			'action' => 'user',
+			'user_id' => strtolower($this->user['name'])
+		), 'default', true ); ?>">Recipes</a> : <?php echo $this->user['recipes_count']?></li>
+	<li>Comments : <?php echo $this->user['comments_count']?></li>
+</ul>
+
+<h3>Last 10 comments</h3>
+<div>
+<?php foreach($this->comments as $comment): ?>
+	<div>
+		<?php echo $comment['comment'] ?> on
+		<a href="<?= $this->url( array( 
+			'controller' => 'recipe', 
+			'action' => 'view',
+			'id' => strtolower($comment['recipe_id'])
+		), 'default', true ); ?>"><?php echo $comment['recipe']; ?></a>
+		<small><?php echo $comment['created'] ?></small>
+	</div>
+<?php endforeach; ?>
+</div>
