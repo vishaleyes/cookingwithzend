@@ -4,59 +4,40 @@ class Recipe_Acl extends Zend_Acl {
 
 	public function __construct() 
 	{
-		// Add a new role called "guest"
-		$this->addRole( new Zend_Acl_Role ( 'guest' ) );
-
-		// Add a role called member, which inherits from guest
-		$this->addRole( new Zend_Acl_Role( 'member' ), 'guest' );
-		$this->addRole( new Zend_Acl_Role( 'admin' ), 'member' );
-
-		// Resources
-		$this->add( new Zend_Acl_Resource( 'error:error' ) );
-		$this->add( new Zend_Acl_Resource( 'login:index' ) );
+		$db = Zend_Registry::get('db');
 		
-		$this->add( new Zend_Acl_Resource( 'ajax:get-ingredients' ) );
-		$this->add( new Zend_Acl_Resource( 'ajax:get-measurements' ) );
-				
-		$this->add( new Zend_Acl_Resource( 'recipe' ) );
-		$this->add( new Zend_Acl_Resource( 'recipe:index' ) );
-		$this->add( new Zend_Acl_Resource( 'recipe:delete' ) );
-		$this->add( new Zend_Acl_Resource( 'recipe:popular' ) );
-		$this->add( new Zend_Acl_Resource( 'recipe:new' ) );
-		$this->add( new Zend_Acl_Resource( 'recipe:edit' ) );
-		$this->add( new Zend_Acl_Resource( 'recipe:view' ) );
-		$this->add( new Zend_Acl_Resource( 'recipe:user' ) );
+		$select = $db->select()
+			->from(array('r'=>'acl_roles'))
+			->joinLeft(array('i' => 'acl_roles'), 'i.id = r.inherit_id', array('inherit_name'=>'i.name'))
+			->order('r.inherit_id ASC');
+		print $select->__toString();
+		$stmt = $db->query($select);
+		$roles = $stmt->fetchAll();
 		
-		$this->add( new Zend_Acl_Resource( 'comment:new' ) );
+		foreach ($roles as $role)
+		{
+			$inheritRole = null;
+			if ($role['inherit_id'] !== null)
+				$inheritRole =$role['inherit_name'];
+			
+			print_r($role);
+			$this->addRole( new Zend_Acl_Role($role['name']), $role['inherit_name'] );
+		}
 		
-		$this->add( new Zend_Acl_Resource( 'ingredient:get-ingredients' ) );
-		$this->add( new Zend_Acl_Resource( 'ingredient:new' ) );
-		$this->add( new Zend_Acl_Resource( 'ingredient:edit' ) );
+		$select = $db->select()
+			->from('acl_resources')
+			->joinLeft('acl_roles', 'acl_roles.id = acl_resources.role_id', array('role_name' => 'name'));
+		$stmt = $db->query($select);
+		$resources = $stmt->fetchAll();
 		
-		$this->add( new Zend_Acl_Resource( 'user:new' ) );
-		$this->add( new Zend_Acl_Resource( 'user:view' ) );
-
-		//We want to allow guests to view pages
-		//             role     resource  privaleges
-		$this->allow( 'guest', 'recipe');
-		$this->allow( 'guest', 'recipe:index');
-		$this->allow( 'guest', 'recipe:popular');
-		$this->allow( 'guest', 'recipe:view');
-		$this->allow( 'guest', 'error:error');
-		$this->allow( 'guest', 'user:new');
-		$this->allow( 'guest', 'user:view');
-
-		// Members can add recipes
-		$this->allow( 'member', 'ajax:get-ingredients' );
-		$this->allow( 'member', 'ajax:get-measurements' );
-		$this->allow( 'member', 'comment:new' );
-		$this->allow( 'member', 'recipe:new');
-		$this->allow( 'member', 'recipe:edit');
-		$this->allow( 'member', 'recipe:delete');
-		$this->allow( 'member', 'recipe:user');
-		$this->allow( 'member', 'ingredient:new');
-		$this->allow( 'member', 'ingredient:edit');
-		$this->allow( 'member', 'ingredient:get-ingredients');
+		foreach ($resources as $resource)
+		{
+			$this->add( new Zend_Acl_Resource( $resource['name'] ) );
+			$this->allow( $resouce['role_name'], $resource['name'] );
+		}	
+		
+		print_r($this);
+		
 	}
 	
 }

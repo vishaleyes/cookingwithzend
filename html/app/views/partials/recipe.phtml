@@ -8,9 +8,9 @@
 		</a></h2>
 	<h3>By 
 		<a href="<?php echo $this->url( array(
-			'controller' => 'recipe',
-			'action' => 'user',
-			'user_id' => strtolower($this->username)
+			'controller' => 'user',
+			'action' => 'view',
+			'id' => strtolower($this->username)
 		), 'default' ); ?>"><?php echo $this->username ?></a>
 	</h3>
 	<div>
@@ -26,6 +26,7 @@
 		</ul>
 	</div>
 	<!-- Edit/Delete links  -->
+	<?php if ($this->identity ): ?>
 	<div>
 		<a href="<?= $this->url( array( 
 			'controller' => 'recipe', 
@@ -38,4 +39,5 @@
 			'id'     => $this->id
 		), 'default' ); ?>">Delete</a>
 	</div>
+	<?php endif; ?>
 </div>

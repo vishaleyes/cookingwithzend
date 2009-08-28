@@ -12,6 +12,38 @@ defined('APPLICATION_PATH')
 defined('APPLICATION_ENVIRONMENT')
     or define('APPLICATION_ENVIRONMENT', 'development');
 
+// CONFIGURATION - Setup the configuration object
+// The Zend_Config_Ini component will parse the ini file, and resolve all of
+// the values for the given section.  Here we will be using the section name
+// that corresponds to the APP's Environment
+$configuration = new Zend_Config_Xml(APPLICATION_PATH . '/../config.xml', APPLICATION_ENVIRONMENT);
+
+// DATABASE ADAPTER - Setup the database adapter
+// Zend_Db implements a factory interface that allows developers to pass in an
+// adapter name and some parameters that will create an appropriate database
+// adapter object.  In this instance, we will be using the values found in the
+// "database" section of the configuration obj.
+$dbAdapter = Zend_Db::factory($configuration->database);
+// defaule all queries to be utf8 compliant
+$dbAdapter->query('SET NAMES utf8');
+
+// DATABASE TABLE SETUP - Setup the Database Table Adapter
+// Since our application will be utilizing the Zend_Db_Table component, we need 
+// to give it a default adapter that all table objects will be able to utilize 
+// when sending queries to the db.
+Zend_Db_Table_Abstract::setDefaultAdapter($dbAdapter);
+
+// REGISTRY - setup the application registry
+// An application registry allows the application to store application 
+// necessary objects into a safe and consistent (non global) place for future 
+// retrieval.  This allows the application to ensure that regardless of what 
+// happends in the global scope, the registry will contain the objects it 
+// needs.
+$registry = Zend_Registry::getInstance();
+$registry->config = $configuration;
+$registry->db     = $dbAdapter;
+//$registry->acl    = $acl;
+
 // FRONT CONTROLLER - Get the front controller.
 // The Zend_Front_Controller class implements the Singleton pattern, which is a
 // design pattern used to ensure there is only one instance of
@@ -48,37 +80,6 @@ $view->setScriptPath( APPLICATION_PATH . '/views/' );
 $view->doctype('XHTML1_STRICT');
 $view->addHelperPath( APPLICATION_PATH . '/views/helpers/' );
 
-// CONFIGURATION - Setup the configuration object
-// The Zend_Config_Ini component will parse the ini file, and resolve all of
-// the values for the given section.  Here we will be using the section name
-// that corresponds to the APP's Environment
-$configuration = new Zend_Config_Xml(APPLICATION_PATH . '/../config.xml', APPLICATION_ENVIRONMENT);
-
-// DATABASE ADAPTER - Setup the database adapter
-// Zend_Db implements a factory interface that allows developers to pass in an
-// adapter name and some parameters that will create an appropriate database
-// adapter object.  In this instance, we will be using the values found in the
-// "database" section of the configuration obj.
-$dbAdapter = Zend_Db::factory($configuration->database);
-// defaule all queries to be utf8 compliant
-$dbAdapter->query('SET NAMES utf8');
-
-// DATABASE TABLE SETUP - Setup the Database Table Adapter
-// Since our application will be utilizing the Zend_Db_Table component, we need 
-// to give it a default adapter that all table objects will be able to utilize 
-// when sending queries to the db.
-Zend_Db_Table_Abstract::setDefaultAdapter($dbAdapter);
-
-// REGISTRY - setup the application registry
-// An application registry allows the application to store application 
-// necessary objects into a safe and consistent (non global) place for future 
-// retrieval.  This allows the application to ensure that regardless of what 
-// happends in the global scope, the registry will contain the objects it 
-// needs.
-$registry = Zend_Registry::getInstance();
-$registry->config = $configuration;
-$registry->db     = $dbAdapter;
-//$registry->acl    = $acl;
 
 // LOG FILE - Setup the log file from the config
 // We can have multiple log files, so we need to set one up for each occurance
