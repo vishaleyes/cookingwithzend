@@ -9,7 +9,7 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 	}
 	
 	public function preDispatch(Zend_Controller_Request_Abstract $request) {
-		//As in the earlier example, authed users will have the role user
+		//As in the earlier example, authed users will have the role member
 		$role = (Zend_Auth::getInstance()->hasIdentity()) ? 'member' : 'guest';
  
 		//For this example, we will use the controller as the resource:

@@ -16,6 +16,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Dumping data for table `acl_resources`
+--
+
+LOCK TABLES `acl_resources` WRITE;
+/*!40000 ALTER TABLE `acl_resources` DISABLE KEYS */;
+INSERT INTO `acl_resources` VALUES (1,'recipe',1),(2,'recipe:index',1),(3,'recipe:popular',1),(4,'recipe:user',1),(5,'recipe:view',1),(6,'error:error',1),(7,'user:new',1),(8,'user:view',1),(9,'ajax:get-ingredients',2),(10,'ajax:get-measurements',2),(11,'comment:new',2),(12,'recipe:new',2),(13,'ingredient:new',2),(14,'ingredient:edit',3),(15,'recipe:delete',3),(16,'recipe:edit',3),(17,'admin',4),(18,'admin:index',4);
+/*!40000 ALTER TABLE `acl_resources` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `acl_roles`
+--
+
+LOCK TABLES `acl_roles` WRITE;
+/*!40000 ALTER TABLE `acl_roles` DISABLE KEYS */;
+INSERT INTO `acl_roles` VALUES (1,'guest',0),(2,'member',1),(3,'owner',2),(4,'admin',3);
+/*!40000 ALTER TABLE `acl_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `comments`
 --
 
@@ -90,7 +110,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES ('16a0ce9fe04484163304258baaa3259c',1239818211,3600,'Default|a:1:{s:4:\"user\";N;}'),('41091c5abf1132c52c94c04c994c5431',1251209527,3600,'Zend_Auth|a:1:{s:7:\"storage\";a:11:{s:2:\"id\";s:1:\"1\";s:8:\"password\";s:32:\"185741fc2d690b712f659c616222515f\";s:4:\"name\";s:9:\"Catharsis\";s:5:\"email\";s:23:\"cookery@catharsis.co.uk\";s:6:\"openid\";s:44:\"http://www.flickr.com/photos/catharsisjelly/\";s:7:\"created\";s:19:\"2008-07-17 09:52:36\";s:7:\"updated\";s:19:\"2008-07-17 09:52:36\";s:10:\"last_login\";s:19:\"2009-08-20 15:59:29\";s:6:\"status\";s:6:\"active\";s:14:\"comments_count\";s:1:\"0\";s:13:\"ratings_count\";s:1:\"0\";}}'),('489ba02e20fadd7ab7d864c712760b0e',1236705220,3600,'Default|a:1:{s:4:\"user\";N;}Zend_Auth|a:1:{s:7:\"storage\";a:12:{s:2:\"id\";s:1:\"1\";s:8:\"password\";s:32:\"185741fc2d690b712f659c616222515f\";s:4:\"name\";s:9:\"Catharsis\";s:5:\"email\";s:23:\"cookery@catharsis.co.uk\";s:6:\"openid\";s:44:\"http://www.flickr.com/photos/catharsisjelly/\";s:7:\"created\";s:19:\"2008-07-17 09:52:36\";s:7:\"updated\";s:19:\"2008-07-17 09:52:36\";s:10:\"last_login\";s:19:\"2009-03-10 16:24:21\";s:6:\"status\";s:6:\"active\";s:13:\"recipes_count\";s:1:\"3\";s:14:\"comments_count\";s:1:\"0\";s:13:\"ratings_count\";s:1:\"0\";}}'),('6c5d40d2af951d57f2715251fb951b9c',1250788759,3600,'Zend_Auth|a:1:{s:7:\"storage\";a:11:{s:2:\"id\";s:1:\"1\";s:8:\"password\";s:32:\"185741fc2d690b712f659c616222515f\";s:4:\"name\";s:9:\"Catharsis\";s:5:\"email\";s:23:\"cookery@catharsis.co.uk\";s:6:\"openid\";s:44:\"http://www.flickr.com/photos/catharsisjelly/\";s:7:\"created\";s:19:\"2008-07-17 09:52:36\";s:7:\"updated\";s:19:\"2008-07-17 09:52:36\";s:10:\"last_login\";s:19:\"2009-08-20 12:07:48\";s:6:\"status\";s:6:\"active\";s:14:\"comments_count\";s:1:\"0\";s:13:\"ratings_count\";s:1:\"0\";}}'),('87e127eb02c567298f33cc468fdb92b1',1251113444,3600,''),('8b1a08933fb2facc1e866470aa832b15',1240494098,3600,''),('92456dd662963feda5c031d3598b7817',1251304257,3600,'Zend_Auth|a:1:{s:7:\"storage\";a:12:{s:2:\"id\";s:1:\"1\";s:8:\"password\";s:32:\"185741fc2d690b712f659c616222515f\";s:4:\"name\";s:9:\"Catharsis\";s:5:\"email\";s:23:\"cookery@catharsis.co.uk\";s:6:\"openid\";s:44:\"http://www.flickr.com/photos/catharsisjelly/\";s:7:\"created\";s:19:\"2008-07-17 09:52:36\";s:7:\"updated\";s:19:\"2008-07-17 09:52:36\";s:10:\"last_login\";s:19:\"2009-08-26 13:33:08\";s:6:\"status\";s:6:\"active\";s:14:\"comments_count\";s:1:\"3\";s:13:\"ratings_count\";s:1:\"0\";s:13:\"recipes_count\";s:1:\"0\";}}'),('b8d423f38ac596bf59fe2aae35d362bd',1250758221,3600,''),('cbf882b6079e7db089d61d9299e2c3f9',1236253454,3600,'Default|a:1:{s:4:\"user\";N;}'),('d11b89c88a30cb28d09dbe8d063c1cd9',1236860294,3600,''),('e0ac04a902d27db1092970552763d2d5',1236772508,3600,''),('e714758c9234acb00e58939f11f2a70d',1240503523,3600,''),('efa6f8b745e70e9c0698738d999bb555',1236166726,3600,'Default|a:1:{s:4:\"user\";N;}'),('ff0c001d5d4082816147749146e3f7bd',1236604095,3600,'Default|a:1:{s:4:\"user\";N;}');
+INSERT INTO `sessions` VALUES ('16a0ce9fe04484163304258baaa3259c',1239818211,3600,'Default|a:1:{s:4:\"user\";N;}'),('2328c78a2785483619c084d1afa372ce',1251468647,3600,''),('41091c5abf1132c52c94c04c994c5431',1251209527,3600,'Zend_Auth|a:1:{s:7:\"storage\";a:11:{s:2:\"id\";s:1:\"1\";s:8:\"password\";s:32:\"185741fc2d690b712f659c616222515f\";s:4:\"name\";s:9:\"Catharsis\";s:5:\"email\";s:23:\"cookery@catharsis.co.uk\";s:6:\"openid\";s:44:\"http://www.flickr.com/photos/catharsisjelly/\";s:7:\"created\";s:19:\"2008-07-17 09:52:36\";s:7:\"updated\";s:19:\"2008-07-17 09:52:36\";s:10:\"last_login\";s:19:\"2009-08-20 15:59:29\";s:6:\"status\";s:6:\"active\";s:14:\"comments_count\";s:1:\"0\";s:13:\"ratings_count\";s:1:\"0\";}}'),('489ba02e20fadd7ab7d864c712760b0e',1236705220,3600,'Default|a:1:{s:4:\"user\";N;}Zend_Auth|a:1:{s:7:\"storage\";a:12:{s:2:\"id\";s:1:\"1\";s:8:\"password\";s:32:\"185741fc2d690b712f659c616222515f\";s:4:\"name\";s:9:\"Catharsis\";s:5:\"email\";s:23:\"cookery@catharsis.co.uk\";s:6:\"openid\";s:44:\"http://www.flickr.com/photos/catharsisjelly/\";s:7:\"created\";s:19:\"2008-07-17 09:52:36\";s:7:\"updated\";s:19:\"2008-07-17 09:52:36\";s:10:\"last_login\";s:19:\"2009-03-10 16:24:21\";s:6:\"status\";s:6:\"active\";s:13:\"recipes_count\";s:1:\"3\";s:14:\"comments_count\";s:1:\"0\";s:13:\"ratings_count\";s:1:\"0\";}}'),('6c5d40d2af951d57f2715251fb951b9c',1250788759,3600,'Zend_Auth|a:1:{s:7:\"storage\";a:11:{s:2:\"id\";s:1:\"1\";s:8:\"password\";s:32:\"185741fc2d690b712f659c616222515f\";s:4:\"name\";s:9:\"Catharsis\";s:5:\"email\";s:23:\"cookery@catharsis.co.uk\";s:6:\"openid\";s:44:\"http://www.flickr.com/photos/catharsisjelly/\";s:7:\"created\";s:19:\"2008-07-17 09:52:36\";s:7:\"updated\";s:19:\"2008-07-17 09:52:36\";s:10:\"last_login\";s:19:\"2009-08-20 12:07:48\";s:6:\"status\";s:6:\"active\";s:14:\"comments_count\";s:1:\"0\";s:13:\"ratings_count\";s:1:\"0\";}}'),('87e127eb02c567298f33cc468fdb92b1',1251113444,3600,''),('8b1a08933fb2facc1e866470aa832b15',1240494098,3600,''),('92456dd662963feda5c031d3598b7817',1251361499,3600,''),('b8d423f38ac596bf59fe2aae35d362bd',1250758221,3600,''),('cbf882b6079e7db089d61d9299e2c3f9',1236253454,3600,'Default|a:1:{s:4:\"user\";N;}'),('d11b89c88a30cb28d09dbe8d063c1cd9',1236860294,3600,''),('e0ac04a902d27db1092970552763d2d5',1236772508,3600,''),('e714758c9234acb00e58939f11f2a70d',1240503523,3600,''),('efa6f8b745e70e9c0698738d999bb555',1236166726,3600,'Default|a:1:{s:4:\"user\";N;}'),('ff0c001d5d4082816147749146e3f7bd',1236604095,3600,'Default|a:1:{s:4:\"user\";N;}'),('ff70cdb75c30edcb879a00ba669c5a8b',1251475682,3600,'');
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,4 +153,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-08-26 16:42:32
+-- Dump completed on 2009-08-28 16:31:00
