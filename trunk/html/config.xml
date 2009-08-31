@@ -59,7 +59,7 @@
 			</params>
 		</database>
 		<log>
-			<file>/home/chris/code/cookingwithzend/logs/application_log</file>
+			<file>/Users/chris/code/cookingwithzend/logs/application_log</file>
 		</log>
 	</development>
 </data>

@@ -44,6 +44,15 @@ $registry->config = $configuration;
 $registry->db     = $dbAdapter;
 //$registry->acl    = $acl;
 
+// LOG FILE - Setup the log file from the config
+// We can have multiple log files, so we need to set one up for each occurance
+if (! isset($configuration->log->file) )
+	throw new Exception('Please set a log file in the configuration');
+
+$logger = new Zend_Log( new Zend_Log_Writer_Stream( $configuration->log->file, 'a' ) );
+$logger->addWriter( new Zend_Log_Writer_Firebug() );
+$registry->set( 'log', $logger );
+
 // FRONT CONTROLLER - Get the front controller.
 // The Zend_Front_Controller class implements the Singleton pattern, which is a
 // design pattern used to ensure there is only one instance of
@@ -79,16 +88,6 @@ $view = Zend_Layout::getMvcInstance()->getView();
 $view->setScriptPath( APPLICATION_PATH . '/views/' );
 $view->doctype('XHTML1_STRICT');
 $view->addHelperPath( APPLICATION_PATH . '/views/helpers/' );
-
-
-// LOG FILE - Setup the log file from the config
-// We can have multiple log files, so we need to set one up for each occurance
-if (! isset($configuration->log->file) )
-	throw new Exception('Please set a log file in the configuration');
-
-$logger = new Zend_Log( new Zend_Log_Writer_Stream( $configuration->log->file, 'a' ) );
-$logger->addWriter( new Zend_Log_Writer_Firebug() );
-$registry->set( 'log', $logger );
 
 // CACHE
 $cache = Zend_Cache::factory(
