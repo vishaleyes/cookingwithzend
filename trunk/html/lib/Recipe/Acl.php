@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Builds the AclResource list using the database
+ * @author chris
+ *
+ */
+
 class Recipe_Acl extends Zend_Acl {
 
 	public function __construct() 

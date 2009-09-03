@@ -39,7 +39,7 @@ class LoginController extends DefaultController
 				}
 				
 				$email = $result->getIdentity();
-				$userRow = $this->model->getSingleByField('email', $email);
+				$userRow = $this->model->getUserByEmail($email);
 				$msg = $this->model->checkStatus($userRow['status']);
 				$this->_db->update(
 					'users', 

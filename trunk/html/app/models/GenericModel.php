@@ -31,6 +31,7 @@ abstract class Models_GenericModel
 
 	/**
 	 * Loads the relevant form in the forms directory
+	 * 
 	 * @param string $form Name of the Form
 	 * @return Zend_Form
 	 */
@@ -79,6 +80,7 @@ abstract class Models_GenericModel
 
 	/**
 	 * Derive the table name from the current Model
+	 * 
 	 * @return Zend_Db_Table_Abstract
 	 */
 
@@ -106,6 +108,7 @@ abstract class Models_GenericModel
 	
 	/**
 	 * Find the record we request in the current table
+	 * 
 	 * @param int $id
 	 * @todo This breaks the extended functionality of find but is that a bad thing?
 	 */
@@ -122,6 +125,24 @@ abstract class Models_GenericModel
 		
 		$row = $rowSet->current();
 		return $row;
+	}
+	
+	/**
+	 * Function to return an array of values from the DB to be used in multiSelect
+	 *  
+	 * @param string $key
+	 * @param string $value
+	 * @return array
+	 */
+	
+	public function fetchForMultiSelect($key, $value)
+	{
+		$select = $this->table->select()
+			->from($this->table, array('key' => $key, 'value' => $value));
+		$results = $this->table->fetchAll($select);
+		if ($results)
+			return $results->toArray();
+		return array();
 	}
 }
 

@@ -5,6 +5,19 @@ class Models_User extends Models_GenericModel
 
 	const SALT = "aSalt";
 	
+	public function getUserByEmail($email)
+	{
+		$select = $this->db->select()
+			->from('users')
+			->joinLeft('acl_roles', 'users.role_id = acl_roles.id', array('role' => 'acl_roles.name'))
+			->where('email = ?', $email);
+		$stmt = $this->db->query($select);
+		$rowSet = $stmt->fetchAll();
+		if ($rowSet)
+			return $rowSet[0];
+		return false;
+	}
+	
 	/**
 	 * Login for the User, this sends the username/password to the Auth Adapter
 	 *
