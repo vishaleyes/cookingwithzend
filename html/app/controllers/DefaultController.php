@@ -122,7 +122,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 		if ( $auth->hasIdentity() ) {
 			$this->_identity = $auth->getIdentity();
 			$this->view->identity = $this->_identity;
-			$this->_role = 'member';
+			$this->_role = $this->_identity['role'];
 			$this->view->role = $this->_role;
 		}
 		

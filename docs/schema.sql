@@ -23,11 +23,11 @@ DROP TABLE IF EXISTS `acl_resources`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `acl_resources` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `role_id` int(11) unsigned default NULL,
   `name` varchar(64) NOT NULL,
-  `roll_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -38,11 +38,11 @@ DROP TABLE IF EXISTS `acl_roles`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `acl_roles` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `inherit_id` int(11) unsigned default NULL,
   `name` varchar(64) NOT NULL,
-  `inherit_id` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -55,13 +55,13 @@ SET character_set_client = utf8;
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) unsigned NOT NULL,
-  `comment` text collate utf8_unicode_ci,
   `recipe_id` int(11) unsigned NOT NULL,
+  `comment` text collate utf8_unicode_ci,
   `created` datetime default NULL,
   PRIMARY KEY  (`id`),
   KEY `recipe_id` (`recipe_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -72,11 +72,11 @@ DROP TABLE IF EXISTS `ingredients`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `ingredients` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) unsigned NOT NULL auto_increment,
   `name` text collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`(255))
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -87,13 +87,13 @@ DROP TABLE IF EXISTS `measurements`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `measurements` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
   `abbreviation` varchar(255) collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `abbreviation` (`abbreviation`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -104,13 +104,13 @@ DROP TABLE IF EXISTS `method_items`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `method_items` (
-  `id` int(11) NOT NULL auto_increment,
-  `description` text collate utf8_unicode_ci NOT NULL,
-  `position` int(11) default NULL,
+  `id` int(11) unsigned NOT NULL auto_increment,
   `recipe_id` int(11) unsigned NOT NULL,
+  `description` text collate utf8_unicode_ci NOT NULL,
+  `position` int(11) unsigned default NULL,
   PRIMARY KEY  (`id`),
   KEY `recipe_id` (`recipe_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -122,8 +122,8 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `ratings` (
   `recipe_id` int(11) unsigned NOT NULL,
-  `value` int(11) unsigned NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
+  `value` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`recipe_id`,`user_id`),
   KEY `recipe_id` (`recipe_id`),
   KEY `user_id` (`user_id`),
@@ -159,21 +159,21 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `recipes` (
   `id` int(11) unsigned NOT NULL auto_increment,
+  `creator_id` int(11) unsigned NOT NULL,
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
   `cooking_time` int(11) unsigned default NULL,
   `preparation_time` int(11) unsigned default NULL,
-  `serves` int(11) default NULL,
+  `serves` int(11) unsigned default NULL,
   `difficulty` int(2) unsigned default '1',
-  `freezable` int(1) default '0',
+  `freezable` int(1) unsigned default '0',
   `created` datetime default NULL,
   `updated` datetime default NULL,
-  `ingredients_count` int(11) default '0',
-  `creator_id` int(11) NOT NULL,
-  `comments_count` int(11) default '0',
-  `ratings_count` int(11) default '0',
-  `view_count` int(9) default '0',
+  `ingredients_count` int(11) unsigned default '0',
+  `comments_count` int(11) unsigned default '0',
+  `ratings_count` int(11) unsigned default '0',
+  `view_count` int(11) unsigned default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -206,7 +206,7 @@ CREATE TABLE `taggings` (
   `taggable_type` varchar(255) collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `index_taggings_on_tag_id_and_taggable_id_and_taggable_type` (`tag_id`,`taggable_id`,`taggable_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -221,7 +221,7 @@ CREATE TABLE `tags` (
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `unique_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -233,6 +233,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL auto_increment,
+  `role_id` int(11) unsigned NOT NULL,
   `password` varchar(64) collate utf8_unicode_ci NOT NULL,
   `name` varchar(60) collate utf8_unicode_ci NOT NULL default '',
   `email` varchar(255) collate utf8_unicode_ci NOT NULL default '',
@@ -241,13 +242,13 @@ CREATE TABLE `users` (
   `updated` datetime NOT NULL,
   `last_login` datetime default NULL,
   `status` enum('pending','banned','admin','active','suspended') collate utf8_unicode_ci default 'pending',
-  `comments_count` int(11) default '0',
-  `ratings_count` int(11) default '0',
-  `recipes_count` int(11) default '0',
+  `comments_count` int(11) unsigned default '0',
+  `ratings_count` int(11) unsigned default '0',
+  `recipes_count` int(11) unsigned default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SET character_set_client = @saved_cs_client;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -259,4 +260,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-08-28 17:01:29
+-- Dump completed on 2009-09-03 16:04:16

@@ -1,14 +1,14 @@
-<h1>An error occurred</h1> 
-<h2><?= $this->error_message ?></h2> 
+<h1>An error occurred of type : <?php echo $this->error_type ?></h1> 
+<h2><?php echo $this->error_message ?></h2> 
 
 <? if ('development' == $this->env): ?> 
 	<h3>Exception information:</h3> 
 	<p> 
-		<b>Message:</b> <?= $this->exception->getMessage() ?> 
+		<b>Message:</b> <?php echo $this->exception->getMessage() ?> 
 	</p> 
 
 	<h3>Stack trace:</h3> 
-	<pre><?= $this->exception->getTraceAsString() ?></pre> 
+	<pre><?php echo $this->exception->getTraceAsString() ?></pre> 
 
 	<h3>Request Parameters:</h3> 
 	<pre><? var_dump($this->request->getParams()) ?></pre> 

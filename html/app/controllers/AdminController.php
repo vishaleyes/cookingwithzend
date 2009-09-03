@@ -16,7 +16,9 @@ class AdminController extends DefaultController
 	
 	public function addResourceAction()
 	{
+		$this->view->title = 'Create a resource';
 		$form = $this->model->getForm('Resource');
+		$this->view->form = $form;
 		if ($this->getRequest()->isPost()) {
 
 			// now check to see if the form submitted exists, and
@@ -27,11 +29,7 @@ class AdminController extends DefaultController
 
 				// Unset the buttons
 				unset( $data['submit'] );
-				
-
-				$this->_log->info( 'Added Recipe ' . sq_brackets( $data['name'] ) ); 
-				$this->_flashMessenger->addMessage( 'Added recipe ' . $data['name'] );
-				$this->_redirect( '/recipe/new' );
+				$this->model->table->insert($data);
 			}
 		}
 	}
