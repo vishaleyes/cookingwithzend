@@ -10,8 +10,7 @@ class AdminController extends DefaultController
 	
 	public function resourcesAction()
 	{
-		$this->view->resources = $this->model->getResources();
-		$form = $this->model->getForm('Resource'); 
+		$this->view->resources = $this->model->getResources(); 
 	} 
 	
 	public function addResourceAction()

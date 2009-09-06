@@ -25,6 +25,7 @@ class MethodController extends DefaultController
 		$this->view->title = 'Create a method';
 		$form = $this->model->getForm('Method');
 		$form->populate( array( 'recipe_id' => $recipe['id'] ) );
+		$this->view->tempConversionForm = $this->model->getForm('TemperatureConversion');
 		$this->view->form = $form;
 
 		if ($this->getRequest()->isPost()) {
