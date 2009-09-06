@@ -2,6 +2,10 @@
 	font-family: Helvetica, Arial;
 }
 
+.hide {
+	display: none;
+}
+
 .numeric {
 	text-align: right;
 }

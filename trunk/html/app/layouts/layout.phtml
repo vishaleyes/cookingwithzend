@@ -10,28 +10,22 @@
 	<? $this->headLink()->appendStylesheet('/css/recipe.css') ?>
 
 	<!-- // @todo Maybe move these to a Jquery include -->
-	<? $this->headLink()->appendStylesheet('/css/jquery.autocomplete.css') ?>
-	<?= $this->headLink()->appendStylesheet('/css/jquery.rating.css') ?>
+	<? $this->headLink()->appendStylesheet('/js/markitup/skins/markitup/style.css') ?>
+	<? $this->headLink()->appendStylesheet('/js/markitup/sets/default/style.css') ?>
+	<?= $this->headLink()->appendStylesheet('/css/jquery.autocomplete.css') ?>
 	
 	<script charset="utf-8" language="javascript" type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
-	<script charset="utf-8" language="javascript" type="text/javascript" src="/js/jquery.form.js"></script>
-	<script charset="utf-8" language="javascript" type="text/javascript" src="/public/js/jquery-ui-personalized-1.6b.packed.js"></script>
+	<script charset="utf-8" language="javascript" type="text/javascript" src="/js/functions.js"></script>
+	<script charset="utf-8" language="javascript" type="text/javascript" src="/js/jquery-ui-personalized-1.6b.packed.js"></script>
 	<script charset="utf-8" language="javascript" type="text/javascript" src="/js/jquery.autocomplete.pack.js"></script>
-	<script charset="utf-8" language="javascript" type="text/javascript" src="/js/jquery.rating.pack.js"></script>
-	<?php if ( $this->textfield === true ): ?>
-	<script type="text/javascript" src="j/s/jquery.FCKEditor.js" language="Javascript" charset="utf-8"></script>
-	<script type="text/javascript">
-		$(function(){ 
-			$('textarea.fck').fck( {
-				path: '/public/fck/',
-				toolbar: 'Cookery',
-				width: 700,
-				height: 200
-			});
+	<!-- RTF editor in jquery -->
+	<script charset="utf-8" language="javascript" type="text/javascript" src="/js/markitup/jquery.markitup.js"></script>
+	<script charset="utf-8" language="javascript" type="text/javascript" src="/js/markitup/sets/default/set.js"></script>
+	<script type="text/javascript" >
+		$(document).ready(function() {
+			$("#description").markItUp(mySettings);
 		});
 	</script>
-
-	<?php endif ?>
 
 </head> 
 <body>
@@ -56,20 +50,29 @@
 	<?php echo $this->render( $this->includesFolder . '/user_details.php') ?>
 	
 	<!-- Navigation -->
+	<div id="menu">
 	<ul>
-		<li><a href="/">Home</a></li>
+		<li><h2><a href="/">Home</a></h2></li>
+	</ul>
+	<ul>
 	<?php if ( $this->identity ): ?>
-		<li><a href="/user/account">My Account</a></li>	
-		<li><a href="<?php echo '/recipe/user/user_id/'.strtolower($this->identity['name']) ?>">My Recipes</a></li>	
-		<li><a href="<?php echo $this->url( array( 
+		<li><h2>You</h2>
+		<ul>
+			<li><a href="/user/account">My Account</a></li>	
+			<li><a href="<?php echo '/recipe/user/user_id/'.strtolower($this->identity['name']) ?>">My Recipes</a></li>	
+			<li><a href="<?php echo $this->url( array( 
 			'controller' => 'recipe', 
 			'action' => 'new',
 		), 'default' ); ?>">New Recipe</a></li>
+		</ul></li>
 	<?php else: ?>
-		<li><a href="/login/">Login</a> / <a href="/user/new">Register</a></li>
+		<li><h2><a href="/login/">Login</a> / <a href="/user/new">Register</a></h2></li>
 	<?php endif ?>
-		<li><a href="http://cookingwithzend.blogspot.com/">Blog</a></li>
 	</ul>
+	<ul>
+		<li><h2><a href="http://cookingwithzend.blogspot.com/">Blog</a></h2></li>
+	</ul>
+	</div>
 	<!-- End Navigation -->
 
 <!-- This next call will now include any content that was generated in the

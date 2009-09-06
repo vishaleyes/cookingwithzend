@@ -11,8 +11,8 @@ class Models_AclResource extends Models_GenericModel
 				'acl_roles.id = acl_resources.role_id', 
 				array('role_name' => 'name')
 			)
-			->order('role_id asc')
-			->order('name asc');
+			->order('name asc')
+			->order('role_id asc');
 		$stmt = $this->db->query($select);
 		$rowSet = $stmt->fetchAll();
 		return $rowSet;
