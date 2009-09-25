@@ -49,9 +49,10 @@ class Forms_Recipe extends Zend_Form
 				new Zend_Validate_GreaterThan(0)
 			) 
 		))
-		->addElement('text', 'difficulty', array(
+		->addElement('select', 'difficulty', array(
 			'label'      => 'Difficulty',
 			'required'   => true,
+			'multiOptions' => array(1,2,3,4,5,6,7,8,9,10),
 			'validators' => array(
 				new Zend_Validate_NotEmpty(),
 				new Zend_Validate_Int(),
