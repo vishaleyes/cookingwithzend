@@ -36,11 +36,13 @@ class IngredientController extends DefaultController
 
 				// Unset the buttons
 				unset( $data['submit'] );
-
+				$ingredientData = array();
+				$ingredientData['name'] = $data['name'];
 				// We start a transaction because we need to insert into two tables
 				$this->_db->beginTransaction();
 				
-				$ingredient = $this->model->table->insert( $data );
+				$ingredient = $this->model->table->insert( $ingredientData );
+				
 				$ri = new Models_RecipeIngredient();
 						
 				try {
@@ -54,7 +56,7 @@ class IngredientController extends DefaultController
 					$this->_log->debug($e->getMessage());
 				}
 				
-				$this->_redirect('/recipe/view/id/'.$recipe['id']);
+				// $this->_redirect('/recipe/view/id/'.$recipeID);
 			}
 		}
 	}
