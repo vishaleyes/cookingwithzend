@@ -1,9 +1,22 @@
 * {
 	font-family: Helvetica, Arial;
+	color: black;
 }
 
 .hide {
 	display: none;
+}
+
+.error {
+	background: red;
+	color: white;
+	font-weight: bold;
+	padding: 0 5px 0 5px;
+}
+
+.notice {
+	background: #c2c2c2;
+	padding: 0 5px 0 5px;
 }
 
 .numeric {

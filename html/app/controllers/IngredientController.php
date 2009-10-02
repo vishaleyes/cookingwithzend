@@ -38,25 +38,40 @@ class IngredientController extends DefaultController
 				unset( $data['submit'] );
 				$ingredientData = array();
 				$ingredientData['name'] = $data['name'];
+	
 				// We start a transaction because we need to insert into two tables
 				$this->_db->beginTransaction();
 				
 				$ingredient = $this->model->table->insert( $ingredientData );
-				
+				$m = new Models_Measurement();
+				$measurement = $m->getSingleByField('name', $data['measurement']);
+								
 				$ri = new Models_RecipeIngredient();
 						
 				try {
 					$ri->table->insert( array(
-						'recipe_id'     => $recipeID,
-						'ingredient_id' => $ingredient->id
+						'recipe_id'      => $recipeID,
+						'ingredient_id'  => $ingredient->id,
+						'measurement_id' => $measurement['id'],
+						'quantity'       => ($data['quantity'] > 0 ? $data['quantity'] : null),
+						'amount'         => ($data['amount'] > 0 ? $data['amount'] : null)  
 					));
 					$this->_db->commit();
+					$this->_flashMessenger->addMessage( 'Added ingredient '.$ingredient->name );
+					$this->_redirect('/recipe/view/id/'.$recipeID);
 				} catch (Exception $e) {
-					$this->_db->rollback();
+					$this->_db->rollback();					
 					$this->_log->debug($e->getMessage());
+					if( strstr($e->getMessage(), 'Duplicate') )
+					{
+						$this->_flashMessenger->setNamespace( 'error' );
+						$this->_flashMessenger->addMessage( $ingredient->name . ' already exists in this recipe' );
+						$this->_flashMessenger->resetNamespace();
+					}
+					
 				}
 				
-				// $this->_redirect('/recipe/view/id/'.$recipeID);
+				
 			}
 		}
 	}
