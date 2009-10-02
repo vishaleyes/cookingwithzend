@@ -32,14 +32,14 @@
 
 	<!-- Messages to users -->
 	<div>
-		<div id="error" style="background: #c2c2c2">
+		<div id="notice" class="notice">
 		<?php foreach( $this->message->getMessages() as $msg ): ?>
 			<?php echo $msg; ?>
 		<?php endforeach ?>
 		</div>
 
 		<?php $this->message->setNameSpace('error') ?>
-		<div id="notice" style="background: #72bf72">
+		<div id="error" class="error">
 		<?php foreach( $this->message->getMessages() as $msg ): ?>
 			<?php echo $msg; ?>
 		<?php endforeach ?>

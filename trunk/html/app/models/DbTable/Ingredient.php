@@ -20,7 +20,7 @@ class Models_DbTable_Ingredient extends Zend_Db_Table_Abstract
 	public function getByName( $string )
 	{
 		$select = $this->select()
-			->from('ingredients')
+			->from($this->_name)
 			->where('name = ?', $string);
 		return $this->fetchRow($select);
 	}
