@@ -8,6 +8,10 @@ class AdminController extends DefaultController
 		$this->model = new Models_AclResource();
 	}
 	
+	public function indexAction()
+	{
+	}
+	
 	public function resourcesAction()
 	{
 		$this->view->resources = $this->model->getResources(); 
