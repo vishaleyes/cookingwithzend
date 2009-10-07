@@ -88,37 +88,4 @@ class Models_Recipe extends Models_GenericModel
 		return $this->db->fetchAll($select);
 	}
 	
-	/**
-	 * Counts the ingredients for this recipe and returns the number
-	 * 
-	 * @param int $id Id number of the recipe
-	 * @return int
-	 */
-	
-	public function getIngredientsCount( $id )
-	{
-		return $this->__getCountFromDb('recipe_ingredients', $id);
-	}
-	
-	/**
-	 * Generic function to return a count from the relevant table and
-	 * relevant field
-	 *
-	 * @todo Maybe move this to generic?
-	 * @param string $table Name of the table
-	 * @param int $id Id number of the recipe
-	 * @return int
-	 */
-	
-	private function __getCountFromDb( $table, $id )
-	{
-		$select = $this->db->select()
-			->from($table, array( 'counter' => new Zend_Db_Expr('COUNT(*)')))
-			->where('recipe_id = ?', $id);
-		
-		$count = $this->db->fetchCol($select);
-		return $count[0];
-	}
-	
-	
 }

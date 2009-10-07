@@ -7,6 +7,8 @@ class RecipeController extends DefaultController
 	{
 		parent::init();
 		$this->model = $this->getModel();
+		$this->form = $this->model->getForm('Recipe');
+		$this->view->form = $this->form;
 	}
 
 	public function indexAction()
@@ -24,16 +26,14 @@ class RecipeController extends DefaultController
 	public function newAction()
 	{
 		$this->view->title = 'Create a recipe';
-		$form = $this->model->getForm('Recipe');
-		$this->view->form = $form;
 
 		if ($this->getRequest()->isPost()) {
 
 			// now check to see if the form submitted exists, and
 			// if the values passed in are valid for this form
-			if ($form->isValid($this->_request->getPost())) {
+			if ($this->form->isValid($this->_request->getPost())) {
 				// Get the values from the DB
-				$data = $form->getValues();
+				$data = $this->form->getValues();
 
 				// Unset the buttons
 				unset( $data['submit'] );
@@ -44,13 +44,16 @@ class RecipeController extends DefaultController
 					$this->_db->update("users", array(
 						"recipes_count" => new Zend_Db_Expr("(recipes_count + 1)")
 					), "id = " . $this->_identity['id']);
+					$id = $this->model->table->lastInsertId();
 					$this->_db->commit();
+					
+					$this->_log->info( 'Added Recipe ' . sq_brackets( $data['name'] ) ); 
+					$this->_flashMessenger->addMessage( 'Added recipe ' . $data['name'] );
+					$this->_redirect( '/recipe/view/'.$id );
 				} catch(Exception $e) {
 					$this->_db->rollback();
 				}
 
-				$this->_log->info( 'Added Recipe ' . sq_brackets( $data['name'] ) ); 
-				$this->_flashMessenger->addMessage( 'Added recipe ' . $data['name'] );
 				$this->_redirect( '/recipe/new' );
 			}
 		}
@@ -66,17 +69,15 @@ class RecipeController extends DefaultController
 		
 		$this->view->title = 'Editing recipe - '.$recipe->name;
 		
-		$form = $this->model->getForm('Recipe');
-		$form->populate($recipe->toArray());
-		$this->view->form = $form;
+		$this->form->populate($recipe->toArray());
 		
 		if ($this->getRequest()->isPost()) {
 
 			// now check to see if the form submitted exists, and
 			// if the values passed in are valid for this form
-			if ($form->isValid($this->_request->getPost())) {
+			if ($this->form->isValid($this->_request->getPost())) {
 				// Get the values from the DB
-				$data = $form->getValues();
+				$data = $this->form->getValues();
 
 				// Unset the buttons
 				unset( $data['submit'] );
@@ -126,6 +127,8 @@ class RecipeController extends DefaultController
 		$c = new Models_Comment();
 		$this->view->comments = $c->getComments('c.recipe_id', $this->_id);
 		
+		// @todo To be replaced by ACL?
+		$this->view->canEdit = ($this->_identity['id'] == $recipe['creator_id'] ? true : false ); 
 		
 	}
 	

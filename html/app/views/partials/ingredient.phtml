@@ -1,6 +1,15 @@
 	
 		<li id="<?php echo "ingredient-" . $this->recipe_id . "-" . $this->ingredient_id ?>">
 			<ul>
+				<?php if ($this->getHelper('Partial')->view->canEdit ): ?>
+				<li class="ingredients">
+					<a href="<?= $this->url( array( 
+						'controller' => 'ingredient', 
+						'action' => 'edit',
+						'recipe_id'     => $this->recipe_id,
+						'ingredient_id' => $this->ingredient_id
+					), 'default' ); ?>">Edit</a></li>
+				<?php endif ?>
 				<?php if ( $this->quantity > 0 ): ?>
 				<li class="ingredients"><?php echo $this->quantity ?></li>
 				<?php endif ?>
@@ -11,6 +20,7 @@
 				<li class="ingredients"><?php echo $this->measurement ?></li>
 				<?php endif ?>
 				<li class="ingredients"><?php echo $this->name ?></li>
+				
 			</ul>
 		</li>
 
