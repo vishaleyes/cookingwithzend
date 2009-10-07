@@ -101,8 +101,17 @@ INSERT INTO `ingredients` (`id`, `name`) VALUES
 (34, 'Lime'),
 (35, 'Fat Free Yoghurt'),
 (36, 'Fresh Mint'),
-(37, 'Chapattis');
-
+(37, 'Chapattis'),
+(38, 'Garam Masala'),
+(39, 'Vegetable Oil'),
+(40, 'Chicken Thighs'),
+(42, 'Tomatoes'),
+(43, 'Chicken Stock'),
+(46, 'Double Cream'),
+(47, 'Ground Almonds'),
+(48, 'Dessicated Coconut'),
+(49, 'Bananas'),
+(50, 'Boiled Rice');
 --
 -- Dumping data for table `measurements`
 --
@@ -215,7 +224,21 @@ INSERT INTO `recipe_ingredients` (`recipe_id`, `ingredient_id`, `measurement_id`
 (5, 34, NULL, 1, NULL),
 (5, 35, 3, NULL, 150),
 (5, 36, 1, 2, NULL),
-(5, 37, NULL, 4, NULL);
+(5, 37, NULL, 4, NULL),
+(6, 20, 1, 2, NULL),
+(6, 24, NULL, 1, NULL),
+(6, 29, NULL, 1, NULL),
+(6, 30, 1, 2, NULL),
+(6, 38, 2, 1, NULL),
+(6, 39, 1, 1, NULL),
+(6, 40, NULL, 8, NULL),
+(6, 42, NULL, 2, NULL),
+(6, 43, 6, NULL, 400),
+(6, 46, 6, NULL, 140),
+(6, 47, 3, NULL, 50),
+(6, 48, 3, NULL, 25),
+(6, 49, NULL, 2, NULL),
+(6, 50, NULL, NULL, NULL);
 
 --
 -- Dumping data for table `tags`
