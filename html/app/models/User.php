@@ -2,8 +2,6 @@
 
 class Models_User extends Models_GenericModel
 {
-
-	const SALT = "aSalt";
 	
 	public function getUserByEmail($email)
 	{
@@ -66,14 +64,12 @@ class Models_User extends Models_GenericModel
 	 * @return bool
 	 */
 
-	public function sendConfirmationEmail()
+	public function sendConfirmationEmail($row)
 	{
-	
-		$verificationCode = $this->getVerificationCode();
-		$e = new Email( $this->email, $this->name, 'Registration' );
+		$e = new Recipe_Email( $row['email'], $row['name'], 'Registration' );
 		$e->setTemplate( 'user-registration.phtml' );
 
-		$e->view->verificationURL = 'http://' . $_SERVER['HTTP_HOST'] . '/user/confirm/' . $verificationCode ;
+		$e->view->verificationURL = 'http://' . $_SERVER['HTTP_HOST'] . '/user/confirm/code/' . $row['code'];
 	
 		return $e->sendMail();
 	}
@@ -105,16 +101,6 @@ class Models_User extends Models_GenericModel
 	}
 
 	/**
-	 * Generate verification code to be e-mailed. Code is mixed hash of the email and salt defined above.
-	 * @return string
-	 */
-
-	public function getVerificationCode()
-	{
-		return (MD5(MD5($this->email) . MD5(self::SALT)));	
-	}
-	
-	/**
 	 * Generates a password between 6 and 12 characters
 	 * @return string
 	 */
@@ -132,4 +118,5 @@ class Models_User extends Models_GenericModel
 
 		return $password;
 	}
+	
 }

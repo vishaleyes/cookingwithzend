@@ -10,17 +10,14 @@
  *  
  */
 
-
-class Email extends Zend_Mail
+class Recipe_Email extends Zend_Mail
 {
 	const FROM_EMAIL = "admin@simplcook.org";
 	const FROM_NAME  = "SimplyCook.org";
 
-	protected $_files;
-
 	public function __construct( $to, $toName = '', $subject = '', $encoding = 'UTF-8' )
 	{
-		parent::__construct();
+		parent::__construct($encoding);
 
 		$this->log = Zend_Registry::get( 'log' );
 		$this->addTo($to, $toName);
@@ -66,26 +63,7 @@ class Email extends Zend_Mail
 			}
 		}
 		
-		if ( $this->html ) {
-			$this->setBodyTxt(strip_tags( $txtBody ));
-		} else {
-			$this->setBodyHtml($txtBody);
-		}
-
-		// add attachments
-		if (count($this->files) > 0) {
-			foreach($this->files as $file) {
-				$this->createAttachment($file);
-			}
-		}
-
-		// add cc
-		if (count($this->cc) > 0) {
-			foreach($this->cc as $cc) {
-				$this->addCc($cc);
-			}
-		}
-
+		$this->html ? $this->setBodyTxt(strip_tags( $txtBody )) : $this->setBodyHtml($txtBody);
 		$this->log->debug( 'Sending email to ' . $this->_to[0] . ' using template ' . $this->template );
 
 		try {

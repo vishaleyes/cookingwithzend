@@ -44,9 +44,7 @@ class UserController extends DefaultController
 					$this->model->table->insert( $params );
 					$this->_flashMessenger->addMessage( 'Please check your email for a confirmation link' );
 					$this->_log->debug( 'Inserted user ' . $values['email'] );
-					$theUser = $this->model->getByField( 'email', $values['email'] );
-					//$theUser->sendConfirmationEmail();
-
+					$this->model->sendConfirmationEmail($values['email'], $values['name']);
 					$this->_redirect( '/' );
 				} catch(Exception $e) {
 					$this->_flashMessenger->setNamespace( 'error' );
@@ -91,8 +89,9 @@ class UserController extends DefaultController
 	public function sendConfirmationAction()
 	{
 		$this->_helper->layout->disableLayout();
-		$user = $this->model->getByField( 'id', $this->_getParam('id') );
-		$emailResult = $user->current()->sendConfirmationEmail();
+		
+		$rowset = $this->model->getByField( 'id', $this->_getParam('id') );
+		$emailResult = $this->model->sendConfirmationEmail($rowset['email'], $rowset['name']);
 		
 		if ($emailResult)
 		{
@@ -109,9 +108,13 @@ class UserController extends DefaultController
 	{
 		$code = $this->_getParam("code");
 		$userId = substr( $code, 32, strlen( $code ) - 32 );
-
-		$u = new User();
-		$user = $u->getByField( 'id', $this->session->user['id'] );
+		var_dump($this->_getAllParams());
+		print($userId);
+		
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(true);
+		
+		/* $user = $this->model->getByField( 'id', $this->session->user['id'] );
 			
 		if ( $code === $user->getVerificationCode() )
 		{
@@ -125,7 +128,7 @@ class UserController extends DefaultController
 			$this->message->addMessage( 'Incorrect confirmation code supplied.' );
 			$this->message->resetNamespace();
 			$this->_redirect('/');
-		}
+		} */
 		
 	}		
 
