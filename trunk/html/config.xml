@@ -10,9 +10,15 @@
 				<host>localhost</host>
 				<username>root</username>
 				<password></password>
-				<dbname>clock_simplycook</dbname>
+				<dbname>simplycook</dbname>
 			</params>
 		</database>
+		<mail>
+			<auth>login</auth>
+			<username></username>
+			<password></password>
+			<smtp_server></smtp_server>			
+		</mail>	
 		<sessions>
 			<name>sessions</name>
 			<primary>id</primary>
@@ -59,7 +65,7 @@
 			</params>
 		</database>
 		<log>
-			<file>/Users/chris/code/cookingwithzend/logs/application_log</file>
+			<file>/home/chris/code/cookingwithzend/logs/application_log</file>
 		</log>
 	</development>
 </data>

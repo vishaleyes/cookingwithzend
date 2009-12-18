@@ -75,6 +75,10 @@ $frontController->registerPlugin(new Recipe_Plugin_Acl($acl));
 // dependent on your organization and site's needs.
 $frontController->setParam('env', APPLICATION_ENVIRONMENT);
 
+// MAIL Setup
+$tr = new Zend_Mail_Transport_Smtp($configuration->mail->smtp_server, $configuration->mail->toArray());
+Zend_Mail::setDefaultTransport($tr);
+
 // LAYOUT SETUP - Setup the layout component
 // The Zend_Layout component implements a composite (or two-step-view) pattern
 // In this call we are telling the component where to find the layouts scripts.
