@@ -223,6 +223,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(60) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `confirm` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `openid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL,
