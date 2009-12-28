@@ -4,11 +4,18 @@
 				<?php if ($this->getHelper('Partial')->view->canEdit ): ?>
 				<li class="ingredients">
 					<a href="<?= $this->url( array( 
-						'controller' => 'ingredient', 
-						'action' => 'edit',
+						'controller'    => 'ingredient', 
+						'action'        => 'edit',
 						'recipe_id'     => $this->recipe_id,
 						'ingredient_id' => $this->ingredient_id
-					), 'default' ); ?>">Edit</a></li>
+					), 'default' ); ?>"><img title="Edit" src="/images/icons/pencil.png" alt="Edit"/></a>&nbsp; 
+					<a href="<?= $this->url( array( 
+						'controller'    => 'ingredient', 
+						'action'        => 'delete',
+						'recipe_id'     => $this->recipe_id,
+						'ingredient_id' => $this->ingredient_id
+					), 'default', true ); ?>"><img title="Delete" src="/images/icons/cross.png" alt="Delete"/></a>
+			</li>
 				<?php endif ?>
 				<?php if ( $this->quantity > 0 ): ?>
 				<li class="ingredients"><?php echo $this->quantity ?></li>

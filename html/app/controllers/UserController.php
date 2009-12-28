@@ -66,21 +66,16 @@ class UserController extends DefaultController
 	{
 		$this->view->title = 'Your account';
 		
-		$rowset = $this->model->getByField('id', $this->_identity['id']);
+		$row = $this->model->getSingleByField('id', $this->_identity['id']);
 				
-		if ( $rowset->current() )
+		if ( $row )
 		{
-			$user = $rowset->current();
-			$this->view->user = $user->toArray();
-			$this->view->recipes_count = $user->getRecipeCount();
+			$this->view->user = $row;
 		}
 		
-		if ($this->_acl->isAllowed( $role, 'user', 'edit'))
-		{
-			$form = $this->model->getForm('UserAccount');
-			$form->populate($user->toArray());
-			$this->view->form = $form;
-		}
+		$form = $this->model->getForm('UserAccount');
+		$form->populate($row);
+		$this->view->form = $form;
 	}
 	
 	/*

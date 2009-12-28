@@ -4,7 +4,7 @@
  * A view helper that displays a link for sorting the column
  * Used for sorting a table of information
  */
-class Zend_View_Helper_SortOrder extends Zend_View_Helper_Abstract
+class Recipe_View_Helper_SortOrder extends Zend_View_Helper_Abstract
 {
     
     /**

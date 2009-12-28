@@ -1,6 +1,19 @@
 <div>
 	<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $this->recipe ) ?>
  
+ 	<!-- Rating -->
+	<a name="ratings"></a>
+	<div>
+		<h3>Ratings</h3>
+		<?php if (! $this->checkOwner($this->recipe['creator_id']) && ! $this->hasRated ): ?>
+		<?php echo $this->rating_form ?>
+		<?php endif; ?>
+		<?php foreach ($this->ratings as $rating): ?>
+		<div>
+		</div>
+		<?php endforeach; ?>
+	</div>
+ 
 	<!-- Ingredients -->
 	<div>
 		<div>
@@ -11,6 +24,7 @@
 			<?php endforeach; ?>
 			</ul>
 		</div>
+		<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
 		<div>	
 			<p><a href="<?= $this->url( array( 
 				'controller' => 'ingredient', 
@@ -19,6 +33,7 @@
 			), 'default', true ); ?>">
 			Add another ingredient?</a></p>
 		</div>
+		<?php endif; ?>
 	</div>
 	<!-- End of Ingredients -->
 	
@@ -28,21 +43,25 @@
 		<h3>Method</h3>
 		<ol>
 	<?php foreach ($this->methods as $method): ?>
-			<li><?php echo $this->escape( $method['description'] ); ?>
+			<li>
+			<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
 			<a href="<?= $this->url( array( 
 				'controller' => 'method', 
 				'action' => 'edit',
 				'id' => $method['id']
-			), 'default', true ); ?>">Edit</a>
-			|
+			), 'default', true ); ?>"><img title="Edit" src="/images/icons/pencil.png" alt="Edit"/></a>
+			&nbsp;
 			<a href="<?= $this->url( array( 
 				'controller' => 'method', 
 				'action' => 'delete',
 				'id' => $method['id']
-			), 'default', true ); ?>">Delete</a>
+			), 'default', true ); ?>"><img title="Delete" src="/images/icons/cross.png" alt="Delete"/></a>
+			<?php endif; ?>
+			<?php echo $this->escape( $method['description'] ); ?>
 			</li>
 	<?php endforeach; ?>
 		</ol>
+		<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
 		<div>
 			<p><a href="<?= $this->url( array( 
 				'controller' => 'method', 
@@ -51,13 +70,14 @@
 			), 'default', true ); ?>">
 			Add another method?</a></p>
 		</div>
+		<?php endif; ?>
 	</div>
 	
 	<!-- Comments -->
 	<a name="comments"></a>
 	<div>
 		<h3>Comments</h3>
-		<?php echo $this->form ?>
+		<?php echo $this->comment_form ?>
 		<?php foreach ($this->comments as $comment): ?>
 		<div>
 			<?php echo $comment['comment'] ?> by

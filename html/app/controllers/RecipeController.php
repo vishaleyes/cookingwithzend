@@ -8,7 +8,6 @@ class RecipeController extends DefaultController
 		parent::init();
 		$this->model = $this->getModel();
 		$this->form = $this->model->getForm('Recipe');
-		$this->view->form = $this->form;
 	}
 
 	public function indexAction()
@@ -26,6 +25,7 @@ class RecipeController extends DefaultController
 	public function newAction()
 	{
 		$this->view->title = 'Create a recipe';
+		$this->view->form = $this->form;
 
 		if ($this->getRequest()->isPost()) {
 
@@ -70,6 +70,7 @@ class RecipeController extends DefaultController
 		$this->view->title = 'Editing recipe - '.$recipe->name;
 		
 		$this->form->populate($recipe->toArray());
+		$this->view->form = $this->form;
 		
 		if ($this->getRequest()->isPost()) {
 
@@ -112,9 +113,12 @@ class RecipeController extends DefaultController
 		// The comment form only gets made if we are logged in
 		if ( $this->_identity )
 		{
-			$form = $this->model->getForm('Comment');
-			$form->populate(array('recipe_id' => $this->_id));
-			$this->view->form = $form;
+			$comment_form = $this->model->getForm('Comment');
+			$rating_form = $this->model->getForm('Rating');
+			$comment_form->populate(array('recipe_id' => $this->_id));
+			$rating_form->populate(array('recipe_id' => $this->_id));
+			$this->view->comment_form = $comment_form;
+			$this->view->rating_form = $rating_form;
 		}
 		
 		$this->view->recipe  = $recipe;
@@ -126,10 +130,10 @@ class RecipeController extends DefaultController
 		
 		$c = new Models_Comment();
 		$this->view->comments = $c->getComments('c.recipe_id', $this->_id);
-		
-		// @todo To be replaced by ACL?
-		$this->view->canEdit = ($this->_identity['id'] == $recipe['creator_id'] ? true : false ); 
-		
+
+		$rate = new Models_Rating();
+		$this->view->hasRated = $rate->hasRated($this->_id, $this->_identity['id']);
+		$this->view->ratings = array();
 	}
 	
 	public function userAction()

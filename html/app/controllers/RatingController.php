@@ -8,20 +8,7 @@
 
 class RatingController extends DefaultController 
 {
-	
-	/**
-	 * This happens before the page is dispatch
-	 */
-
-	public function preDispatch() {
-		// Held in DefaultController. Params are actions allowed as guest.
-		$this->loggedIn();
-		$this->pendingAccount();
-	}
-
-	public function indexAction() {
-	}
-	
+		
 	public function addAction() {
 		
 		/*	Poss remove - check messages to user with Chris
@@ -60,14 +47,4 @@ class RatingController extends DefaultController
 		
 	}
 	
-	
-	
-
-	/**
-	 * This happens after the page is dispatch
-	*/ 
-
-	public function postDispatch() {
-		exit;
-	}
 }
