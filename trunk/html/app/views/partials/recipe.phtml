@@ -5,7 +5,23 @@
 			'action' => 'view',
 			'id'     => $this->id
 		), 'default' ); ?>"><?php echo $this->escape( $this->name ) . ' ' . round_brackets( $this->view_count ) ?>
-		</a></h2>
+		</a>
+		<!-- Edit/Delete links  -->
+		<?php if( $this->checkOwner($this->creator_id) ): ?>
+		<div>
+			<a href="<?= $this->url( array( 
+				'controller' => 'recipe', 
+				'action' => 'edit',
+				'id'     => $this->id
+			), 'default' ); ?>"><img title="Edit" src="/images/icons/pencil.png" alt="Edit"/></a> &nbsp; 
+			<a href="<?= $this->url( array( 
+				'controller' => 'recipe', 
+				'action' => 'delete',
+				'id'     => $this->id
+			), 'default' ); ?>"><img title="Delete" src="/images/icons/cross.png" alt="Delete"/></a>
+		</div>
+		<?php endif; ?>
+	</h2>
 	<h3>By 
 		<a href="<?php echo $this->url( array(
 			'controller' => 'user',
@@ -25,19 +41,4 @@
 			<?php echo ( $this->freezable ? '<li>Freezable</li>' : null ) ?>
 		</ul>
 	</div>
-	<!-- Edit/Delete links  -->
-	<?php if ($this->getHelper('Partial')->view->canEdit ): ?>
-	<div>
-		<a href="<?= $this->url( array( 
-			'controller' => 'recipe', 
-			'action' => 'edit',
-			'id'     => $this->id
-		), 'default' ); ?>">Edit</a> | 
-		<a href="<?= $this->url( array( 
-			'controller' => 'recipe', 
-			'action' => 'delete',
-			'id'     => $this->id
-		), 'default' ); ?>">Delete</a>
-	</div>
-	<?php endif; ?>
 </div>

@@ -15,7 +15,7 @@ $(function(){
 		<?php else: ?>
 			<p>User has not rated this</p>
 		<?php endif ?>
-		<?php if ( $this->loggedIn() && $this->checkOwner( $comment['creator_id'] ) ): ?>
+		<?php if ( $this->loggedIn() && $this->checkOwner( $comment['user_id'] ) ): ?>
 			<a href="<?php echo "/comment/delete/id/".$comment['id'] ?>">Delete</a> | Report
 		<?php endif ?>
 	<?php endforeach ?>

@@ -1,6 +1,6 @@
 <?php
 
-class Zend_View_Helper_CycleCss extends Zend_View_Helper_Abstract
+class Recipe_View_Helper_CycleCss extends Zend_View_Helper_Abstract
 {
 	protected $_count = 0;
 	

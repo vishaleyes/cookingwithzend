@@ -28,9 +28,11 @@ class Models_DbTable_Rating extends Zend_Db_Table_Abstract
 	 * Add user_id to insert query.
 	 */
 	
-	public function insert($params)
+	public function insert(array $params)
 	{
-		$params['user_id'] = Zend_Registry::get('session')->user['id'];
+		$auth = Zend_Auth::getInstance();
+		$identity = $auth->getIdentity();
+		$params['user_id'] = $identity['id'];
 		
 		return parent::insert($params);
 	}

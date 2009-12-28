@@ -91,7 +91,7 @@ Zend_Layout::startMvc(APPLICATION_PATH . '/layouts/');
 $view = Zend_Layout::getMvcInstance()->getView();
 $view->setScriptPath( APPLICATION_PATH . '/views/' );
 $view->doctype('XHTML1_STRICT');
-$view->addHelperPath( APPLICATION_PATH . '/views/helpers/' );
+$view->addHelperPath( 'Recipe/View/Helper/', 'Recipe_View_Helper' );
 
 // CACHE
 $cache = Zend_Cache::factory(
