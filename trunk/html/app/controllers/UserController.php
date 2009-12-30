@@ -76,55 +76,6 @@ class UserController extends DefaultController
 		$form = $this->model->getForm('UserAccount');
 		$form->populate($row);
 		$this->view->form = $form;
-	}
-	
-	/*
-	 * Executes sendConfirmationEmail function. Used for testing, can be deleted or modified.
-	 */
-	public function sendConfirmationAction()
-	{
-		$this->_helper->layout->disableLayout();
-		
-		$rowset = $this->model->getByField( 'id', $this->_getParam('id') );
-		$emailResult = $this->model->sendConfirmationEmail($rowset['email'], $rowset['name']);
-		
-		if ($emailResult)
-		{
-			$this->message->addMessage( 'Confirmation e-mail sent.' );
-			$this->_redirect('/');
-		}
-	}
-		
-	/**
-	 * Allows user to confirm e-mail address.
-	 */
-	
-	public function confirmAction()
-	{
-		$code = $this->_getParam("code");
-		$userId = substr( $code, 32, strlen( $code ) - 32 );
-		var_dump($this->_getAllParams());
-		print($userId);
-		
-		$this->_helper->layout->disableLayout();
-		$this->_helper->viewRenderer->setNoRender(true);
-		
-		/* $user = $this->model->getByField( 'id', $this->session->user['id'] );
-			
-		if ( $code === $user->getVerificationCode() )
-		{
-			// Code matches, update DB
-			$this->db->update( "users", array( "status" => "active" ), "id = $userId" );
-			$this->message->addMessage( 'You have now confirmed your account.' );
-			$this->_redirect('/');
-		} else {
-			// Code doesn't match, bitch at user.
-			$this->message->setNamespace( 'error' );
-			$this->message->addMessage( 'Incorrect confirmation code supplied.' );
-			$this->message->resetNamespace();
-			$this->_redirect('/');
-		} */
-		
-	}		
+	}	
 
 }
