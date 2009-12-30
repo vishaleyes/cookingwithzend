@@ -46,15 +46,19 @@ class Models_User extends Models_GenericModel
 	 * @return bool
 	 */
 
-	public function forgottenPasswordMail()
+	public function forgottenPasswordMail($row)
 	{
-		$newpass = $this->generatePassword();
-		$this->password = new Zend_Db_Expr('PASSWORD("'.$newpass.'")');
-		$this->save();
+		// Reset the password
+		$password = $this->generatePassword();
+		$row['password'] = new Zend_Db_Expr('PASSWORD("'.$password.'")');
+		// remove the role from the row because we cannot update that
+		unset($row['role']);
 		
-		$e = new Email( $this->email, $this->name, 'Forgotten Password' );
+		$this->table->update($row, 'id = '.$row['id']);
+				
+		$e = new Recipe_Email( $row['email'], $row['name'], 'Forgotten Password' );
 		$e->setTemplate( 'forgotten-password.phtml' );
-		$e->view->password = $this->password;
+		$e->view->password = $password;
 
 		return $e->sendMail();
 	}
@@ -69,7 +73,7 @@ class Models_User extends Models_GenericModel
 		$e = new Recipe_Email( $row['email'], $row['name'], 'Registration' );
 		$e->setTemplate( 'user-registration.phtml' );
 
-		$e->view->verificationURL = 'http://' . $_SERVER['HTTP_HOST'] . '/user/confirm/code/' . $row['code'];
+		$e->view->verificationURL = 'http://' . $_SERVER['HTTP_HOST'] . '/user/confirm/code/' . $row['confirm'];
 	
 		return $e->sendMail();
 	}
@@ -92,6 +96,7 @@ class Models_User extends Models_GenericModel
 				$message = 'Your account has been suspended, you should of been mailed the reason';
 				break;
 			case 'pending':
+				$message = 'You need to fully activate your account to continue, maybe you need a <a href="/login/gsend-confirmation">confirmation e-mail</a>';
 			case 'admin':
 			case 'active':
 				break;

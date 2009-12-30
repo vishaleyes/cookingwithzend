@@ -3,6 +3,8 @@
 class AjaxController extends Zend_Controller_Action
 {
 
+	private $_text;
+	
 	/**
 	 * Ajax controller requires no layout and no view as it mostly sends back ajax
 	 * we do this in preDispatch so that we dont have to repeat ourselves
@@ -11,6 +13,11 @@ class AjaxController extends Zend_Controller_Action
 	{
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(true);
+		
+		$this->_text = $this->_getParam('q');
+		
+		if ( !$text )
+			return false;
 	}
 	
 	/**
@@ -18,12 +25,10 @@ class AjaxController extends Zend_Controller_Action
 	 */
 
 	public function getIngredientsAction()
-	{
-		$text = $this->_getParam('q');
-		
+	{	
 		$i = new Models_Ingredient();
 		$select = $i->table->select()
-			->where( 'LOWER(name) LIKE ?', '%'.strtolower($text).'%' )
+			->where( 'LOWER(name) LIKE ?', '%'.strtolower($this->_text).'%' )
 			->limit(5);
 		
 		$rowset = $i->table->fetchAll( $select );
@@ -41,8 +46,8 @@ class AjaxController extends Zend_Controller_Action
 		
 		$m = new Models_Measurement();
 		$select = $m->table->select()
-			->where( 'LOWER(name) LIKE ?', '%'.strtolower($text).'%' )
-			->orWhere( 'LOWER(abbreviation) LIKE ?', '%'.strtolower($text).'%' )
+			->where( 'LOWER(name) LIKE ?', '%'.strtolower($this->_text).'%' )
+			->orWhere( 'LOWER(abbreviation) LIKE ?', '%'.strtolower($this->_text).'%' )
 			->limit(5);
 
 		$rowset = $m->table->fetchAll( $select );
@@ -56,11 +61,9 @@ class AjaxController extends Zend_Controller_Action
 
 	public function userLookupAction()
 	{
-		$text = $this->_getParam('q');
-
 		$u = new Models_User();
 		$select = $u->table->select()
-			->where( 'name = ?', $text );
+			->where( 'name = ?', $this->_text );
 		
 		$row = $u->table->fetchRow( $select );
 		if ( $row ) {

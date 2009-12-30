@@ -26,7 +26,7 @@ class Models_DbTable_User extends Zend_Db_Table_Abstract
 		$params['last_login'] = new Zend_Db_Expr('NOW()');
 		
 		// generate a confirmation code
-		$params['confirm'] = $this->getVerificationCode($params['email']);
+		$params['confirm'] = $this->getVerificationCode($params);
 		
 		return parent::insert( $params );
 	}
@@ -36,9 +36,9 @@ class Models_DbTable_User extends Zend_Db_Table_Abstract
 	 * @return string
 	 */
 
-	public function getVerificationCode($email)
+	public function getVerificationCode(array $params)
 	{
-		return (MD5(MD5($email) . MD5(self::SALT)));	
+		return (MD5(MD5($params['email'] . $param['created']) . MD5(self::SALT)));	
 	}
 	
 }
