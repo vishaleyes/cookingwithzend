@@ -9,18 +9,19 @@ Please date stamp anything you want to change in here because it makes it easier
 
   * DB Classes in different files
   * Models only contain function to do with that model
-  * Use the layout system
-  * Use the Zend Forms
   * Rework any piece of code necessary that is currently too complex
   * Keep it Simple!
 
 = Next =
 
-  * Implement an ACL, essential reading : http://codeutopia.net/blog/?s=ACL
-  * Add scripts to update resources?
-  * Optionally show a form on user/account if user is owner
-  * Optionally show edit on recipe if user is owner
-  * Only allow owner to edit recipe
+  * Ratings
+  ** Add Rating, check counter is increased
+  * Comments
+  ** Re-test comments (unsure if its broke
+  * Tags
+  ** Add/Delete/Update
+  * Search
+  ** By Name, Ingredient, Tag
 
 = Complete =
 
@@ -28,3 +29,8 @@ Below is a list of what I believe are complete parts of the re-work, feel free t
 
   * Make Login work properly so things start talking to the Auth object
   * Use the Auth object to submit recipes
+  * Use the layout system
+  * Use the Zend Forms
+  * Implement an ACL, essential reading : http://codeutopia.net/blog/?s=ACL
+  * Optionally show edit on recipe if user is owner
+  * Only allow owner to edit recipe
