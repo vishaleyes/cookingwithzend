@@ -50,15 +50,21 @@ INSERT INTO `acl_resources` (`id`, `role_id`, `name`) VALUES
 (20, 4, 'admin:add-resource'),
 (21, 1, 'login:index'),
 (22, 2, 'method:new'),
-(23, 2, 'method:edit');
+(23, 2, 'method:edit'),
+(24, 1, 'login:confirm'),
+(25, 1, 'ajax:user-lookup'),
+(26, 2, 'user:account'),
+(27, 1, 'index:index'),
+(28, 1, 'login:reset'),
+(29, 1, 'login:send-confirmation');
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `role_id`, `password`, `name`, `email`, `openid`, `created`, `updated`, `last_login`, `status`, `comments_count`, `ratings_count`, `recipes_count`) VALUES
-(1, 4, '185741fc2d690b712f659c616222515f', 'Catharsis', 'cookery@catharsis.co.uk', 'http://www.flickr.com/photos/catharsisjelly/', '2008-07-17 09:52:36', '2008-07-17 09:52:36', '2009-09-06 22:24:20', 'active', 5, 0, 5),
-(2, 0, '185741fc2d690b712f659c616222515f', 'Other', 'other@catharsis.co.uk', '', '2009-08-20 15:55:40', '2009-08-20 15:55:40', '2009-08-20 15:56:24', 'active', 0, 0, 0);
+INSERT INTO `users` (`id`, `role_id`, `password`, `name`, `email`, `confirm`, `openid`, `created`, `updated`, `last_login`, `status`, `comments_count`, `ratings_count`, `recipes_count`) VALUES
+(1, 4, '185741fc2d690b712f659c616222515f', 'Catharsis', 'cookery@catharsis.co.uk', 'c68d10e3e2a445676cf20733dc1b06f8', 'http://www.flickr.com/photos/catharsisjelly/', '2008-07-17 09:52:36', '2008-07-17 09:52:36', '2009-12-15 14:24:58', 'active', 5, 0, 5),
+(2, 0, '185741fc2d690b712f659c616222515f', 'Other', 'other@catharsis.co.uk', 'f9c3eb2042844960ac620d52bc289886', '', '2009-08-20 15:55:40', '2009-08-20 15:55:40', '2009-08-20 15:56:24', 'active', 0, 0, 0);
 
 --
 -- Dumping data for table `ingredients`

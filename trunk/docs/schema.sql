@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.0.1
+-- version 3.2.2.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2009 at 09:28 PM
+-- Generation Time: Dec 30, 2009 at 12:31 PM
 -- Server version: 5.1.37
--- PHP Version: 5.3.0
+-- PHP Version: 5.2.10-2ubuntu6.3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -117,7 +117,9 @@ DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE IF NOT EXISTS `ratings` (
   `recipe_id` int(11) unsigned NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
+  `comment` text COLLATE utf8_unicode_ci,
   `value` int(11) unsigned NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`recipe_id`,`user_id`),
   KEY `recipe_id` (`recipe_id`),
   KEY `user_id` (`user_id`)
@@ -194,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `taggings` (
   `taggable_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_taggings_on_tag_id_and_taggable_id_and_taggable_type` (`tag_id`,`taggable_id`,`taggable_type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -208,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `tags` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -278,3 +280,4 @@ ALTER TABLE `recipes`
 --
 ALTER TABLE `recipe_ingredients`
   ADD CONSTRAINT `recipe_ingredients_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE;
+
