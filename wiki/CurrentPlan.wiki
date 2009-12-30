@@ -15,13 +15,17 @@ Please date stamp anything you want to change in here because it makes it easier
 = Next =
 
   * Ratings
-  ** Add Rating, check counter is increased
+   * Add Rating, check counter is increased
   * Comments
-  ** Re-test comments (unsure if its broke
+   * Re-test comments (unsure if its broke
   * Tags
-  ** Add/Delete/Update
+   * Add/Delete/Update
   * Search
-  ** By Name, Ingredient, Tag
+   * By Name, Ingredient, Tag
+  * Redirect
+   * Redirect on 404 to a 404
+   * Redirect to another page if no acl
+   * Redirect on login if not logged in and they asked for a specific page
 
 = Complete =
 
