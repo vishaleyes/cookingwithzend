@@ -107,7 +107,7 @@ class RecipeController extends DefaultController
 		{
 			$this->_db->update("recipes", array(
 				"view_count" => new Zend_Db_Expr("(view_count + 1)")
-			), "id = " . $recipe['id']);
+			), "id = " . $this->_id);
 		}
 		
 		// The comment form only gets made if we are logged in
@@ -133,7 +133,7 @@ class RecipeController extends DefaultController
 
 		$rate = new Models_Rating();
 		$this->view->hasRated = $rate->hasRated($this->_id, $this->_identity['id']);
-		$this->view->ratings = array();
+		$this->view->ratings = $rate->getRatings($this->_id);
 	}
 	
 	public function userAction()

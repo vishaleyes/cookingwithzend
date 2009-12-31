@@ -4,14 +4,29 @@
  	<!-- Rating -->
 	<a name="ratings"></a>
 	<div>
-		<h3>Ratings</h3>
+		<h3>Last 5 Ratings</h3>		
+		<?php foreach ($this->ratings as $rating): ?>
+		<div>
+		<?php echo $rating['comment'] . ' '. $rating['value'] ?>/10 by
+			<a href="<?= $this->url( array( 
+				'controller' => 'user', 
+				'action' => 'view',
+				'id' => strtolower($rating['username'])
+			), 'default', true ); ?>"><?php echo $rating['username']; ?></a>
+			<small><?php echo $rating['created'] ?></small>
+			<?php if ($this->checkOwner($rating['user_id']) ): ?>
+			<a href="<?= $this->url( array( 
+				'controller' => 'rating', 
+				'action' => 'delete',
+				'recipe_id' => $rating['recipe_id'],
+				'user_id' => $rating['user_id'],
+			), 'default', true ); ?>"><img title="Delete" src="/images/icons/cross.png" alt="Delete"/></a>
+			<?php endif; ?>
+		</div>
+		<?php endforeach; ?>
 		<?php if (! $this->checkOwner($this->recipe['creator_id']) && ! $this->hasRated ): ?>
 		<?php echo $this->rating_form ?>
 		<?php endif; ?>
-		<?php foreach ($this->ratings as $rating): ?>
-		<div>
-		</div>
-		<?php endforeach; ?>
 	</div>
  
 	<!-- Ingredients -->
@@ -87,6 +102,14 @@
 				'id' => strtolower($comment['username'])
 			), 'default', true ); ?>"><?php echo $comment['username']; ?></a>
 			<small><?php echo $comment['created'] ?></small>
+			<?php if ($this->checkOwner($comment['user_id']) ): ?>
+			<a href="<?= $this->url( array( 
+				'controller' => 'comment', 
+				'action' => 'delete',
+				'recipe_id' => $comment['recipe_id'],
+				'id' => $comment['id'],
+			), 'default', true ); ?>"><img title="Delete" src="/images/icons/cross.png" alt="Delete"/></a>
+			<?php endif; ?>
 		</div>
 		<?php endforeach; ?>
 	</div>

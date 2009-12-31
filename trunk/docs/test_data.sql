@@ -20,8 +20,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 INSERT INTO `acl_roles` (`id`, `inherit_id`, `name`) VALUES
 (1, NULL, 'guest'),
 (2, 1, 'member'),
-(3, 2, 'owner'),
-(4, 3, 'admin');
+(3, 2, 'admin');
 
 --
 -- Dumping data for table `acl_resources`
@@ -41,13 +40,13 @@ INSERT INTO `acl_resources` (`id`, `role_id`, `name`) VALUES
 (11, 2, 'comment:new'),
 (12, 2, 'recipe:new'),
 (13, 2, 'ingredient:new'),
-(14, 3, 'ingredient:edit'),
-(15, 3, 'recipe:delete'),
-(16, 3, 'recipe:edit'),
-(17, 4, 'admin'),
-(18, 4, 'admin:index'),
-(19, 4, 'admin:resources'),
-(20, 4, 'admin:add-resource'),
+(14, 2, 'ingredient:edit'),
+(15, 2, 'recipe:delete'),
+(16, 2, 'recipe:edit'),
+(17, 3, 'admin'),
+(18, 3, 'admin:index'),
+(19, 3, 'admin:resources'),
+(20, 3, 'admin:add-resource'),
 (21, 1, 'login:index'),
 (22, 2, 'method:new'),
 (23, 2, 'method:edit'),
@@ -56,15 +55,16 @@ INSERT INTO `acl_resources` (`id`, `role_id`, `name`) VALUES
 (26, 2, 'user:account'),
 (27, 1, 'index:index'),
 (28, 1, 'login:reset'),
-(29, 1, 'login:send-confirmation');
+(29, 1, 'login:send-confirmation'),
+(30, 2, 'rating:new');
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `role_id`, `password`, `name`, `email`, `confirm`, `openid`, `created`, `updated`, `last_login`, `status`, `comments_count`, `ratings_count`, `recipes_count`) VALUES
-(1, 4, '185741fc2d690b712f659c616222515f', 'Catharsis', 'cookery@catharsis.co.uk', 'c68d10e3e2a445676cf20733dc1b06f8', 'http://www.flickr.com/photos/catharsisjelly/', '2008-07-17 09:52:36', '2008-07-17 09:52:36', '2009-12-15 14:24:58', 'active', 5, 0, 5),
-(2, 0, '185741fc2d690b712f659c616222515f', 'Other', 'other@catharsis.co.uk', 'f9c3eb2042844960ac620d52bc289886', '', '2009-08-20 15:55:40', '2009-08-20 15:55:40', '2009-08-20 15:56:24', 'active', 0, 0, 0);
+(1, 3, '185741fc2d690b712f659c616222515f', 'Catharsis', 'cookery@catharsis.co.uk', 'c68d10e3e2a445676cf20733dc1b06f8', 'http://www.flickr.com/photos/catharsisjelly/', '2008-07-17 09:52:36', '2008-07-17 09:52:36', '2009-12-15 14:24:58', 'active', 5, 0, 5),
+(2, 2, '185741fc2d690b712f659c616222515f', 'Other', 'other@catharsis.co.uk', 'f9c3eb2042844960ac620d52bc289886', '', '2009-08-20 15:55:40', '2009-08-20 15:55:40', '2009-08-20 15:56:24', 'active', 0, 0, 0);
 
 --
 -- Dumping data for table `ingredients`
