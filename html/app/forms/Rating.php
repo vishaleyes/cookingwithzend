@@ -10,7 +10,7 @@ class Forms_Rating extends Zend_Form
 		$stripTags->setAttributesAllowed( array( 'href', 'target', 'rel', 'name', 'src', 'width', 'height', 'alt', 'title' ) );
 		
 		$this->setAction('/rating/new');
-		$this->addElement('select', 'rating', array(
+		$this->addElement('select', 'value', array(
 			'label' => 'Rating:',
 			'required'   => true,
 			'multiOptions' => array(1,2,3,4,5,6,7,8,9,10)

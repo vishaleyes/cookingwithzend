@@ -6,10 +6,13 @@ class Models_Rating extends Models_GenericModel
 	public function getRatings($recipe_id, $max = 5)
 	{
 		$select = $this->db->select()
-			->from($this->table)
+			->from(array('r' => 'ratings'))
+			->joinLeft(array('u' => 'users'), 'r.user_id = u.id', array(
+				'username' => 'u.name'
+			))
 			->where('recipe_id = ?', $recipe_id)
 			->limit($max);
-		$this->db->fetchAll($select);
+		return $this->db->fetchAll($select);
 	}
 	
 	/**

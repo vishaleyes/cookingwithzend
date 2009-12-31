@@ -38,7 +38,7 @@ class CommentController extends DefaultController
 					$this->model->table->insert( $data );
 						
 					$counterData = array("comments_count" => new Zend_Db_Expr("(comments_count + 1)"));
-					
+						
 					$this->_db->update("users", $counterData, "id = " . $this->_identity['id']);
 					$this->_db->update("recipes", $counterData, "id = " . $recipe_id);
 
@@ -55,16 +55,30 @@ class CommentController extends DefaultController
 		
 	}
 	
+	// @todo this action should be limited to the person who owns the rating
+	
 	public function deleteAction()
 	{
-		$id = $this->_getParam( 'id' );
-		$c = new Comment();
-		$rowset = $c->find( $id );
-		if ($rowset)
-			$rowset->current()->delete();
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(true);
+		
+		$this->_db->beginTransaction();
+		try {
+			$this->model->table->delete('id = '.$this->_getParam('id'));
+						
+			$counterData = array("comments_count" => new Zend_Db_Expr("(comments_count - 1)"));
+						
+			$this->_db->update("users", $counterData, "id = " . $this->_identity['id']);
+			$this->_db->update("recipes", $counterData, "id = " . $this->_getParam('recipe_id'));
 
-		// go back :)
-		$this->_redirect( $_SERVER['HTTP_REFERER'] );
+			$this->_flashMessenger->addMessage( 'Comment deleted' );
+			$this->_db->commit();
+		} catch(Exception $e) {
+			$this->_db->rollback();
+			$this->_log->debug( 'Error deleting comment id '.$this->_getParam('id') . ' : ' . $e->getMessage() );
+		}
+
+		$this->_redirect( '/recipe/view/id/' . $this->_getParam('recipe_id') );
 	}
 	
 }
