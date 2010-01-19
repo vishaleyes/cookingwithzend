@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 30, 2009 at 12:31 PM
+-- Generation Time: Jan 19, 2010 at 05:17 PM
 -- Server version: 5.1.37
--- PHP Version: 5.2.10-2ubuntu6.3
+-- PHP Version: 5.2.10-2ubuntu6.4
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   PRIMARY KEY (`id`),
   KEY `recipe_id` (`recipe_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -115,14 +115,16 @@ CREATE TABLE IF NOT EXISTS `method_items` (
 
 DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE IF NOT EXISTS `ratings` (
+  `id` int(11) NOT NULL,
   `recipe_id` int(11) unsigned NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
   `comment` text COLLATE utf8_unicode_ci,
   `value` int(11) unsigned NOT NULL,
   `created` datetime NOT NULL,
-  PRIMARY KEY (`recipe_id`,`user_id`),
-  KEY `recipe_id` (`recipe_id`),
-  KEY `user_id` (`user_id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Unique` (`recipe_id`,`user_id`),
+  KEY `user_id` (`user_id`),
+  KEY `recipe_id` (`recipe_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -236,7 +238,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `recipes_count` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`),
+  KEY `role_id` (`role_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -266,8 +269,8 @@ ALTER TABLE `method_items`
 -- Constraints for table `ratings`
 --
 ALTER TABLE `ratings`
-  ADD CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`);
 
 --
 -- Constraints for table `recipes`
@@ -281,3 +284,8 @@ ALTER TABLE `recipes`
 ALTER TABLE `recipe_ingredients`
   ADD CONSTRAINT `recipe_ingredients_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE;
 
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `acl_roles` (`id`);
