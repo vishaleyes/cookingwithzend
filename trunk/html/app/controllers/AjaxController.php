@@ -5,6 +5,12 @@ class AjaxController extends Zend_Controller_Action
 
 	private $_text;
 	
+	private $_db;
+	
+	public function init() {
+		$this->_db = Zend_Registry::get('db');
+	}
+	
 	/**
 	 * Ajax controller requires no layout and no view as it mostly sends back ajax
 	 * we do this in preDispatch so that we dont have to repeat ourselves
@@ -16,7 +22,7 @@ class AjaxController extends Zend_Controller_Action
 		
 		$this->_text = $this->_getParam('q');
 		
-		if ( !$text )
+		if ( !$this->_text )
 			return false;
 	}
 	
@@ -74,6 +80,16 @@ class AjaxController extends Zend_Controller_Action
 		echo json_encode( 'is free' );
 	}
 
+	public function methodSortAction() {
+		// Update the db to now meet the array
+		$position = 1;
+		foreach( $this->_getParam('method') as $method )
+		{
+			$data = array('position' => $position++);
+			$this->_db->update('method_items', $data, 'id = '.$method);
+		}
+	}
+	
 	/**
 	 * Ajax call to return the comments for the relevant recipe
 	 */
