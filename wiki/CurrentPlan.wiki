@@ -17,14 +17,16 @@ Please date stamp anything you want to change in here because it makes it easier
   * ACL in controllers
    * change things like edit/delete to only be available if the user is the owner of the item in question
   * Ratings
-   * Add and check counters increase
-   * Delete to reduce counter
-   * Test Add / Delete
+   * DONE: Add and check counters increase
+   * DONE: Delete to reduce counter
+   * DONE: Test Add / Delete
    * Delete to be limited in controller (right now anyone can hack a url to delete it)
   * Comments
-   * Delete
-   * Test Add / Delete
+   * DONE: Delete
+   * DONE: Test Add / Delete
    * Delete to be limited in controller (right now anyone can hack a url to delete it)
+  * Method Items
+    * DONE: JQuery Sortable
   * Tags
    * Add/Delete/Update Tags
   * Search
