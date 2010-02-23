@@ -26,12 +26,37 @@
 	
 	<!-- Methods -->
 	<a name="methods"></a>
+	
+	<style type="text/css">
+	#sortable { list-style-type: none; margin: 0; padding: 0; width: 95%; }
+	#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1 em; }
+	#sortable li span { position: absolute; margin-left: -1.3em; }
+	</style>
+	<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
+	<script type="text/javascript">
+	$(function() {
+		$("#sortable").sortable({
+			update: function(event, ui) {
+				var order = $("#sortable").sortable("serialize");
+				alert(order);
+				$.post("/ajax/method-sort/", order, function(theResponse){
+					$("#contentRight").html(theResponse);
+				});
+			}
+		});
+		$("#sortable").disableSelection();
+	});
+	</script>
+	<?php endif; ?>
+	
 	<div>
 		<h3>Method</h3>
-		<ol>
+	
+		<ul id="sortable">
 	<?php foreach ($this->methods as $method): ?>
-			<li>
+			<li id="method_<?php echo $method['id'] ?>" class="ui-state-default">
 			<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
+			<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
 			<a href="<?= $this->url( array( 
 				'controller' => 'method', 
 				'action' => 'edit',
@@ -47,7 +72,7 @@
 			<?php echo $this->escape( $method['description'] ); ?>
 			</li>
 	<?php endforeach; ?>
-		</ol>
+		</ul>
 		<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
 		<div>
 			<p><a href="<?= $this->url( array( 

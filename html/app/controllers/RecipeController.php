@@ -41,15 +41,15 @@ class RecipeController extends DefaultController
 				$this->_db->beginTransaction();
 				try{
 					$this->model->table->insert( $data );
+					$id = $this->_db->lastInsertId();
 					$this->_db->update("users", array(
 						"recipes_count" => new Zend_Db_Expr("(recipes_count + 1)")
 					), "id = " . $this->_identity['id']);
-					$id = $this->model->table->lastInsertId();
 					$this->_db->commit();
 					
 					$this->_log->info( 'Added Recipe ' . sq_brackets( $data['name'] ) ); 
 					$this->_flashMessenger->addMessage( 'Added recipe ' . $data['name'] );
-					$this->_redirect( '/recipe/view/'.$id );
+					$this->_redirect( '/recipe/view/id/'.$id );
 				} catch(Exception $e) {
 					$this->_db->rollback();
 				}
@@ -110,7 +110,8 @@ class RecipeController extends DefaultController
 			), "id = " . $this->_id);
 		}
 		
-		// The comment form only gets made if we are logged in
+		$rate = new Models_Rating();
+		// Only do this if we have a logged in user
 		if ( $this->_identity )
 		{
 			$comment_form = $this->model->getForm('Comment');
@@ -119,6 +120,9 @@ class RecipeController extends DefaultController
 			$rating_form->populate(array('recipe_id' => $this->_id));
 			$this->view->comment_form = $comment_form;
 			$this->view->rating_form = $rating_form;
+			
+			// Figure out if this user has made a rating or not
+			$this->view->hasRated = $rate->hasRated($this->_id, $this->_identity['id']);
 		}
 		
 		$this->view->recipe  = $recipe;
@@ -130,9 +134,7 @@ class RecipeController extends DefaultController
 		
 		$c = new Models_Comment();
 		$this->view->comments = $c->getComments('c.recipe_id', $this->_id);
-
-		$rate = new Models_Rating();
-		$this->view->hasRated = $rate->hasRated($this->_id, $this->_identity['id']);
+		
 		$this->view->ratings = $rate->getRatings($this->_id);
 	}
 	

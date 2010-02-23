@@ -3,6 +3,10 @@
 	color: black;
 }
 
+img {
+	border: none;
+}
+
 .hide {
 	display: none;
 }

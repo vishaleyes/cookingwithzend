@@ -49,8 +49,8 @@ class Models_Rating extends Models_GenericModel
 		
 		if ($this->db->fetchOne($select) > 0)
 			return true;
-		else
-			return false;
+		
+		return false;
 	}
 	
 }

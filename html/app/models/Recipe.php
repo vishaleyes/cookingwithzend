@@ -83,7 +83,9 @@ class Models_Recipe extends Models_GenericModel
 	{
 		$select = $this->db->select()
 			->from(array('m' => 'method_items'))
-			->where('m.recipe_id = ?', $recipe_id);
+			->where('m.recipe_id = ?', $recipe_id)
+			->order('position')
+			->order('id');
 			
 		return $this->db->fetchAll($select);
 	}

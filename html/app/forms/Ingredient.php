@@ -7,6 +7,7 @@ class Forms_Ingredient extends Zend_Form
 	{
 		$this->addElement('text', 'name', array(
 			'label'      => 'Name:',
+			'title'      => 'The ingredient name',
 			'required'   => true,
 			'filters'    => array('StringTrim'),
 			'validators' => array(
@@ -17,6 +18,7 @@ class Forms_Ingredient extends Zend_Form
 		))
 		->addElement('text', 'measurement', array(
 			'label'      => 'Measurement:',
+			'title'      => 'Tbsp? Tsp? G? Kg?',
 			'filters'    => array('StringTrim'),
 			'validators' => array(
 				new Zend_Validate_Alnum(true),
@@ -26,6 +28,7 @@ class Forms_Ingredient extends Zend_Form
 		))
 		->addElement('text', 'quantity', array(
 			'label'      => 'Quantity:',
+			'title'      => 'More than one of these items?',
 			'filters'    => array('StringTrim'),
 			'validators' => array(
 				new Zend_Validate_Int()
@@ -33,6 +36,7 @@ class Forms_Ingredient extends Zend_Form
 		))
 		->addElement('text', 'amount', array(
 			'label'      => 'Amount:',
+			'title'      => 'How much of it? e.g. 250',
 			'filters'    => array('StringTrim'),
 			'validators' => array(
 				new Zend_Validate_Alnum(true),

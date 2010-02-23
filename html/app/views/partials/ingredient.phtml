@@ -1,7 +1,8 @@
 	
 		<li id="<?php echo "ingredient-" . $this->recipe_id . "-" . $this->ingredient_id ?>">
 			<ul>
-				<?php if ($this->getHelper('Partial')->view->canEdit ): ?>
+				<?php $creator_id = $this->getHelper('Partial')->view->recipe['creator_id']; ?>
+				<?php if( $this->checkOwner($creator_id) ): ?>
 				<li class="ingredients">
 					<a href="<?= $this->url( array( 
 						'controller'    => 'ingredient', 
