@@ -29,38 +29,17 @@ class LoginController extends DefaultController
 				// Get the values from the DB
 				$data = $form->getValues();
 
-				$result = $this->model->login( $data['email'], $data['password']);
+				$msg = $this->model->login( $data['email'], $data['password']);
+				$this->_log->debug( 'message ' . sq_brackets( $msg ) );
 				
-				// Not a valid login
-				if( ! $result->isValid() ) {
+				// Not a valid login, send the msg to the user
+				if( $msg !== true ) {
 					$this->_flashMessenger->setNamespace( 'error' );
-					$this->_flashMessenger->addMessage( 'Wrong credentials supplied.  maybe you forgot your password?' );
+					$this->_flashMessenger->addMessage( $msg );
 					$this->_log->debug( 'User ' . sq_brackets( $data['email'] ).' failed login'. var_export( $result, true ) );
 					$this->_redirect('/');
 				}
-				
-				$email = $result->getIdentity();
-				$userRow = $this->model->getUserByEmail($email);
-				$msg = $this->model->checkStatus($userRow['status']);
-				$this->_db->update(
-					'users', 
-					array('last_login' => new Zend_Db_Expr('NOW()')),
-					'id = '.$userRow['id']
-				);
-				
-				// Check to see the user is fully logged in
-				$auth = Zend_Auth::getInstance();
-				if ( $msg == '' )
-				{
-					$auth->getStorage()->write($userRow);
-				} else {
-					// Not logged in, clear the identity
-					$auth->clearIdentity();
-					$this->_log->info('User '.sq_brackets( $userRow['name'] ).' tried to login but got ' . sq_brackets( $msg ) );
-                    $this->_flashMessenger->setNamespace( 'error' );
-                    $this->_flashMessenger->addMessage( $msg );
-                    $this->_flashMessenger->resetNamespace();
-				}
+
 				$this->_redirect('/');
 			}
 		}

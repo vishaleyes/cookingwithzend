@@ -9,10 +9,8 @@ class Models_User extends Models_GenericModel
 			->from('users')
 			->joinLeft('acl_roles', 'users.role_id = acl_roles.id', array('role' => 'acl_roles.name'))
 			->where('email = ?', $email);
-		$stmt = $this->db->query($select);
-		$rowSet = $stmt->fetchAll();
-		if ($rowSet)
-			return $rowSet[0];
+		if ( $row = $this->db->fetchRow($select) )
+			return $row;
 		return false;
 	}
 	
@@ -25,12 +23,11 @@ class Models_User extends Models_GenericModel
 	 */
 	public function login( $email, $password )
 	{
-		$db = Zend_Registry::get( 'db' );
 		$config = Zend_Registry::get( 'config' );
 		$auth = Zend_Auth::getInstance();
 
 		// @todo Move this to bootstrap
-		$authAdapter = new Zend_Auth_Adapter_DbTable( $db );
+		$authAdapter = new Zend_Auth_Adapter_DbTable( $this->db );
 		$authAdapter->setTableName( $config->authentication->tableName )
 			->setIdentityColumn( $config->authentication->identityColumn )
 			->setCredentialColumn( $config->authentication->credentialColumn )
@@ -38,7 +35,35 @@ class Models_User extends Models_GenericModel
 			->setIdentity( $email )
 			->setCredential( $password );
 	
-		return $auth->authenticate( $authAdapter );
+		$result = $auth->authenticate( $authAdapter );
+
+		if ( ! $result->isValid() )
+			return join(',', $result->getMessages());
+			
+		$userRow = $this->getUserByEmail($auth->getIdentity());
+		
+		$this->log->info('UserStatus'. $userRow['status'] );
+		$msg = $this->checkStatus($userRow['status']);
+		$this->table->update(
+			array('last_login' => new Zend_Db_Expr('NOW()')),
+			'id = '.$userRow['id']
+		);
+		
+		if ( $msg != '' )
+		{
+			$auth->clearIdentity();
+			$this->log->info('User '.sq_brackets( $userRow['name'] ).' tried to login but got ' . sq_brackets( $msg ) );
+			return $msg;
+			
+		}
+		
+		// @todo get the preferences
+		$up = new Models_UserPreferences();
+		$prefs = $up->getPreferences($userRow['id']);
+		$userRow['preferences'] = $prefs;
+		
+		$auth->getStorage()->write($userRow);
+		return true;
 	}
 	
 	/**
