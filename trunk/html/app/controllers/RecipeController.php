@@ -15,6 +15,10 @@ class RecipeController extends DefaultController
 		$this->view->title = 'Viewing recipes';
 		
 		$recipes = $this->model->getRecipes(null, 'created', 'DESC');
+		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($recipes));
+		$paginator->setItemCountPerPage(2);
+		$paginator->setCurrentPageNumber($this->_getParam('page'));
+		$this->view->paginator = $paginator;
 		$this->view->recipes = $recipes;
 	}
 
