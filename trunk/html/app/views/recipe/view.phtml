@@ -11,7 +11,7 @@
 			<?php endforeach; ?>
 			</ul>
 		</div>
-		<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
+		<?php if ($this->checkOwner($this->recipe['user_id']) ): ?>
 		<div>	
 			<p><a href="<?= $this->url( array( 
 				'controller' => 'ingredient', 
@@ -32,7 +32,7 @@
 	#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1 em; }
 	#sortable li span { position: absolute; margin-left: -1.3em; }
 	</style>
-	<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
+	<?php if ($this->checkOwner($this->recipe['user_id']) ): ?>
 	<script type="text/javascript">
 	$(function() {
 		$("#sortable").sortable({
@@ -55,7 +55,7 @@
 		<ul id="sortable">
 	<?php foreach ($this->methods as $method): ?>
 			<li id="method_<?php echo $method['id'] ?>" class="ui-state-default">
-			<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
+			<?php if ($this->checkOwner($this->recipe['user_id']) ): ?>
 			<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
 			<a href="<?= $this->url( array( 
 				'controller' => 'method', 
@@ -73,7 +73,7 @@
 			</li>
 	<?php endforeach; ?>
 		</ul>
-		<?php if ($this->checkOwner($this->recipe['creator_id']) ): ?>
+		<?php if ($this->checkOwner($this->recipe['user_id']) ): ?>
 		<div>
 			<p><a href="<?= $this->url( array( 
 				'controller' => 'method', 
@@ -109,7 +109,7 @@
 			<?php endif; ?>
 		</div>
 		<?php endforeach; ?>
-		<?php if (! $this->checkOwner($this->recipe['creator_id']) && ! $this->hasRated ): ?>
+		<?php if (! $this->checkOwner($this->recipe['user_id']) && ! $this->hasRated ): ?>
 		<?php echo $this->rating_form ?>
 		<?php endif; ?>
 	</div>

@@ -39,7 +39,7 @@ class CommentController extends DefaultController
 						
 					$counterData = array("comments_count" => new Zend_Db_Expr("(comments_count + 1)"));
 						
-					$this->_db->update("users", $counterData, "id = " . $this->_identity['id']);
+					$this->_db->update("users", $counterData, "id = " . $this->_identity->id);
 					$this->_db->update("recipes", $counterData, "id = " . $recipe_id);
 
 					$this->_flashMessenger->addMessage( 'Comment added' );
@@ -68,7 +68,7 @@ class CommentController extends DefaultController
 						
 			$counterData = array("comments_count" => new Zend_Db_Expr("(comments_count - 1)"));
 						
-			$this->_db->update("users", $counterData, "id = " . $this->_identity['id']);
+			$this->_db->update("users", $counterData, "id = " . $this->_identity->id);
 			$this->_db->update("recipes", $counterData, "id = " . $this->_getParam('recipe_id'));
 
 			$this->_flashMessenger->addMessage( 'Comment deleted' );

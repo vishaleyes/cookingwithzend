@@ -18,7 +18,7 @@ class Recipe_View_Helper_CheckOwner extends Zend_View_Helper_Abstract
 			return false;
 		
 		$identity = $auth->getIdentity();
-		return ( $identity['id'] == $id ? true : false );
+		return ( $identity->id == $id ? true : false );
 	}
 
 }

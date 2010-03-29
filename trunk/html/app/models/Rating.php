@@ -1,7 +1,13 @@
 <?php
 
-class Models_Rating extends Models_GenericModel
+class Models_Rating extends Models_GenericModel implements Zend_Acl_Resource_Interface
 {
+	protected $_ownerUserId = null;
+	
+	public function getResourceId()
+	{
+		return 'rating';
+	}
 
 	public function getRatings($recipe_id, $max = 5)
 	{

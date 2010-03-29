@@ -1,7 +1,45 @@
 <?php
 
-class Models_User extends Models_GenericModel
+class Models_User extends Models_GenericModel implements Zend_Acl_Resource_Interface, Zend_Acl_Role_Interface
 {
+	protected $_ownerUserId = null;
+	
+	public function getResourceId()
+	{
+		return 'user';
+	}
+	
+	protected $_data = array(
+		'id'             => null,
+		'name'           => null,
+		'last_login'     => null,
+		'status'         => null,
+		'comments_count' => 0,
+		'ratings_count'  => 0,
+		'recipes_count'  => 0,
+		'role'           => null,
+		'preferences'    => array()
+	);
+	
+	/**
+	 * Retrieves the roleID, required by the inclusion of implements Zend_Acl_Role_Interface
+	 * 
+	 * @return string
+	 */
+	
+	public function getRoleId()
+	{
+		if ($this->_data['role'] == null)
+			return 'guest';
+		return $this->_data['role'];
+	}
+	
+	/**
+	 * Retieves the user information if you supply an email address
+	 * 
+	 * @param string $email
+	 * @return array|false 
+	 */
 	
 	public function getUserByEmail($email)
 	{
@@ -9,9 +47,11 @@ class Models_User extends Models_GenericModel
 			->from('users')
 			->joinLeft('acl_roles', 'users.role_id = acl_roles.id', array('role' => 'acl_roles.name'))
 			->where('email = ?', $email);
-		if ( $row = $this->db->fetchRow($select) )
-			return $row;
-		return false;
+		if ( !$row = $this->db->fetchRow($select) )
+			return false;
+		$this->_data = array_merge($this->_data, $row);
+		$this->_ownerUserId = $this->_data['id'];
+		return true;
 	}
 	
 	/**
@@ -40,29 +80,27 @@ class Models_User extends Models_GenericModel
 		if ( ! $result->isValid() )
 			return join(',', $result->getMessages());
 			
-		$userRow = $this->getUserByEmail($auth->getIdentity());
-		
-		$this->log->info('UserStatus'. $userRow['status'] );
-		$msg = $this->checkStatus($userRow['status']);
-		$this->table->update(
-			array('last_login' => new Zend_Db_Expr('NOW()')),
-			'id = '.$userRow['id']
-		);
+		$this->getUserByEmail($auth->getIdentity());
+		$msg = $this->checkStatus();
 		
 		if ( $msg != '' )
 		{
 			$auth->clearIdentity();
-			$this->log->info('User '.sq_brackets( $userRow['name'] ).' tried to login but got ' . sq_brackets( $msg ) );
+			$this->log->info('User '.sq_brackets( $this->_data['name'] ).' tried to login but got ' . sq_brackets( $msg ) );
 			return $msg;
 			
 		}
 		
-		// @todo get the preferences
-		$up = new Models_UserPreferences();
-		$prefs = $up->getPreferences($userRow['id']);
-		$userRow['preferences'] = $prefs;
+		$this->table->update(
+			array('last_login' => new Zend_Db_Expr('NOW()')),
+			'id = '.$this->_data['id']
+		);
 		
-		$auth->getStorage()->write($userRow);
+		// @todo get the preferences
+		$up = new Models_UserPreferences($this->_data['id']);
+		$this->_data['preferences'] = $up;
+		
+		$auth->getStorage()->write($this);
 		return true;
 	}
 	
@@ -108,11 +146,11 @@ class Models_User extends Models_GenericModel
 	 * @return string
 	 */
 
-	public function checkStatus($status)
+	public function checkStatus()
 	{
 		$message = '';
 
-		switch ($status)
+		switch ($this->_data['status'])
 		{
 			case 'banned':
 				$message = 'Your account has been banned, you need to get in touch with us to find out why';
@@ -129,13 +167,13 @@ class Models_User extends Models_GenericModel
 
 		return $message;
 	}
-
+	
 	/**
 	 * Generates a password between 6 and 12 characters
 	 * @return string
 	 */
 
-	private function generatePassword()
+	private function _generatePassword()
 	{
 	    $chars = "1234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		$i = 0;
@@ -149,4 +187,28 @@ class Models_User extends Models_GenericModel
 		return $password;
 	}
 	
+	/* MAGIC METHODS */
+	
+	/**
+	 * Magic method sleep, used to store minimal info in the DB
+	 * @return array
+	 */
+	
+	public function __sleep()
+	{
+		return array('_data');
+	}
+	
+	/**
+	 * Return the relevant attribute
+	 * @param string $key
+	 */
+	
+	public function __get($key)
+	{
+		if(array_key_exists($key, $this->_data))
+			return $this->_data[$key];
+
+		return false;
+	}
 }

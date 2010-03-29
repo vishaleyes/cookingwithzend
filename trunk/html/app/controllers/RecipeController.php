@@ -13,10 +13,9 @@ class RecipeController extends DefaultController
 	public function indexAction()
 	{
 		$this->view->title = 'Viewing recipes';
-		
 		$recipes = $this->model->getRecipes(null, 'created', 'DESC');
 		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($recipes));
-		$paginator->setItemCountPerPage(2);
+		$paginator->setItemCountPerPage($this->_prefs->getPreference('RecipesPerPage'));
 		$paginator->setCurrentPageNumber($this->_getParam('page'));
 		$this->view->paginator = $paginator;
 		$this->view->recipes = $recipes;
@@ -48,7 +47,7 @@ class RecipeController extends DefaultController
 					$id = $this->_db->lastInsertId();
 					$this->_db->update("users", array(
 						"recipes_count" => new Zend_Db_Expr("(recipes_count + 1)")
-					), "id = " . $this->_identity['id']);
+					), "id = " . $this->_identity->id);
 					$this->_db->commit();
 					
 					$this->_log->info( 'Added Recipe ' . sq_brackets( $data['name'] ) ); 
@@ -107,7 +106,7 @@ class RecipeController extends DefaultController
 		$recipe = $this->model->getRecipe($this->_id);
 		// If this is being viewed by a guest or not by the creator
 		
-		if ( !$this->_identity || ($this->_identity['id'] != $recipe['creator_id']))
+		if ( !$this->_identity || ($this->_identity->id != $recipe['user_id']))
 		{
 			$this->_db->update("recipes", array(
 				"view_count" => new Zend_Db_Expr("(view_count + 1)")
@@ -126,7 +125,7 @@ class RecipeController extends DefaultController
 			$this->view->rating_form = $rating_form;
 			
 			// Figure out if this user has made a rating or not
-			$this->view->hasRated = $rate->hasRated($this->_id, $this->_identity['id']);
+			$this->view->hasRated = $rate->hasRated($this->_id, $this->_identity->id);
 		}
 		
 		$this->view->recipe  = $recipe;
@@ -154,6 +153,10 @@ class RecipeController extends DefaultController
 		$this->view->user = $user;
 
 		$recipes = $this->model->getRecipes($userID, $this->_getParam('order'), $this->_getParam('direction'));
+		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($recipes));
+		$paginator->setItemCountPerPage($this->_prefs->getPreference('ItemsPerList'));
+		$paginator->setCurrentPageNumber($this->_getParam('page'));
+		$this->view->paginator = $paginator;
 		$this->view->searchCriteria = new Recipe_SearchCriteria(0, $this->_getParam('order'), $this->_getParam('direction'));
 		$this->view->recipes = $recipes;
 	}
@@ -167,7 +170,7 @@ class RecipeController extends DefaultController
 			$recipe->delete();
 			$this->_db->update("users", array(
 				"recipes_count" => new Zend_Db_Expr("(recipes_count - 1)")
-			), "id = " . $this->_identity['id']);
+			), "id = " . $this->_identity->id);
 			$this->_db->commit();
 		} catch(Exception $e) {
 			$this->_db->rollback();

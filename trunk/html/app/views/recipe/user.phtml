@@ -15,7 +15,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	<?php foreach( $this->recipes as $recipe ): ?>
+	<?php foreach( $this->paginator as $recipe ): ?>
 		<tr class="<?php echo $this->cycleCss(); ?>">
 			<td><a href="<?php echo $this->url( array( 
 				'controller' => 'recipe', 
@@ -35,4 +35,4 @@
 	</tbody>
 </table>
 
-
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'includes/pagination.php'); ?>

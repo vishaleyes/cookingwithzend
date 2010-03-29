@@ -4,7 +4,7 @@
 
 	<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $recipe ) ?>
 
-	<?php //echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $recipe['tags'], 'creator' => $recipe['creator_id'] ) ) ?>
+	<?php //echo $this->partial( $this->partialsFolder . '/tags.phtml', array( 'tags' => $recipe['tags'], 'creator' => $recipe['user_id'] ) ) ?>
 
 	<div><?php //echo $this->starRating( $recipe['rating'] ); ?></div>
 </div>
@@ -12,4 +12,4 @@
 </ul>
 <?php endif; ?>
 
-<?= $this->paginationControl($this->paginator, 'Sliding', 'includes/pagination.php'); ?>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'includes/pagination.php'); ?>
