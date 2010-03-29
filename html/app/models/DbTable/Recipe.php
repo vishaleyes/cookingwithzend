@@ -17,7 +17,7 @@ class Models_DbTable_Recipe extends Zend_Db_Table_Abstract
 
 	protected $_referenceMap = array(
 		'User' => array(
-			'columns'       => 'creator_id',
+			'columns'       => 'user_id',
 			'refTableClass' => 'Models_DbTable_User',
 			'refColumns'	=> 'id'
 		)
@@ -34,7 +34,7 @@ class Models_DbTable_Recipe extends Zend_Db_Table_Abstract
 	{
 		$auth = Zend_Auth::getInstance();
 		$identity = $auth->getIdentity();
-		$params['creator_id'] = $identity['id'];
+		$params['user_id'] = $identity->id;
 		$params['created'] = new Zend_Db_Expr('NOW()');
 		$params['updated'] = new Zend_Db_Expr('NOW()');
 		

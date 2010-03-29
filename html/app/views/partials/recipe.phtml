@@ -7,7 +7,7 @@
 		), 'default' ); ?>"><?php echo $this->escape( $this->name ) . ' ' . round_brackets( $this->view_count ) ?>
 		</a>
 		<!-- Edit/Delete links  -->
-		<?php if( $this->checkOwner($this->creator_id) ): ?>
+		<?php if( $this->checkOwner($this->user_id) ): ?>
 		<div>
 			<a href="<?= $this->url( array( 
 				'controller' => 'recipe', 

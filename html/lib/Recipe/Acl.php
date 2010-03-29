@@ -28,7 +28,11 @@ class Recipe_Acl extends Zend_Acl {
 		foreach ($resources as $resource)
 		{
 			$this->add( new Zend_Acl_Resource( $resource['name'] ) );
-			$this->allow( $resource['role_name'], $resource['name'] );
+			// if the privilege is edit or delete we want to add assertion
+			if ( $resource['privilege'] == 'edit' || $resource['privilege'] == 'delete')
+				$this->allow( $resource['role_name'], $resource['name'], $resource['privilege'], new Recipe_Acl_CanAmmendAssertion() );
+			else
+				$this->allow( $resource['role_name'], $resource['name'], $resource['privilege']);
 		}		
 	}
 	

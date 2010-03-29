@@ -26,7 +26,7 @@ class Models_DbTable_Comment extends Zend_Db_Table_Abstract {
 	{
 		$auth = Zend_Auth::getInstance();
 		$identity = $auth->getIdentity();
-		$params['user_id'] = $identity['id'];
+		$params['user_id'] = $identity->id;
 		$params['created'] = new Zend_Db_Expr('NOW()');
 		
 		return parent::insert($params);

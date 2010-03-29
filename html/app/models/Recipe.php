@@ -1,19 +1,49 @@
 <?php
 
-class Models_Recipe extends Models_GenericModel
+class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Interface
 {
+	protected $_ownerUserId = null;
+	
+	/**
+	 * getResourceId returns the resourceID of the model 
+	 * @see Zend_Acl_Resource_Interface 
+	 */
+	
+	public function getResourceId()
+	{
+		return 'recipe';
+	}
+	
+	/**
+	 * @param int $id
+	 */
+	
+	public function __construct($id = null)
+	{
+		parent::__construct();
+		if ($id !== null)
+			$this->getRecipe($id);
+	}
+	
+	/**
+	 * Fetches a single Recipe from the database
+	 * 
+	 * @param unknown_type $recipe_id
+	 * @return unknown
+	 */
 	
 	public function getRecipe($recipe_id)
 	{
 		$select = $this->db->select()
 			->from(array('r' => 'recipes'))
-			->joinLeft(array('u' => 'users'), 'r.creator_id = u.id', array(
+			->joinLeft(array('u' => 'users'), 'r.user_id = u.id', array(
 				'username' => 'u.name'
 			))
 			->where('r.id = ?', $recipe_id);
 		$stmt = $this->db->query($select);
-		$rowSet = $stmt->fetchAll();
-		return $rowSet[0];
+		$row = $stmt->fetchRow();
+		$this->_ownerUserId = $row['user_id'];
+		return $row;
 	}
 	
 	/**
@@ -27,7 +57,7 @@ class Models_Recipe extends Models_GenericModel
 	{
 		$select = $this->db->select()
 			->from(array('r' => 'recipes'))
-			->joinLeft(array('u' => 'users'), 'r.creator_id = u.id', array(
+			->joinLeft(array('u' => 'users'), 'r.user_id = u.id', array(
 				'username' => 'u.name'
 			));
 		

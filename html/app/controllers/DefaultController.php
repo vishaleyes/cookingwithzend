@@ -74,10 +74,16 @@ abstract class DefaultController extends Zend_Controller_Action {
 	protected $_flashMessenger;
 	
 	/**
-	 * Enter description here...
-	 * @var obj 
+	 * The users identity
+	 * @var array 
 	 */
 	protected $_identity;
+	
+	/**
+	 * The users preferences
+	 * @var obj
+	 */
+	protected $_prefs;
 	
 	/**
 	 * The role of the current user
@@ -121,9 +127,12 @@ abstract class DefaultController extends Zend_Controller_Action {
 		$auth = Zend_Auth::getInstance();
 		if ( $auth->hasIdentity() ) {
 			$this->_identity = $auth->getIdentity();
+			$this->_prefs = $this->_identity->preferences;
 			$this->view->identity = $this->_identity;
-			$this->_role = $this->_identity['role'];
+			$this->_role = $this->_identity->role;
 			$this->view->role = $this->_role;
+		} else {
+			$this->_prefs = new Models_UserPreferences();
 		}
 		
 	}

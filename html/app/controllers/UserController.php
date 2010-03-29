@@ -66,7 +66,7 @@ class UserController extends DefaultController
 	{
 		$this->view->title = 'Your account';
 		
-		$row = $this->model->getSingleByField('id', $this->_identity['id']);
+		$row = $this->model->getSingleByField('id', $this->_identity->id);
 				
 		if ( $row )
 		{

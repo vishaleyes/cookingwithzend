@@ -33,7 +33,7 @@ class RatingController extends DefaultController
 			
 			$this->_db->update("users",
 				$ratingsData,
-				"id = " . $this->_identity['id']
+				"id = " . $this->_identity->id
 			);
 			$this->_db->update("recipes",
 				$ratingsData,
@@ -74,7 +74,7 @@ class RatingController extends DefaultController
 			/* Incease ratings counters (maybe this should be done in the table insert? */
 			$this->_db->update("users",
 				$ratingsData,
-				"id = " . $this->_identity['id']
+				"id = " . $this->_identity->id
 			);
 			$this->_db->update("recipes",
 				$ratingsData,
