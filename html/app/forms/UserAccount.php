@@ -34,6 +34,26 @@ class Forms_UserAccount extends Zend_Form
 				new Zend_Validate_StringLength( array(3,255) )
 			)
 		))
+		->addElement('text', 'RecipesPerPage', array(
+			'label'      => 'Recipes Per Page (5-100):',
+			'filters'    => array('StringTrim'),
+			'validators' => array(
+				new Zend_Validate_NotEmpty(),
+				new Zend_Validate_Int(),
+				new Zend_Validate_GreaterThan(5),
+				new Zend_Validate_LessThan(100)
+			)
+		))
+		->addElement('text', 'ItemsPerList', array(
+			'label'      => 'Items Per List (5-100):',
+			'filters'    => array('StringTrim'),
+			'validators' => array(
+				new Zend_Validate_NotEmpty(),
+				new Zend_Validate_Int(),
+				new Zend_Validate_GreaterThan(5),
+				new Zend_Validate_LessThan(100)
+			)
+		))
 		->addElement('submit', 'submit');
 	}
 }

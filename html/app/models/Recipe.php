@@ -2,7 +2,9 @@
 
 class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Interface
 {
-	protected $_ownerUserId = null;
+	var $ownerUserId = null;
+	
+	protected $_data = array();
 	
 	/**
 	 * getResourceId returns the resourceID of the model 
@@ -22,7 +24,7 @@ class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Int
 	{
 		parent::__construct();
 		if ($id !== null)
-			$this->getRecipe($id);
+			$this->getSingleByField('id',$id);
 	}
 	
 	/**
@@ -40,9 +42,8 @@ class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Int
 				'username' => 'u.name'
 			))
 			->where('r.id = ?', $recipe_id);
-		$stmt = $this->db->query($select);
-		$row = $stmt->fetchRow();
-		$this->_ownerUserId = $row['user_id'];
+		$row = $this->db->fetchRow($select);
+	
 		return $row;
 	}
 	

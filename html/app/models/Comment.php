@@ -1,7 +1,34 @@
 <?php
 
-class Models_Comment extends Models_GenericModel
+class Models_Comment extends Models_GenericModel implements Zend_Acl_Resource_Interface
 {
+	
+	var $ownerUserId = null;
+	
+	protected $_data = array();
+	
+	/**
+	 * getResourceId returns the resourceID of the model 
+	 * @see Zend_Acl_Resource_Interface 
+	 */
+	
+	public function getResourceId()
+	{
+		return 'comment';
+	}
+	
+	/**
+	 * @param int $id
+	 */
+	
+	public function __construct($id = null)
+	{
+		parent::__construct();
+		if ($id !== null)
+			$this->getSingleByField('id', $id);
+			
+	}
+	
 	/**
 	 * Return all the comments with a username thrown in
 	 *

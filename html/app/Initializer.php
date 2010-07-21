@@ -194,11 +194,7 @@ class Initializer extends Zend_Controller_Plugin_Abstract
      */
     public function initPlugins()
     {
-    	// ACL
-    	//require_once ('Recipe/Acl.php');
-    	//$acl = new Recipe_Acl();
-
-		$this->_front->registerPlugin(new Recipe_Plugin_Acl());
+		//$this->_front->registerPlugin(new Recipe_Plugin_Acl());
     }
     
     /**

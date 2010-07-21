@@ -37,7 +37,7 @@ class Models_DbTable_User extends Zend_Db_Table_Abstract
 
 	public function getVerificationCode(array $params)
 	{
-		return (MD5(MD5($params['email'] . $param['created']) . MD5(self::SALT)));	
+		return (MD5(MD5($params['email'] . $params['created']) . MD5(self::SALT)));	
 	}
 	
 }

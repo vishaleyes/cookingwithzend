@@ -21,7 +21,7 @@
 				'controller' => 'recipe', 
 				'action' => 'view',
 				'id'     => $recipe['id']
-			), 'default' ); ?>"><?php echo $recipe['name']; ?></a></td>
+			), 'default', true ); ?>"><?php echo $recipe['name']; ?></a></td>
 			<td class="numeric"><?php echo $recipe['cooking_time']; ?></td>
 			<td class="numeric"><?php echo $recipe['preparation_time']; ?></td>
 			<td class="numeric"><?php echo $recipe['serves']; ?></td>

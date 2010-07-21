@@ -63,12 +63,12 @@
 	<?php if ( $this->identity ): ?>
 		<li><h2>You</h2>
 		<ul>
-			<li><a href="/user/account">My Account</a></li>	
+			<li><a href="/user/edit">My Account</a></li>	
 			<li><a href="<?php echo '/recipe/user/user_id/'.strtolower($this->identity->name) ?>">My Recipes</a></li>	
 			<li><a href="<?php echo $this->url( array( 
 			'controller' => 'recipe', 
 			'action' => 'new',
-		), 'default' ); ?>">New Recipe</a></li>
+		), 'default', true ); ?>">New Recipe</a></li>
 		</ul></li>
 	<?php else: ?>
 		<li><h2><a href="/login/">Login</a> / <a href="/user/new">Register</a></h2></li>
