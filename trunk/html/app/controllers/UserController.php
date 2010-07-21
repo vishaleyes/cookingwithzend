@@ -62,10 +62,11 @@ class UserController extends DefaultController
 	 * Display the users acccount to them
 	 */
 
-	public function accountAction()
+	public function editAction()
 	{
 		$this->view->title = 'Your account';
 		
+		$row = array();
 		$row = $this->model->getSingleByField('id', $this->_identity->id);
 				
 		if ( $row )
@@ -74,7 +75,7 @@ class UserController extends DefaultController
 		}
 		
 		$form = $this->model->getForm('UserAccount');
-		$form->populate($row);
+		$form->populate($this->view->user->toArray());
 		$this->view->form = $form;
 	}	
 

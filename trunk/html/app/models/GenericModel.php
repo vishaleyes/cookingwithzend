@@ -72,10 +72,14 @@ abstract class Models_GenericModel
 	public function getSingleByField( $field, $value )
 	{
 		$select = $this->table->select()->where( $field . ' = ?', $value );
-		$row = $this->table->fetchRow( $select );
-		if ( $row )
-			return $row->toArray();
-		return false;
+		if ( !$row = $this->table->fetchRow( $select ))
+			return false;
+	
+		$this->_data = array_merge($this->_data, $row->toArray());
+
+		if (array_key_exists('user_id', $row))
+			$this->ownerUserId = $this->_data['user_id'];
+		return $row;
 	}
 
 	/**
@@ -143,6 +147,31 @@ abstract class Models_GenericModel
 		if ($results)
 			return $results->toArray();
 		return array();
+	}
+	
+	/* MAGIC METHODS */
+	
+	/**
+	 * Magic method sleep, used to store minimal info in the DB
+	 * @return array
+	 */
+	
+	public function __sleep()
+	{
+		return array('_data');
+	}
+	
+	/**
+	 * Return the relevant attribute
+	 * @param string $key
+	 */
+	
+	public function __get($key)
+	{
+		if(array_key_exists($key, $this->_data))
+			return $this->_data[$key];
+
+		return false;
 	}
 }
 

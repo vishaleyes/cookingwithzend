@@ -4,11 +4,6 @@ class Models_User extends Models_GenericModel implements Zend_Acl_Resource_Inter
 {
 	protected $_ownerUserId = null;
 	
-	public function getResourceId()
-	{
-		return 'user';
-	}
-	
 	protected $_data = array(
 		'id'             => null,
 		'name'           => null,
@@ -20,6 +15,11 @@ class Models_User extends Models_GenericModel implements Zend_Acl_Resource_Inter
 		'role'           => null,
 		'preferences'    => array()
 	);
+	
+	public function getResourceId()
+	{
+		return 'user';
+	}
 	
 	/**
 	 * Retrieves the roleID, required by the inclusion of implements Zend_Acl_Role_Interface
@@ -43,13 +43,8 @@ class Models_User extends Models_GenericModel implements Zend_Acl_Resource_Inter
 	
 	public function getUserByEmail($email)
 	{
-		$select = $this->db->select()
-			->from('users')
-			->joinLeft('acl_roles', 'users.role_id = acl_roles.id', array('role' => 'acl_roles.name'))
-			->where('email = ?', $email);
-		if ( !$row = $this->db->fetchRow($select) )
+		if ( !$row = parent::getSingleByField('email', $email) )
 			return false;
-		$this->_data = array_merge($this->_data, $row);
 		$this->_ownerUserId = $this->_data['id'];
 		return true;
 	}
@@ -187,28 +182,5 @@ class Models_User extends Models_GenericModel implements Zend_Acl_Resource_Inter
 		return $password;
 	}
 	
-	/* MAGIC METHODS */
 	
-	/**
-	 * Magic method sleep, used to store minimal info in the DB
-	 * @return array
-	 */
-	
-	public function __sleep()
-	{
-		return array('_data');
-	}
-	
-	/**
-	 * Return the relevant attribute
-	 * @param string $key
-	 */
-	
-	public function __get($key)
-	{
-		if(array_key_exists($key, $this->_data))
-			return $this->_data[$key];
-
-		return false;
-	}
 }
