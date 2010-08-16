@@ -16,36 +16,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `acl_resources`
---
-
-DROP TABLE IF EXISTS `acl_resources`;
-CREATE TABLE IF NOT EXISTS `acl_resources` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `role_id` int(11) unsigned DEFAULT NULL,
-  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  KEY `role_id` (`role_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `acl_roles`
---
-
-DROP TABLE IF EXISTS `acl_roles`;
-CREATE TABLE IF NOT EXISTS `acl_roles` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `inherit_id` int(11) unsigned DEFAULT NULL,
-  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `comments`
 --
 
@@ -140,6 +110,7 @@ CREATE TABLE IF NOT EXISTS `recipes` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `cooking_time` int(11) unsigned DEFAULT NULL,
   `preparation_time` int(11) unsigned DEFAULT NULL,
+  `total_time` int(11) unsigned DEFAULT NULL,
   `serves` int(11) unsigned DEFAULT NULL,
   `difficulty` int(2) unsigned DEFAULT '1',
   `freezable` int(1) unsigned DEFAULT '0',

@@ -62,6 +62,36 @@ table, thead, td {
 	padding: 3px;
 }
 
+h3 {
+	font-weight: bold;
+	margin 0;
+	padding: 0;
+}
+
 thead {
 	font-weight: bold;
+}
+
+#recipe-title {
+	display: inline;
+}
+
+#recipe-title h3 {
+	display: inline;
+}
+
+#recipe-summary ul {
+	margin-left: 0;
+	padding-left: 0;
+	display: inline;
+	border: none;
+	font-size: 12px;
+}
+
+#recipe-summary ul li {
+	margin-left: 0;
+	padding-left: 2px;
+	border: none;
+	list-style: none;
+	display: inline;
 }

@@ -15,15 +15,7 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 	
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
 	{
-		// Start with a blank user
-		$user = new Models_User();
-		// Is the user logged in?
-		$instance = Zend_Auth::getInstance();
-		if ($instance->hasIdentity())
-		{
-			$user = $instance->getIdentity();
-			$this->_log->debug('user is logged in and is a : '.$user->getRoleId());
-		}
+		
 		
 		$logString = $request->getControllerName() . '/' . $request->getActionName();
 		$this->_log->debug('Trying to access : '.$logString);
@@ -35,6 +27,16 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 		
 		$this->_log->debug('Adding Rsource '.$resource->getResourceId());
 		$this->_acl->addResource( $resource->getResourceId() );
+
+		// Start with a blank user
+		$user = new Models_User();
+		// Is the user logged in?
+		$instance = Zend_Auth::getInstance();
+		if ($instance->hasIdentity())
+		{
+			$user = $instance->getIdentity();
+			$this->_log->debug('user is logged in and is a : '.$user->getRoleId());
+		}
 			
 		// Okay so we need to check what they are trying to access
 		// Its going wrong here I think, the allows dont seam to be working?
@@ -42,10 +44,14 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 		{
 			case 'edit':
 			case 'delete':
+				// If you have a blank user here it means the user is not logged in and you do not want them to access this
+				if ($user->__get('id') === null)
+					break;
+
 				$this->_acl->allow( $user, $resource, $request->getActionName(), new Recipe_Acl_CanAmmendAssertion());
 				break;
 			default:
-				return true;
+				return false;
 		}
 		
 		if(!$this->_acl->isAllowed($user, $resource, $request->getActionName())) {
@@ -58,13 +64,17 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 	public function _getResource($request)
 	{
 		$resource = null;
+		$id = $request->getParam('id');
 		switch($request->getControllerName())
 		{
 			case 'recipe':
-				$resource = new Models_Recipe($request->getParam('id'));
+				$resource = new Models_Recipe($id);
+				break;
+			case 'method':
+				$resource = new Models_Method($id);
 				break;
 			case 'rating':
-				$resource = new Models_Rating($request->getParam('id'));
+				$resource = new Models_Rating($id);
 				break;
 		}
 		return $resource;

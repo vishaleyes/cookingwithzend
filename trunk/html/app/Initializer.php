@@ -194,7 +194,7 @@ class Initializer extends Zend_Controller_Plugin_Abstract
      */
     public function initPlugins()
     {
-		//$this->_front->registerPlugin(new Recipe_Plugin_Acl());
+		$this->_front->registerPlugin(new Recipe_Plugin_Acl());
     }
     
     /**

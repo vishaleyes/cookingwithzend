@@ -103,13 +103,14 @@ class RecipeController extends DefaultController
 
 	public function viewAction()
 	{
-		$recipe = $this->model->getRecipe($this->_id);
+		$this->model->getRecipe($this->_id);
 		// If this is being viewed by a guest or not by the creator
 		
 		if ( !$this->_identity || ($this->_identity->id != $recipe['user_id']))
 		{
+			$this->model->incrementField('view_count');
 			$this->_db->update("recipes", array(
-				"view_count" => new Zend_Db_Expr("(view_count + 1)")
+				"view_count" => $this->model->__get('view_count')
 			), "id = " . $this->_id);
 		}
 		
@@ -128,7 +129,7 @@ class RecipeController extends DefaultController
 			$this->view->hasRated = $rate->hasRated($this->_id, $this->_identity->id);
 		}
 		
-		$this->view->recipe  = $recipe;
+		$this->view->recipe = $this->model->toArray();
 		$ingredients = $this->model->getIngredients($this->_id);
 		$this->view->ingredients  = $ingredients;
 		

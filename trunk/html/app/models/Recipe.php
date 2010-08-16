@@ -24,7 +24,7 @@ class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Int
 	{
 		parent::__construct();
 		if ($id !== null)
-			$this->getSingleByField('id',$id);
+			$this->getRecipe($id);
 	}
 	
 	/**
@@ -43,8 +43,7 @@ class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Int
 			))
 			->where('r.id = ?', $recipe_id);
 		$row = $this->db->fetchRow($select);
-	
-		return $row;
+		$this->_dataMerge( $row );
 	}
 	
 	/**
@@ -81,44 +80,27 @@ class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Int
 	/**
 	 * Rebuilds the ingredient from the joining tables
 	 *
+	 * @see Models_Ingredient
 	 * @param int $id
 	 * @return array
 	 */
 	
 	public function getIngredients( $recipe_id )
 	{
-		$select = $this->db->select()
-			->from(array('ri' => 'recipe_ingredients'))
-			->joinLeft(
-				array('i' => 'ingredients'), 
-				'ri.ingredient_id = i.id', 
-				array( 'name' => 'i.name')
-			)
-			->joinLeft(
-				array('m' => 'measurements'),
-				'ri.measurement_id = m.id',
-				array( 'measurement' => 'm.abbreviation')
-			)
-			->where('ri.recipe_id = ?', $recipe_id);
-		return $this->db->fetchAll($select);
+		$i = new Models_Ingredient();
+		return $i->getIngredients($recipe_id);
 	}
 	
 	/**
 	 * Retrieve the methods for a recipe
 	 *
-	 * @param int $id
-	 * @return array
+	 * @see Models_Method
 	 */
 	
 	public function getMethods( $recipe_id )
 	{
-		$select = $this->db->select()
-			->from(array('m' => 'method_items'))
-			->where('m.recipe_id = ?', $recipe_id)
-			->order('position')
-			->order('id');
-			
-		return $this->db->fetchAll($select);
+		$m = new Models_Method();
+		return $m->getMethods($recipe_id);
 	}
 	
 }
