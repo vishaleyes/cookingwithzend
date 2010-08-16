@@ -37,6 +37,7 @@ class Models_DbTable_Recipe extends Zend_Db_Table_Abstract
 		$params['user_id'] = $identity->id;
 		$params['created'] = new Zend_Db_Expr('NOW()');
 		$params['updated'] = new Zend_Db_Expr('NOW()');
+		$params['total_time'] = $params['preparation_time'] + $params['cooking_time'];
 		
 		return parent::insert( $params );
 	}
@@ -44,6 +45,7 @@ class Models_DbTable_Recipe extends Zend_Db_Table_Abstract
 	public function update( array $params, $where )
 	{
 		$params['updated'] = new Zend_Db_Expr('NOW()');
+		$params['total_time'] = $params['preparation_time'] + $params['cooking_time'];
 		return parent::update( $params, $where );
 	}
 	

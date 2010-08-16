@@ -72,14 +72,30 @@ abstract class Models_GenericModel
 	public function getSingleByField( $field, $value )
 	{
 		$select = $this->table->select()->where( $field . ' = ?', $value );
+
 		if ( !$row = $this->table->fetchRow( $select ))
 			return false;
 	
-		$this->_data = array_merge($this->_data, $row->toArray());
+		$this->_dataMerge($row);
 
-		if (array_key_exists('user_id', $row))
-			$this->ownerUserId = $this->_data['user_id'];
 		return $row;
+	}
+
+	/**
+	 * Takes the data from the db row and stores it in the model
+	 *
+	 * @param array|Zend_Db_Table_Row $row
+	 */
+
+	protected function _dataMerge( $row )
+	{
+		if ( $row instanceof Zend_Db_Table_Row )
+			$row = $row->toArray();
+		
+		$this->_data = array_merge($this->_data, $row);
+		
+		if (array_key_exists('user_id', $this->_data))
+			$this->ownerUserId = $this->_data['user_id'];
 	}
 
 	/**
@@ -147,6 +163,26 @@ abstract class Models_GenericModel
 		if ($results)
 			return $results->toArray();
 		return array();
+	}
+
+	/**
+	 * Increments a field (used for db increments)
+	 * @param string $field
+	 */
+
+	public function incrementField( $field )
+	{
+		$this->_data[$field]++;
+	}
+
+	/**
+	 * Returns everything in _data to an array
+	 * @return array
+	 */
+
+	public function toArray()
+	{
+		return $this->_data;
 	}
 	
 	/* MAGIC METHODS */

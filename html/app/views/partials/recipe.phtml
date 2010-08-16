@@ -1,44 +1,42 @@
 <div>
-	<h2>
+	<h3>
 		<a href="<?php echo $this->url( array( 
 			'controller' => 'recipe', 
 			'action' => 'view',
 			'id'     => $this->id
-		), 'default' ); ?>"><?php echo $this->escape( $this->name ) . ' ' . round_brackets( $this->view_count ) ?>
-		</a>
-		<!-- Edit/Delete links  -->
-		<?php if( $this->checkOwner($this->user_id) ): ?>
-		<div>
-			<a href="<?= $this->url( array( 
-				'controller' => 'recipe', 
-				'action' => 'edit',
-				'id'     => $this->id
-			), 'default' ); ?>"><img title="Edit" src="/images/icons/pencil.png" alt="Edit"/></a> &nbsp; 
-			<a href="<?= $this->url( array( 
-				'controller' => 'recipe', 
-				'action' => 'delete',
-				'id'     => $this->id
-			), 'default' ); ?>"><img title="Delete" src="/images/icons/cross.png" alt="Delete"/></a>
-		</div>
-		<?php endif; ?>
-	</h2>
-	<h3>By 
-		<a href="<?php echo $this->url( array(
-			'controller' => 'user',
-			'action' => 'view',
-			'id' => strtolower($this->username)
-		), 'default' ); ?>"><?php echo $this->username ?></a>
+		), 'default' ); ?>"><?php echo $this->escape( $this->name ) ?></a>
+		<?php echo round_brackets( $this->view_count ) ?>
+		<span> -  
+			<a href="<?php echo $this->url( array(
+				'controller' => 'user',
+				'action' => 'view',
+				'id' => strtolower($this->username)
+			), 'default' ); ?>"><?php echo $this->username ?></a>
+		</span>
 	</h3>
+	<!-- Edit/Delete links  -->
+	<?php if( $this->checkOwner($this->user_id) ): ?>
 	<div>
-		<ul id="recipe-summary">
-			<li><?php echo 'Difficulty: ' . $this->difficulty ?></li>
-			<li><?php echo 'Serves: ' . $this->serves ?></li>
-			<li><?php echo 'Cooking Time: ' . $this->cooking_time ?></li>
-			<li><?php echo 'Preparation Time: ' . $this->preparation_time ?></li>
-			<li><?php echo 'No of Ingredients: ' . $this->ingredients_count ?></li>
-			<!-- <li><?php echo 'Ratings count: ' . $this->ratings_count ?></li> -->
-			<li><?php echo 'Comments count: ' . $this->comments_count ?></li>
-			<?php echo ( $this->freezable ? '<li>Freezable</li>' : null ) ?>
+		<a href="<?= $this->url( array( 
+			'controller' => 'recipe', 
+			'action' => 'edit',
+			'id'     => $this->id
+		), 'default' ); ?>"><img title="Edit" src="/images/icons/pencil.png" alt="Edit"/></a> &nbsp; 
+		<a href="<?= $this->url( array( 
+			'controller' => 'recipe', 
+			'action' => 'delete',
+			'id'     => $this->id
+		), 'default' ); ?>"><img title="Delete" src="/images/icons/cross.png" alt="Delete"/></a>
+	</div>
+	<?php endif; ?>
+	<div id="recipe-summary">
+		<ul>
+			<li><?php echo 'Difficulty: ' . $this->difficulty ?> |</li>
+			<li><?php echo 'Serves: ' . $this->serves ?> | </li>
+			<li><img src="/images/icons/clock.png" alt="total time" title="Total Time"/><?php echo minsToWords($this->total_time) ?> |</li>
+			<?php echo ( $this->freezable ? '<li><img src="/images/freezable.gif" alt="freezable" title="Freezable"> |</li>' : null ) ?>
+			<!-- <li><?php echo 'Ratings count: ' . $this->ratings_count ?> |</li> -->
+			<li><?php echo $this->comments_count ?><img src="/images/icons/comments.png" alt="comments"/></li>
 		</ul>
 	</div>
 </div>

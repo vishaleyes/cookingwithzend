@@ -1,8 +1,22 @@
 <?php
 
 /**
+ *
+ */
+
+function minsToWords( $mins )
+{
+	if ( $mins < 60 )
+		return $mins.' mins';
+	$h = floor(($mins / 60));
+	$mins = $mins % 60;
+	return "{$h} h ".($mins > 0 ? "{$mins} mins" : null);
+}
+
+/**
  * Surrounds a variable with the relevant string, this replaces backtick, 
  * double_quote and single_quote functions, defaults to `
+ *
  * @param mixed $var
  * @param string $string
  * @return string
@@ -80,6 +94,7 @@ function extArray($arr)
    $ret.= '</td>';
    return $ret;
 }
+
 function addMonth($date)
 {
 	return date('Y-m-d',strtotime('+1 month',strtotime($date)));
@@ -115,38 +130,6 @@ function money($amount, $noentities = false, $nullreturns = false)
 function datef($date)
 {
 	return date('m D Y',strtotime($date));
-}
-
-/**
- * Converts a php array to a javascript one
- *
- * @param unknown_type $string
- */
-function jsarray($array, $literal = false)
-{
-	if ($literal) return '['.implode(',', $array).']';
-	return '["'.implode('","', $array).'"]';
-}
-
-/**
- * Writes a string out to a file
- *
- * @param string $filename
- * @param string $data
- */
-function writeToFile($filename, $data)
-{
-	if (!$handle = fopen($filename, 'w')) {
-		echo "Cannot open file ($filename)";
-		exit;
-	}
-	
-	if (fwrite($handle, $data) === FALSE) 
-	{
-		echo "Cannot write to file ($filename)";
-		exit;
-	}
-	fclose($handle);
 }
 
 /**
@@ -207,29 +190,6 @@ function urlLink($url, $querystring = null)
 		$url = $scheme.$_SERVER['HTTP_HOST'] .'/'. $mainscript.'?page='.$ret;
 	}
 	return $url;
-}
-
-
-/**
- * gets and sets a session variable from request object
- *
- * @param string $sessionvariable
- * @param string $defaultvalue
- */
-function getAndSet($sessionvariable, $defaultvalue = null)
-{
-	if (is_string(@$_GET[$sessionvariable]))
-	{
-		$_SESSION[$sessionvariable] = $_GET[$sessionvariable];
-	}
-	if (is_string(@$_POST[$sessionvariable])) 
-	{
-		$_SESSION[$sessionvariable] = $_POST[$sessionvariable];
-	}
-	if (!(@$_SESSION[$sessionvariable])) 
-	{
-		$_SESSION[$sessionvariable] = $defaultvalue;
-	}
 }
 
 /**
@@ -293,55 +253,4 @@ function unCamelCase($string)
 	return implode(" ", $arr);
 }
 
-/**
- * Removes files and directories matching a wildcard
- *
- * @param string $fileglob
- * @return boolean success/failure
- */
-function rm($fileglob)
-{
-   if (is_string($fileglob)) {
-       if (is_file($fileglob)) {
-			return unlink($fileglob);
-       } else if (is_dir($fileglob)) {
-           $ok = rm("$fileglob/*");
-           if (! $ok) {
-               return false;
-           }
-           return rmdir($fileglob);
-       } else {
-           $matching = glob($fileglob);
-           if ($matching === false) {
-               trigger_error(sprintf('No files match supplied glob %s', $fileglob), E_USER_WARNING);
-               return false;
-           }    
-           $rcs = array_map('rm', $matching);
-           if (in_array(false, $rcs)) {
-               return false;
-           }
-       }     
-   } else if (is_array($fileglob)) {
-       $rcs = array_map('rm', $fileglob);
-       if (in_array(false, $rcs)) {
-           return false;
-       }
-   } else {
-       trigger_error('Param #1 must be filename or glob pattern, or array of filenames or glob patterns', E_USER_ERROR);
-       return false;
-   }
 
-   return true;
-}
-
-
-function op_obj($obj, $flag = false){
-
-	echo "<pre>";
-	print_r($obj);
-	echo "</pre>";
-	echo "<br />";
-	if($flag){
-    exit;
-	}	
-}
