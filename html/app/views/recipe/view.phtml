@@ -2,7 +2,7 @@
 	<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $this->recipe ) ?>
  
 	<!-- Ingredients -->
-	<div>
+	<div id="ingredients-summary">
 		<div>
 			<h3>Ingredients</h3>
 			<ul>
@@ -27,15 +27,10 @@
 	<!-- Methods -->
 	<a name="methods"></a>
 	
-	<style type="text/css">
-	#sortable { list-style-type: none; margin: 0; padding: 0; width: 95%; }
-	#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1 em; }
-	#sortable li span { position: absolute; margin-left: -1.3em; }
-	</style>
 	<?php if ($this->checkOwner($this->recipe['user_id']) ): ?>
 	<script type="text/javascript">
 	$(function() {
-		$("#sortable").sortable({
+		$(".sortable").sortable({
 			update: function(event, ui) {
 				var order = $("#sortable").sortable("serialize");
 				alert(order);
@@ -44,7 +39,7 @@
 				});
 			}
 		});
-		$("#sortable").disableSelection();
+		$(".sortable").disableSelection();
 	});
 	</script>
 	<?php endif; ?>
@@ -52,7 +47,7 @@
 	<div>
 		<h3>Method</h3>
 	
-		<ul id="sortable">
+		<ul class="sortable">
 	<?php foreach ($this->methods as $method): ?>
 			<li id="method_<?php echo $method['id'] ?>" class="ui-state-default">
 			<?php if ($this->checkOwner($this->recipe['user_id']) ): ?>

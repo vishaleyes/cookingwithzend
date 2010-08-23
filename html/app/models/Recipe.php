@@ -23,8 +23,9 @@ class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Int
 	public function __construct($id = null)
 	{
 		parent::__construct();
-		if ($id !== null)
+		if ($id !== null){
 			$this->getRecipe($id);
+		}
 	}
 	
 	/**
@@ -36,24 +37,38 @@ class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Int
 	
 	public function getRecipe($recipe_id)
 	{
-		$select = $this->db->select()
-			->from(array('r' => 'recipes'))
-			->joinLeft(array('u' => 'users'), 'r.user_id = u.id', array(
-				'username' => 'u.name'
-			))
-			->where('r.id = ?', $recipe_id);
+		$select = $this->getRecipesSelect();
+		$select->where('r.id = ?', $recipe_id);
 		$row = $this->db->fetchRow($select);
 		$this->_dataMerge( $row );
 	}
 	
 	/**
-	 * Return all the recipies with a username thrown in
+	 * Return all the recipies
 	 *
 	 * @param string $userID
-	 * @param string $order
+	 * @param string $order Name of the column you want to order by
+	 * @param string $direction ASC|DESC
 	 * @return array
 	 */
 	public function getRecipes($userID = null, $order = null, $direction = 'ASC')
+	{
+		$select = $this->getRecipesSelect($userID, $order, $direction);
+			
+		$stmt = $this->db->query($select);
+		$rowSet = $stmt->fetchAll();
+		return $rowSet;
+	}
+	
+	/**
+	 * Return a select query for all the recipies with a username thrown in
+	 *
+	 * @param string $userID
+	 * @param string $order Name of the column you want to order by
+	 * @param string $direction ASC|DESC
+	 * @return Zend_Db_Select
+	 */
+	public function getRecipesSelect($userID = null, $order = null, $direction = 'ASC')
 	{
 		$select = $this->db->select()
 			->from(array('r' => 'recipes'))
@@ -72,9 +87,7 @@ class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Int
 		else
 			$select->order("r.name");
 			
-		$stmt = $this->db->query($select);
-		$rowSet = $stmt->fetchAll();
-		return $rowSet;
+		return $select;
 	}
 	
 	/**

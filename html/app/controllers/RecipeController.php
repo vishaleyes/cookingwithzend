@@ -13,12 +13,12 @@ class RecipeController extends DefaultController
 	public function indexAction()
 	{
 		$this->view->title = 'Viewing recipes';
-		$recipes = $this->model->getRecipes(null, 'created', 'DESC');
-		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($recipes));
+		$select = $this->model->getRecipesSelect(null, 'created', 'DESC');
+
+		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
 		$paginator->setItemCountPerPage($this->_prefs->getPreference('RecipesPerPage'));
 		$paginator->setCurrentPageNumber($this->_getParam('page'));
 		$this->view->paginator = $paginator;
-		$this->view->recipes = $recipes;
 	}
 
 	/**
@@ -40,6 +40,7 @@ class RecipeController extends DefaultController
 
 				// Unset the buttons
 				unset( $data['submit'] );
+				print "I got here..";
 				
 				$this->_db->beginTransaction();
 				try{
@@ -104,9 +105,9 @@ class RecipeController extends DefaultController
 	public function viewAction()
 	{
 		$this->model->getRecipe($this->_id);
-		// If this is being viewed by a guest or not by the creator
 		
-		if ( !$this->_identity || ($this->_identity->id != $recipe['user_id']))
+		// If this is being viewed by a guest or not by the creator
+		if ( !$this->_acl->isAllowed($this->_identity, $this->model, 'edit') )
 		{
 			$this->model->incrementField('view_count');
 			$this->_db->update("recipes", array(
@@ -153,13 +154,14 @@ class RecipeController extends DefaultController
 		$user = $u->getSingleByField('name', $userID);
 		$this->view->user = $user;
 
-		$recipes = $this->model->getRecipes($userID, $this->_getParam('order'), $this->_getParam('direction'));
-		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($recipes));
+		$select = $this->model->getRecipesSelect($userID, $this->_getParam('order'), $this->_getParam('direction'));
+
+		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
 		$paginator->setItemCountPerPage($this->_prefs->getPreference('ItemsPerList'));
 		$paginator->setCurrentPageNumber($this->_getParam('page'));
+
 		$this->view->paginator = $paginator;
 		$this->view->searchCriteria = new Recipe_SearchCriteria(0, $this->_getParam('order'), $this->_getParam('direction'));
-		$this->view->recipes = $recipes;
 	}
 	
 	public function deleteAction()
@@ -188,18 +190,5 @@ class RecipeController extends DefaultController
 		$this->_helper->viewRenderer->setScriptAction('index');
 	}
 
-	private function _getSingleRecipe($redirect = '/recipe/index')
-	{
-		// Fetch the recipe being requested
-		if ( ! $recipe = $this->model->fetchSingleByPrimary($this->_id) )
-		{
-			$this->_flashMessenger->setNamespace( 'error' );
-			$this->_flashMessenger->addMessage( 'Unable to find recipe with id ' . $id );
-			$this->_flashMessenger->resetNamespace();
-			$this->_redirect( '/recipe/index' );
-			return false;
-		}
-		return $recipe;
-	}
 }
 

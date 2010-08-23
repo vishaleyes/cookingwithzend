@@ -1,19 +1,21 @@
-<div>
-	<h3>
-		<a href="<?php echo $this->url( array( 
-			'controller' => 'recipe', 
-			'action' => 'view',
-			'id'     => $this->id
-		), 'default' ); ?>"><?php echo $this->escape( $this->name ) ?></a>
-		<?php echo round_brackets( $this->view_count ) ?>
-		<span> -  
-			<a href="<?php echo $this->url( array(
-				'controller' => 'user',
+<div id="recipe-details">
+	<div class="recipe-title">
+		<h3>
+			<a href="<?php echo $this->url( array( 
+				'controller' => 'recipe', 
 				'action' => 'view',
-				'id' => strtolower($this->username)
-			), 'default' ); ?>"><?php echo $this->username ?></a>
-		</span>
-	</h3>
+				'id'     => $this->id
+			), 'default' ); ?>"><?php echo $this->escape( $this->name ) ?></a>
+			<?php echo round_brackets( $this->view_count ) ?>
+			<span> -  
+				<a href="<?php echo $this->url( array(
+					'controller' => 'user',
+					'action' => 'view',
+					'id' => strtolower($this->username)
+				), 'default' ); ?>"><?php echo $this->username ?></a>
+			</span>
+		</h3>
+	</div>
 	<!-- Edit/Delete links  -->
 	<?php if( $this->checkOwner($this->user_id) ): ?>
 	<div>
@@ -29,7 +31,7 @@
 		), 'default' ); ?>"><img title="Delete" src="/images/icons/cross.png" alt="Delete"/></a>
 	</div>
 	<?php endif; ?>
-	<div id="recipe-summary">
+	<div class="recipe-summary">
 		<ul>
 			<li><?php echo 'Difficulty: ' . $this->difficulty ?> |</li>
 			<li><?php echo 'Serves: ' . $this->serves ?> | </li>

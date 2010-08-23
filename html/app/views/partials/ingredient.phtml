@@ -1,5 +1,5 @@
 	
-		<li id="<?php echo "ingredient-" . $this->recipe_id . "-" . $this->ingredient_id ?>">
+		<li id="<?php echo "ingredient-" . $this->recipe_id . "-" . $this->ingredient_id ?>" class="ingredient-item">
 			<ul>
 				<?php $creator_id = $this->getHelper('Partial')->view->recipe['user_id']; ?>
 				<?php if( $this->checkOwner($creator_id) ): ?>
@@ -16,7 +16,7 @@
 						'recipe_id'     => $this->recipe_id,
 						'ingredient_id' => $this->ingredient_id
 					), 'default', true ); ?>"><img title="Delete" src="/images/icons/cross.png" alt="Delete"/></a>
-			</li>
+				</li>
 				<?php endif ?>
 				<?php if ( $this->quantity > 0 ): ?>
 				<li class="ingredients"><?php echo $this->quantity ?></li>
