@@ -105,6 +105,7 @@ abstract class DefaultController extends Zend_Controller_Action {
 	{
 		$this->_log = Zend_Registry::get('log');
 		$this->_db = Zend_Registry::get('db');
+		$this->_acl = Zend_Registry::get('acl');
 
 		// Get the session for all controllers
 		$this->_session = Zend_Registry::get('session');

@@ -6,6 +6,8 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 	public function __construct()
 	{
 		$this->_acl = new Zend_Acl();
+		Zend_Registry::set('acl', $this->_acl );
+		
 		$this->_acl->addRole(new Zend_Acl_Role('guest'));
 		$this->_acl->addRole(new Zend_Acl_Role('member'), 'guest');
 		$this->_acl->addRole(new Zend_Acl_Role('admin'), 'member');
@@ -15,8 +17,6 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 	
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
 	{
-		
-		
 		$logString = $request->getControllerName() . '/' . $request->getActionName();
 		$this->_log->debug('Trying to access : '.$logString);
 		
@@ -42,6 +42,10 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 		// Its going wrong here I think, the allows dont seam to be working?
 		switch($request->getActionName())
 		{
+			case 'new':
+				// If you have a blank user here it means the user is not logged in and you do not want them to access this
+				if ($user->__get('id') === null)
+					break;
 			case 'edit':
 			case 'delete':
 				// If you have a blank user here it means the user is not logged in and you do not want them to access this
@@ -51,6 +55,7 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 				$this->_acl->allow( $user, $resource, $request->getActionName(), new Recipe_Acl_CanAmmendAssertion());
 				break;
 			default:
+				$this->_log->debug('Returning false from ACL');
 				return false;
 		}
 		
@@ -64,7 +69,11 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 	public function _getResource($request)
 	{
 		$resource = null;
-		$id = $request->getParam('id');
+		/** 
+		 * The id in the param can be unsert if we are using a new action so we must
+		 * so we must default the id to be null
+		 */
+		$id = ($request->getParam('id') ? $request->getParam('id') : null);
 		switch($request->getControllerName())
 		{
 			case 'recipe':

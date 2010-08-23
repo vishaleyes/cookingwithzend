@@ -11,7 +11,7 @@ class Forms_Comment extends Zend_Form
 		
 		$this->setAction('/comment/new');
 		$this->addElement('textarea', 'comment', array(
-			'class'      => 'richedit',
+			'id'      => 'wysiwyg',
 			'label'      => 'Comment:',
 			'filters'    => array('StringTrim', $stripTags),
 			'validators' => array(

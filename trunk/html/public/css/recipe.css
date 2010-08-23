@@ -1,47 +1,19 @@
-* {
-	font-family: Helvetica, Arial;
-	color: black;
-}
+* { font-family: Helvetica, Arial; color: black; }
 
-img {
-	border: none;
-}
+img { border: none; }
 
-.hide {
-	display: none;
-}
+.hide { display: none; }
 
-.error {
-	background: red;
-	color: white;
-	font-weight: bold;
-	padding: 0 5px 0 5px;
-}
+/* User message display */
+.error { background: red; color: white; font-weight: bold; padding: 0 5px 0 5px; }
+.notice { background: #c2c2c2; padding: 0 5px 0 5px; }
 
-.notice {
-	background: #c2c2c2;
-	padding: 0 5px 0 5px;
-}
-
-.numeric {
-	text-align: right;
-}
-
-.center {
-	text-align: center;
-}
-
-.odd {
-	background-color: #dad4d3;
-}
-
-.even {
-	background-color: #a0a0a0;
-}
-
-li.ingredients {
-	display: inline;
-}
+/* Generic classes */
+.numeric { text-align: right; }
+.center { text-align: center; }
+.odd { background-color: #dad4d3; }
+.even { background-color: #a0a0a0; }
+/* END Generic classes */
 
 pre.comments {
 	margin: 10px;
@@ -72,15 +44,30 @@ thead {
 	font-weight: bold;
 }
 
-#recipe-title {
+.ingredient-item {
+	margin: 0;
+	padding: 0;
+}
+
+.ingredient-item ul {
+	margin: 0;
+	padding: 0;
+}
+
+.ingredient-item ul li {
+	margin: 0;
+	padding: 0;
 	display: inline;
+}
+
+#recipe-title {
 }
 
 #recipe-title h3 {
 	display: inline;
 }
 
-#recipe-summary ul {
+.recipe-summary ul {
 	margin-left: 0;
 	padding-left: 0;
 	display: inline;
@@ -88,10 +75,19 @@ thead {
 	font-size: 12px;
 }
 
-#recipe-summary ul li {
+.recipe-summary ul li {
 	margin-left: 0;
 	padding-left: 2px;
 	border: none;
 	list-style: none;
 	display: inline;
 }
+
+/* Form CSS */
+.zend_form {
+}
+
+/* Sortable */
+.sortable { list-style-type: none; margin: 0; padding: 0; width: 95%; }
+.sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1 em; }
+.sortable li span { position: absolute; margin-left: -1.3em; }
