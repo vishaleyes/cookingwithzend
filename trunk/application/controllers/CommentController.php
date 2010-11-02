@@ -6,7 +6,7 @@
  * @author punky
  */
 
-class CommentController extends DefaultController 
+class CommentController extends Recipe_Model_Controller 
 {
 	
 	public function init()

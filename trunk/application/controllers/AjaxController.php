@@ -32,7 +32,7 @@ class AjaxController extends Zend_Controller_Action
 
 	public function getIngredientsAction()
 	{	
-		$i = new Models_Ingredient();
+		$i = new Recipe_Model_Ingredient();
 		$select = $i->table->select()
 			->where( 'LOWER(name) LIKE ?', '%'.strtolower($this->_text).'%' )
 			->limit(5);
@@ -50,7 +50,7 @@ class AjaxController extends Zend_Controller_Action
 	{
 		$text = $this->_getParam('q');
 		
-		$m = new Models_Measurement();
+		$m = new Recipe_Model_Measurement();
 		$select = $m->table->select()
 			->where( 'LOWER(name) LIKE ?', '%'.strtolower($this->_text).'%' )
 			->orWhere( 'LOWER(abbreviation) LIKE ?', '%'.strtolower($this->_text).'%' )
@@ -67,7 +67,7 @@ class AjaxController extends Zend_Controller_Action
 
 	public function userLookupAction()
 	{
-		$u = new Models_User();
+		$u = new Recipe_Model_User();
 		$select = $u->table->select()
 			->where( 'name = ?', $this->_text );
 		

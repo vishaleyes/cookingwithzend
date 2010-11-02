@@ -6,13 +6,14 @@
  * @author punky
  */
 
-class RatingController extends DefaultController 
+class RatingController extends Recipe_Model_Controller 
 {
 	
 	public function init()
 	{
 		parent::init();
-		$this->model = $this->getModel();
+		$this->_model = $this->getModel();
+		$this->_form = $this->getForm();
 	}
 
 	// @todo this action should be limited to the person who owns the rating

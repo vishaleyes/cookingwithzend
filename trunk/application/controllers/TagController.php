@@ -1,11 +1,11 @@
 <?php
 
-class TagController extends DefaultController  
+class TagController extends Recipe_Model_Controller  
 {
 
 	public function preDispatch()
 	{
-		// Held in DefaultController
+		// Held in Recipe_Model_Controller
 		$this->loggedIn( array( 'index', 'tags' ) );
 		$this->pendingAccount( array( 'index' ) );
 	}

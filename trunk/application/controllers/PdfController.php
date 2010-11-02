@@ -1,6 +1,6 @@
 <?php
 
-class PdfController extends DefaultController  
+class PdfController extends Recipe_Model_Controller  
 {
 	public function generateAction()
 	{
