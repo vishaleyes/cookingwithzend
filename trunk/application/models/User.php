@@ -58,15 +58,14 @@ class Recipe_Model_User extends Recipe_Model_GenericModel implements Zend_Acl_Re
 	 */
 	public function login( $email, $password )
 	{
-		$config = Zend_Registry::get( 'config' );
 		$auth = Zend_Auth::getInstance();
 
 		// @todo Move this to bootstrap
 		$authAdapter = new Zend_Auth_Adapter_DbTable( $this->db );
-		$authAdapter->setTableName( $config->authentication->tableName )
-			->setIdentityColumn( $config->authentication->identityColumn )
-			->setCredentialColumn( $config->authentication->credentialColumn )
-			->setCredentialTreatment( $config->authentication->credentialTreatment )
+		$authAdapter->setTableName( 'users' )
+			->setIdentityColumn( 'email' )
+			->setCredentialColumn( 'password' )
+			->setCredentialTreatment( 'MD5(?)' )
 			->setIdentity( $email )
 			->setCredential( $password );
 	

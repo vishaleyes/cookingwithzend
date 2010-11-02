@@ -5,7 +5,7 @@ class UserController extends Recipe_Model_Controller
 	public function init()
 	{
 		parent::init();
-		$this->model = $this->getModel();
+		$this->_model = $this->getModel();
 	}
 
 	public function viewAction()
@@ -14,7 +14,7 @@ class UserController extends Recipe_Model_Controller
 			$this->_redirect( '/recipe/index' );
 			
 		$userID = $this->_getParam('id');
-		$user = $this->model->getSingleByField('name', $userID);
+		$user = $this->_model->getSingleByField('name', $userID);
 		$this->view->title = 'Viewing user '.$user['name'];
 		$this->view->user = $user;
 		
@@ -25,7 +25,7 @@ class UserController extends Recipe_Model_Controller
 	public function newAction()
 	{
 		$this->view->title = 'Create an account';
-		$form = $this->model->getForm('UserNew');
+		$form = $this->_model->getForm('UserNew');
 		$this->view->form = $form;
 
 		if ($this->getRequest()->isPost()) {
@@ -41,10 +41,10 @@ class UserController extends Recipe_Model_Controller
 				);
 		
 				try {
-					$this->model->table->insert( $params );
+					$this->_model->table->insert( $params );
 					$this->_flashMessenger->addMessage( 'Please check your email for a confirmation link' );
 					$this->_log->debug( 'Inserted user ' . $values['email'] );
-					$this->model->sendConfirmationEmail($values['email'], $values['name']);
+					$this->_model->sendConfirmationEmail($values['email'], $values['name']);
 					$this->_redirect( '/' );
 				} catch(Exception $e) {
 					$this->_flashMessenger->setNamespace( 'error' );
@@ -67,14 +67,14 @@ class UserController extends Recipe_Model_Controller
 		$this->view->title = 'Your account';
 		
 		$row = array();
-		$row = $this->model->getSingleByField('id', $this->_identity->id);
+		$row = $this->_model->getSingleByField('id', $this->_identity->id);
 				
 		if ( $row )
 		{
 			$this->view->user = $row;
 		}
 		
-		$form = $this->model->getForm('UserAccount');
+		$form = $this->_model->getForm('UserAccount');
 		$form->populate($this->view->user->toArray());
 		$this->view->form = $form;
 	}	
