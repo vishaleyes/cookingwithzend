@@ -3,7 +3,7 @@
 /**
 * 
 */
-class Models_DbTable_UserPreferences extends Zend_Db_Table_Abstract
+class Recipe_Model_DbTable_UserPreferences extends Zend_Db_Table_Abstract
 {
 	protected $_name = "user_preferences";
 	protected $_primary = "id";
@@ -14,7 +14,7 @@ class Models_DbTable_UserPreferences extends Zend_Db_Table_Abstract
 	protected $_referenceMap = array(
 		'User' => array(
 			'columns'       => 'user_id',
-			'refTableClass' => 'Models_DbTable_User',
+			'refTableClass' => 'Recipe_Model_DbTable_User',
 			'refColumns'	=> 'id'
 		)
 	);

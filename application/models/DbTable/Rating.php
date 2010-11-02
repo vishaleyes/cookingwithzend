@@ -3,7 +3,7 @@
 /**
 * 
 */
-class Models_DbTable_Rating extends Zend_Db_Table_Abstract
+class Recipe_Model_DbTable_Rating extends Zend_Db_Table_Abstract
 {
 	protected $_name = "ratings";
 	protected $_primary = array( "recipe_id", "user_id" );
@@ -14,12 +14,12 @@ class Models_DbTable_Rating extends Zend_Db_Table_Abstract
 	protected $_referenceMap = array(
 		'User' => array(
 			'columns'		=> 'user_id',
-			'refTableClass' => 'Models_DbTable_User',
+			'refTableClass' => 'Recipe_Model_DbTable_User',
 			'refColumns'	=> 'id'
 		),
 		'Recipe' => array(
 			'columns'       => 'recipe_id',
-			'refTableClass' => 'Models_DbTable_Recipe',
+			'refTableClass' => 'Recipe_Model_DbTable_Recipe',
 			'refColumns'    => 'id'
 		)
 	);

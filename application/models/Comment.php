@@ -1,6 +1,6 @@
 <?php
 
-class Models_Comment extends Models_GenericModel implements Zend_Acl_Resource_Interface
+class Recipe_Model_Comment extends Recipe_Model_GenericModel implements Zend_Acl_Resource_Interface
 {
 	
 	var $ownerUserId = null;

@@ -3,7 +3,7 @@
 /**
 * 
 */
-class Models_DbTable_Ingredient extends Zend_Db_Table_Abstract
+class Recipe_Model_DbTable_Ingredient extends Zend_Db_Table_Abstract
 {
 	protected $_name = "ingredients";
 	protected $_primary = "id";	   

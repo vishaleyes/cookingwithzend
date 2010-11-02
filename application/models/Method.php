@@ -1,6 +1,6 @@
 <?php
 
-class Models_Method extends Models_GenericModel implements Zend_Acl_Resource_Interface 
+class Recipe_Model_Method extends Recipe_Model_GenericModel implements Zend_Acl_Resource_Interface 
 {
 	protected $_ownerUserId = null;
 

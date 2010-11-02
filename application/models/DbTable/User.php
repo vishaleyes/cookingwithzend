@@ -3,7 +3,7 @@
 /**
 * 
 */
-class Models_DbTable_User extends Zend_Db_Table_Abstract
+class Recipe_Model_DbTable_User extends Zend_Db_Table_Abstract
 {
 	protected $_name = "users";
 	protected $_primary = "id";
@@ -14,8 +14,8 @@ class Models_DbTable_User extends Zend_Db_Table_Abstract
 	protected $_sequence = true;
 
 	protected $_dependentTables = array(
-		'Models_DbTable_Recipe',
-		'Models_DbTable_Comment'
+		'Recipe_Model_DbTable_Recipe',
+		'Recipe_Model_DbTable_Comment'
 	);
 	
 	public function insert( array $params )

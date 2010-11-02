@@ -1,6 +1,6 @@
 <?php
 
-class Models_User extends Models_GenericModel implements Zend_Acl_Resource_Interface, Zend_Acl_Role_Interface
+class Recipe_Model_User extends Recipe_Model_GenericModel implements Zend_Acl_Resource_Interface, Zend_Acl_Role_Interface
 {
 	protected $_ownerUserId = null;
 	
@@ -92,7 +92,7 @@ class Models_User extends Models_GenericModel implements Zend_Acl_Resource_Inter
 		);
 		
 		// @todo get the preferences
-		$up = new Models_UserPreferences($this->_data['id']);
+		$up = new Recipe_Model_UserPreferences($this->_data['id']);
 		$this->_data['preferences'] = $up;
 		
 		$auth->getStorage()->write($this);
