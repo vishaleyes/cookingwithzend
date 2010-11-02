@@ -93,6 +93,7 @@
 <body>
 
 	<!-- Messages to users -->
+	<?php if ($this->message): ?>
 	<div>
 		<div id="notice" class="notice">
 		<?php foreach( $this->message->getMessages() as $msg ): ?>
@@ -107,9 +108,10 @@
 		<?php endforeach ?>
 		</div>
 	</div>
+	<?php endif; ?>
 	<!-- end Messages to users -->
 	
-	<?php echo $this->render( $this->includesFolder . '/user_details.php') ?>
+	<?php // echo $this->render( 'user_details.php') ?>
 	
 	<!-- Navigation -->
 	<div id="menu">
