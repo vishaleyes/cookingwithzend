@@ -1,6 +1,6 @@
 <?php
 
-class Forms_Login extends Zend_Form
+class Recipe_Form_Login extends Zend_Form
 {
 
 	public function init()

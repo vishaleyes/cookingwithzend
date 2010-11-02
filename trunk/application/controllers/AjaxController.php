@@ -110,7 +110,7 @@ class AjaxController extends Zend_Controller_Action
 			'style'          => 'digg_with_jquery'
 		);
 
-		echo $this->view->partial( $this->partialsFolder . '/comments.phtml', array( 'comments' => $rowset, 'pagination_config' => $this->view->pagination_config ) );
+		echo $this->view->partial( 'partials/comments.phtml', array( 'comments' => $rowset, 'pagination_config' => $this->view->pagination_config ) );
 		
 	}
 	

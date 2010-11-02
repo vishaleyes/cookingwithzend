@@ -18,24 +18,21 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
 	{
 		$logString = $request->getControllerName() . '/' . $request->getActionName();
-		$this->_log->debug('Trying to access : '.$logString);
 		
 		$resource = $this->_getResource($request);
 		// If the resource returned is not a resource then we do not need to check anything
 		if( !($resource instanceof Zend_Acl_Resource_Interface))
 			return true;
 		
-		$this->_log->debug('Adding Rsource '.$resource->getResourceId());
 		$this->_acl->addResource( $resource->getResourceId() );
 
 		// Start with a blank user
-		$user = new Models_User();
+		$user = new Recipe_Model_User();
 		// Is the user logged in?
 		$instance = Zend_Auth::getInstance();
 		if ($instance->hasIdentity())
 		{
 			$user = $instance->getIdentity();
-			$this->_log->debug('user is logged in and is a : '.$user->getRoleId());
 		}
 			
 		// Okay so we need to check what they are trying to access
@@ -55,7 +52,6 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 				$this->_acl->allow( $user, $resource, $request->getActionName(), new Recipe_Acl_CanAmmendAssertion());
 				break;
 			default:
-				$this->_log->debug('Returning false from ACL');
 				return false;
 		}
 		
@@ -77,13 +73,13 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 		switch($request->getControllerName())
 		{
 			case 'recipe':
-				$resource = new Models_Recipe($id);
+				$resource = new Recipe_Model_Recipe($id);
 				break;
 			case 'method':
-				$resource = new Models_Method($id);
+				$resource = new Recipe_Model_Method($id);
 				break;
 			case 'rating':
-				$resource = new Models_Rating($id);
+				$resource = new Recipe_Model_Rating($id);
 				break;
 		}
 		return $resource;

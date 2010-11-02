@@ -1,5 +1,5 @@
 <div>
-	<?php echo $this->partial( $this->partialsFolder . '/recipe.phtml', $this->recipe ) ?>
+	<?php echo $this->partial( 'partials/recipe.phtml', $this->recipe ) ?>
  
 	<!-- Ingredients -->
 	<div id="ingredients-summary">
@@ -7,7 +7,7 @@
 			<h3>Ingredients</h3>
 			<ul>
 			<?php foreach ($this->ingredients as $ingredient ): ?>
-			<?php echo $this->partial( $this->partialsFolder . '/ingredient.phtml', $ingredient ); ?>
+			<?php echo $this->partial( 'partials/ingredient.phtml', $ingredient ); ?>
 			<?php endforeach; ?>
 			</ul>
 		</div>
