@@ -1,6 +1,6 @@
 <?php
 
-class Forms_Rating extends Zend_Form
+class Recipe_Form_Rating extends Zend_Form
 {
 
 	public function init()

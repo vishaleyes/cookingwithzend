@@ -1,6 +1,6 @@
 <?php
 
-class Forms_Comment extends Zend_Form
+class Recipe_Form_Comment extends Zend_Form
 {
 
 	public function init()

@@ -20,11 +20,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		//$view->navigation($container);
 	}
 	
-	protected function _initAcl()
+	protected function _initSession()
 	{
-		$frontController = Zend_Controller_Front::getInstance();
+		$session = new Zend_Session_Namespace();
+		Zend_Registry::set( 'session', $session );
+	}
+	
+	public function _initPlugins()
+	{
+		$front = Zend_Controller_Front::getInstance();
 		require_once 'Recipe/Plugin/Acl.php';
-		$frontController->registerPlugin(new Recipe_Plugin_Acl($acl));
+		$front->registerPlugin(new Recipe_Plugin_Acl());
 	}
 
 }

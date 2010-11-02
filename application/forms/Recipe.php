@@ -3,7 +3,7 @@
 /**
  * Used for both the New and edit recipe actions
  */
-class Forms_Recipe extends Zend_Form
+class Recipe_Form_Recipe extends Zend_Form
 {
 
 	public function init()
