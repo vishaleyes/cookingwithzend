@@ -12,29 +12,6 @@ class Recipe_Model_Tag extends Zend_Db_Table_Abstract {
 
 	public $DELIMETER = ' ';
 
-	// Form elements for add/edit
-	// field name => array(type, required, validatorArray, filtersArray);
-	public $_form_fields_config = array(
-		array( 'text', 'tag_name', array(
-			'id' => 'tag-name',
-			'label' => 'Tags',
-			'validators' => array(
-				array( 'NotEmpty', true ),
-				array( 'alnum', true, true )
-			),
-		) )
-	);
-
-	function __construct()
-	{
-		$this->db = Zend_Registry::get("db");
-		Zend_Db_Table_Abstract::setDefaultAdapter($this->db);
-		
-		$this->log = Zend_Registry::get('log');
-		
-		$this->_setup();
-	}
-
 	/**
 	 * Returns an associative array putting each object into the tag it
 	 * belongs to

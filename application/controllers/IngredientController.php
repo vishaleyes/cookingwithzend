@@ -6,8 +6,8 @@ class IngredientController extends Recipe_Model_Controller
 	public function init()
 	{
 		parent::init();
-		$this->model = $this->getModel();
-		$this->form = $this->model->getForm('Ingredient');
+		$this->_model = $this->getModel();
+		$this->form = $this->_model->getForm('Ingredient');
 		$this->view->form = $this->form;
 	}
 	
@@ -18,7 +18,7 @@ class IngredientController extends Recipe_Model_Controller
 		
 		$recipeID = $this->_getParam('recipe_id');
 		$ingredientID = $this->_getParam('ingredient_id');
-		$ingredient = $this->model->getIngredientForRecipe($recipeID, $ingredientID);
+		$ingredient = $this->_model->getIngredientForRecipe($recipeID, $ingredientID);
 		$this->form->populate($ingredient);
 		
 		if ($this->getRequest()->isPost()) {
@@ -37,7 +37,7 @@ class IngredientController extends Recipe_Model_Controller
 				// We start a transaction because we need to insert into two tables
 				$this->_db->beginTransaction();
 				
-				$ingredient = $this->model->table->insert( $ingredientData );
+				$ingredient = $this->_model->table->insert( $ingredientData );
 				$m = new Recipe_Model_Measurement();
 				$measurement = $m->getSingleByField('name', $data['measurement']);
 								
@@ -103,7 +103,7 @@ class IngredientController extends Recipe_Model_Controller
 				// We start a transaction because we need to insert into two tables
 				$this->_db->beginTransaction();
 				
-				$ingredient = $this->model->table->insert( $ingredientData );
+				$ingredient = $this->_model->table->insert( $ingredientData );
 				$m = new Recipe_Model_Measurement();
 				$measurement = $m->getSingleByField('name', $data['measurement']);
 								

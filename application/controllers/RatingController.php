@@ -28,7 +28,7 @@ class RatingController extends Recipe_Model_Controller
 			
 		$this->_db->beginTransaction();
 		try {
-			$this->model->table->delete($where);
+			$this->_model->table->delete($where);
 			
 			$ratingsData = array("ratings_count" => new Zend_Db_Expr("(ratings_count - 1)"));
 			
@@ -58,7 +58,7 @@ class RatingController extends Recipe_Model_Controller
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(true);
 				
-		$form = $this->model->getForm('Rating');
+		$form = $this->_model->getForm('Rating');
 		$form->populate($this->_getAllParams());
 		$data = $form->getValues();
 	
@@ -68,7 +68,7 @@ class RatingController extends Recipe_Model_Controller
 		/*	Try and insert them into DB	using a transaction */
 		$this->_db->beginTransaction();
 		try {
-			$this->model->table->insert($data);
+			$this->_model->table->insert($data);
 			
 			$ratingsData = array("ratings_count" => new Zend_Db_Expr("(ratings_count + 1)"));
 			

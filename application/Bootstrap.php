@@ -4,9 +4,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
 	protected function _initRegistry()
 	{
+		$this->bootstrap('log');
 		if ($this->hasPluginResource('Log'))
 			Zend_Registry::set('log', $this->getResource('Log'));
-                    Zend_Registry::set('Config', $this->getOptions());
 	}
 
 	protected function _initView()

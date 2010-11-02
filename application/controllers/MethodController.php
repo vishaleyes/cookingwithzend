@@ -10,7 +10,7 @@ class MethodController extends Recipe_Model_Controller
 	public function init()
 	{
 		parent::init();
-		$this->model = $this->getModel();
+		$this->_model = $this->getModel();
 	}
 	
 	public function newAction()
@@ -23,9 +23,9 @@ class MethodController extends Recipe_Model_Controller
 		$this->view->recipe = $recipe;
 			
 		$this->view->title = 'Create a method';
-		$form = $this->model->getForm('Method');
+		$form = $this->_model->getForm('Method');
 		$form->populate( array( 'recipe_id' => $recipe['id'] ) );
-		$this->view->tempConversionForm = $this->model->getForm('TemperatureConversion');
+		$this->view->tempConversionForm = $this->_model->getForm('TemperatureConversion');
 		$this->view->form = $form;
 
 		if ($this->getRequest()->isPost()) {
@@ -39,7 +39,7 @@ class MethodController extends Recipe_Model_Controller
 				// Unset the buttons
 				unset( $data['submit'] );
 								
-				$this->model->table->insert( $data );
+				$this->_model->table->insert( $data );
 
 				$this->_flashMessenger->addMessage( 'Added method' );
 				$this->_redirect( '/recipe/view/id/' . $recipe['id'] );
@@ -54,7 +54,7 @@ class MethodController extends Recipe_Model_Controller
 	public function editAction()
 	{
 		// Fetch the recipe being requested
-		if ( ! $method = $this->model->fetchSingleByPrimary($this->_id) )
+		if ( ! $method = $this->_model->fetchSingleByPrimary($this->_id) )
 		{
 			$this->_flashMessenger->setNamespace( 'error' );
 			$this->_flashMessenger->addMessage( 'Unable to find method with id ' . $this->_id );
@@ -64,7 +64,7 @@ class MethodController extends Recipe_Model_Controller
 		
 		$this->view->title = 'Edit the instructions';
 		
-		$form = $this->model->getForm('Method');
+		$form = $this->_model->getForm('Method');
 		$form->populate($method->toArray());
 		$this->view->form = $form;
 		
@@ -94,7 +94,7 @@ class MethodController extends Recipe_Model_Controller
 
 	public function deleteAction()
 	{
-		if ( ! $method = $this->model->fetchSingleByPrimary($this->_id) )
+		if ( ! $method = $this->_model->fetchSingleByPrimary($this->_id) )
 		{
 			$this->_flashMessenger->setNamespace( 'error' );
 			$this->_flashMessenger->addMessage( 'Unable to find method with id ' . $this->_id );

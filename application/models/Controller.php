@@ -9,12 +9,6 @@ abstract class Recipe_Model_Controller extends Zend_Controller_Action
 {
 
 	/**
-	 * Config object - based on config.xml file
-	 * @var Zend_Config
-	 */
-	protected $_config;
-
-	/**
 	 * Database object (for example Zend_Db_Adapter_Pdo_Mysql object)
 	 * @var object
 	 */
@@ -120,10 +114,12 @@ abstract class Recipe_Model_Controller extends Zend_Controller_Action
 	 * @return Zend_Form
 	 */
 
-	public function getForm()
+	public function getForm($formName = null)
 	{
-		$modelName = substr(get_class($this), 0, strpos(get_class($this), 'Controller'));
-		$modelClass = self::PREFIX . 'Form_' . $modelName;
+		if ( null === $formName )
+			$formName = substr(get_class($this), 0, strpos(get_class($this), 'Controller'));
+			
+		$modelClass = self::PREFIX . 'Form_' . $formName;
 		$this->_form = new $modelClass();
 		$this->view->form = $this->_form;
 	}

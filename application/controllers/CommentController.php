@@ -12,13 +12,13 @@ class CommentController extends Recipe_Model_Controller
 	public function init()
 	{
 		parent::init();
-		$this->model = $this->getModel();
+		$this->_model = $this->getModel();
 	}
 	
 	public function newAction()
 	{
 		$recipe_id = $this->_getParam('recipe_id');
-		$form = $this->model->getForm('Comment');
+		$form = $this->_model->getForm('Comment');
 		$form->populate(array('recipe_id' => $recipe_id));
 		$this->view->form = $form;
 		
@@ -35,7 +35,7 @@ class CommentController extends Recipe_Model_Controller
 				
 				$this->_db->beginTransaction();
 				try {
-					$this->model->table->insert( $data );
+					$this->_model->table->insert( $data );
 						
 					$counterData = array("comments_count" => new Zend_Db_Expr("(comments_count + 1)"));
 						
@@ -64,7 +64,7 @@ class CommentController extends Recipe_Model_Controller
 		
 		$this->_db->beginTransaction();
 		try {
-			$this->model->table->delete('id = '.$this->_getParam('id'));
+			$this->_model->table->delete('id = '.$this->_getParam('id'));
 						
 			$counterData = array("comments_count" => new Zend_Db_Expr("(comments_count - 1)"));
 						
