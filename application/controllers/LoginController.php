@@ -1,12 +1,12 @@
 <?php
 
-class LoginController extends DefaultController
+class LoginController extends Recipe_Model_Controller
 {
 
 	public function init()
 	{
 		parent::init();
-		$this->model = new Models_User();
+		$this->model = new Recipe_Model_User();
 	}
 
 	public function indexAction() 

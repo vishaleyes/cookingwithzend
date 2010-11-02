@@ -1,11 +1,11 @@
 <?php
 
-class AdminController extends DefaultController
+class AdminController extends Recipe_Model_Controller
 {
 	public function init()
 	{
 		parent::init();
-		$this->model = new Models_AclResource();
+		$this->model = new Recipe_Model_AclResource();
 	}
 	
 	public function indexAction()

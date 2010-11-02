@@ -1,6 +1,6 @@
 <?php
 
-class UserController extends DefaultController  
+class UserController extends Recipe_Model_Controller  
 {
 	public function init()
 	{
@@ -18,7 +18,7 @@ class UserController extends DefaultController
 		$this->view->title = 'Viewing user '.$user['name'];
 		$this->view->user = $user;
 		
-		$c = new Models_Comment();
+		$c = new Recipe_Model_Comment();
 		$this->view->comments = $c->getComments('u.name', $userID);
 	}
 	

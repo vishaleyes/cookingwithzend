@@ -1,19 +1,19 @@
 <?php
 
-class RecipeController extends DefaultController
+class RecipeController extends Recipe_Model_Controller
 {
 
 	public function init()
 	{
 		parent::init();
-		$this->model = $this->getModel();
-		$this->form = $this->model->getForm('Recipe');
+		$this->_model = $this->getModel();
+		$this->_form = $this->getForm();
 	}
 
 	public function indexAction()
 	{
 		$this->view->title = 'Viewing recipes';
-		$select = $this->model->getRecipesSelect(null, 'created', 'DESC');
+		$select = $this->_model->getRecipesSelect(null, 'created', 'DESC');
 
 		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
 		$paginator->setItemCountPerPage($this->_prefs->getPreference('RecipesPerPage'));
@@ -28,15 +28,15 @@ class RecipeController extends DefaultController
 	public function newAction()
 	{
 		$this->view->title = 'Create a recipe';
-		$this->view->form = $this->form;
+		$this->view->_form = $this->_form;
 
 		if ($this->getRequest()->isPost()) {
 
 			// now check to see if the form submitted exists, and
 			// if the values passed in are valid for this form
-			if ($this->form->isValid($this->_request->getPost())) {
+			if ($this->_form->isValid($this->_request->getPost())) {
 				// Get the values from the DB
-				$data = $this->form->getValues();
+				$data = $this->_form->getValues();
 
 				// Unset the buttons
 				unset( $data['submit'] );
@@ -44,7 +44,7 @@ class RecipeController extends DefaultController
 				
 				$this->_db->beginTransaction();
 				try{
-					$this->model->table->insert( $data );
+					$this->_model->table->insert( $data );
 					$id = $this->_db->lastInsertId();
 					$this->_db->update("users", array(
 						"recipes_count" => new Zend_Db_Expr("(recipes_count + 1)")
@@ -73,16 +73,16 @@ class RecipeController extends DefaultController
 		
 		$this->view->title = 'Editing recipe - '.$recipe->name;
 		
-		$this->form->populate($recipe->toArray());
-		$this->view->form = $this->form;
+		$this->_form->populate($recipe->toArray());
+		$this->view->_form = $this->_form;
 		
 		if ($this->getRequest()->isPost()) {
 
 			// now check to see if the form submitted exists, and
 			// if the values passed in are valid for this form
-			if ($this->form->isValid($this->_request->getPost())) {
+			if ($this->_form->isValid($this->_request->getPost())) {
 				// Get the values from the DB
-				$data = $this->form->getValues();
+				$data = $this->_form->getValues();
 
 				// Unset the buttons
 				unset( $data['submit'] );
@@ -104,23 +104,23 @@ class RecipeController extends DefaultController
 
 	public function viewAction()
 	{
-		$this->model->getRecipe($this->_id);
+		$this->_model->getRecipe($this->_id);
 		
 		// If this is being viewed by a guest or not by the creator
-		if ( !$this->_acl->isAllowed($this->_identity, $this->model, 'edit') )
+		if ( !$this->_acl->isAllowed($this->_identity, $this->_model, 'edit') )
 		{
-			$this->model->incrementField('view_count');
+			$this->_model->incrementField('view_count');
 			$this->_db->update("recipes", array(
-				"view_count" => $this->model->__get('view_count')
+				"view_count" => $this->_model->__get('view_count')
 			), "id = " . $this->_id);
 		}
 		
-		$rate = new Models_Rating();
+		$rate = new Recipe_Model_Rating();
 		// Only do this if we have a logged in user
 		if ( $this->_identity )
 		{
-			$comment_form = $this->model->getForm('Comment');
-			$rating_form = $this->model->getForm('Rating');
+			$comment_form = $this->_model->getForm('Comment');
+			$rating_form = $this->_model->getForm('Rating');
 			$comment_form->populate(array('recipe_id' => $this->_id));
 			$rating_form->populate(array('recipe_id' => $this->_id));
 			$this->view->comment_form = $comment_form;
@@ -130,14 +130,14 @@ class RecipeController extends DefaultController
 			$this->view->hasRated = $rate->hasRated($this->_id, $this->_identity->id);
 		}
 		
-		$this->view->recipe = $this->model->toArray();
-		$ingredients = $this->model->getIngredients($this->_id);
+		$this->view->recipe = $this->_model->toArray();
+		$ingredients = $this->_model->getIngredients($this->_id);
 		$this->view->ingredients  = $ingredients;
 		
-		$methods = $this->model->getMethods($this->_id);
+		$methods = $this->_model->getMethods($this->_id);
 		$this->view->methods  = $methods;
 		
-		$c = new Models_Comment();
+		$c = new Recipe_Model_Comment();
 		$this->view->comments = $c->getComments('c.recipe_id', $this->_id);
 		
 		$this->view->ratings = $rate->getRatings($this->_id);
@@ -150,11 +150,11 @@ class RecipeController extends DefaultController
 
 		$userID = $this->_getParam('user_id');
 		$this->view->title = 'Viewing recipes for user';
-		$u = new Models_User();
+		$u = new Recipe_Model_User();
 		$user = $u->getSingleByField('name', $userID);
 		$this->view->user = $user;
 
-		$select = $this->model->getRecipesSelect($userID, $this->_getParam('order'), $this->_getParam('direction'));
+		$select = $this->_model->getRecipesSelect($userID, $this->_getParam('order'), $this->_getParam('direction'));
 
 		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
 		$paginator->setItemCountPerPage($this->_prefs->getPreference('ItemsPerList'));
@@ -185,7 +185,7 @@ class RecipeController extends DefaultController
 	public function popularAction()
 	{
 		$this->view->title = 'Most popular recipes';
-		$recipes = $this->model->getRecipes(null, 'view_count', 'DESC');
+		$recipes = $this->_model->getRecipes(null, 'view_count', 'DESC');
 		$this->view->recipes = $recipes;
 		$this->_helper->viewRenderer->setScriptAction('index');
 	}

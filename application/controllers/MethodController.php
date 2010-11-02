@@ -1,6 +1,6 @@
 <?php
 
-class MethodController extends DefaultController  
+class MethodController extends Recipe_Model_Controller  
 {
 
 	/**
@@ -18,7 +18,7 @@ class MethodController extends DefaultController
 		if ( ! $this->checkRequiredParams(array('recipe_id')) )
 			$this->_redirect( '/recipe/index' );
 		
-		$recipeModel = new Models_Recipe();
+		$recipeModel = new Recipe_Model_Recipe();
 		$recipe = $recipeModel->fetchSingleByPrimary($this->_getParam('recipe_id'));
 		$this->view->recipe = $recipe;
 			

@@ -1,6 +1,6 @@
 <?php
 
-class IngredientController extends DefaultController  
+class IngredientController extends Recipe_Model_Controller  
 {
 	
 	public function init()
@@ -38,10 +38,10 @@ class IngredientController extends DefaultController
 				$this->_db->beginTransaction();
 				
 				$ingredient = $this->model->table->insert( $ingredientData );
-				$m = new Models_Measurement();
+				$m = new Recipe_Model_Measurement();
 				$measurement = $m->getSingleByField('name', $data['measurement']);
 								
-				$ri = new Models_RecipeIngredient();
+				$ri = new Recipe_Model_RecipeIngredient();
 						
 				try {
 					$ri->table->update( array(
@@ -104,10 +104,10 @@ class IngredientController extends DefaultController
 				$this->_db->beginTransaction();
 				
 				$ingredient = $this->model->table->insert( $ingredientData );
-				$m = new Models_Measurement();
+				$m = new Recipe_Model_Measurement();
 				$measurement = $m->getSingleByField('name', $data['measurement']);
 								
-				$ri = new Models_RecipeIngredient();
+				$ri = new Recipe_Model_RecipeIngredient();
 						
 				try {
 					$ri->table->insert( array(
