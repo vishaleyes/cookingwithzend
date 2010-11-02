@@ -1,5 +1,5 @@
 <?php
 
-class Models_RecipeIngredient extends Models_GenericModel
+class Recipe_Model_RecipeIngredient extends Recipe_Model_GenericModel
 {	
 }

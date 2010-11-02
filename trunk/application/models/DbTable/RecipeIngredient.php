@@ -1,6 +1,6 @@
 <?php
 
-class Models_DbTable_RecipeIngredient extends Zend_Db_Table_Abstract {
+class Recipe_Model_DbTable_RecipeIngredient extends Zend_Db_Table_Abstract {
 	
 	protected $_name = "recipe_ingredients";
 	protected $_primary = array( "recipe_id", "ingredient_id" );

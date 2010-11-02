@@ -1,24 +1,24 @@
 <?php
 
-class Models_DbTable_Recipe extends Zend_Db_Table_Abstract
+class Recipe_Model_DbTable_Recipe extends Zend_Db_Table_Abstract
 {
 	protected $_name = "recipes";
 	protected $_primary = "id";
-	protected $_rowClass = "Models_DbTable_RecipeRow";
+	protected $_rowClass = "Recipe_Model_DbTable_RecipeRow";
 
 	# Primary does Auto Inc
 	protected $_sequence = true;
 
 	protected $_dependentTables = array(
-		'Models_DbTable_RecipeIngredient', 
-		'Models_DbTable_Method',
-		'Models_DbTable_Comment'
+		'Recipe_Model_DbTable_RecipeIngredient', 
+		'Recipe_Model_DbTable_Method',
+		'Recipe_Model_DbTable_Comment'
 	);
 
 	protected $_referenceMap = array(
 		'User' => array(
 			'columns'       => 'user_id',
-			'refTableClass' => 'Models_DbTable_User',
+			'refTableClass' => 'Recipe_Model_DbTable_User',
 			'refColumns'	=> 'id'
 		)
 	);

@@ -1,6 +1,6 @@
 <?php
 
-class Models_DbTable_Measurement extends Zend_Db_Table_Abstract
+class Recipe_Model_DbTable_Measurement extends Zend_Db_Table_Abstract
 {
 	protected $_name = "measurements";
 	protected $_primary = "id";	   

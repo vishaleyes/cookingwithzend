@@ -1,6 +1,6 @@
 <?php
 
-class Models_Rating extends Models_GenericModel implements Zend_Acl_Resource_Interface
+class Recipe_Model_Rating extends Recipe_Model_GenericModel implements Zend_Acl_Resource_Interface
 {
 	var $ownerUserId = null;
 	

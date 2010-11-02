@@ -1,6 +1,6 @@
 <?php
 
-class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Interface
+class Recipe_Model_Recipe extends Recipe_Model_GenericModel implements Zend_Acl_Resource_Interface
 {
 	var $ownerUserId = null;
 	
@@ -93,26 +93,26 @@ class Models_Recipe extends Models_GenericModel implements Zend_Acl_Resource_Int
 	/**
 	 * Rebuilds the ingredient from the joining tables
 	 *
-	 * @see Models_Ingredient
+	 * @see Recipe_Model_Ingredient
 	 * @param int $id
 	 * @return array
 	 */
 	
 	public function getIngredients( $recipe_id )
 	{
-		$i = new Models_Ingredient();
+		$i = new Recipe_Model_Ingredient();
 		return $i->getIngredients($recipe_id);
 	}
 	
 	/**
 	 * Retrieve the methods for a recipe
 	 *
-	 * @see Models_Method
+	 * @see Recipe_Model_Method
 	 */
 	
 	public function getMethods( $recipe_id )
 	{
-		$m = new Models_Method();
+		$m = new Recipe_Model_Method();
 		return $m->getMethods($recipe_id);
 	}
 	

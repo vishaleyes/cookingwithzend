@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Models_UserPreferences an object to store the user preferences
+ * Recipe_Model_UserPreferences an object to store the user preferences
  * either grabbed from the DB or held in the session for the user
  *
  */
 
-class Models_UserPreferences extends Models_GenericModel
+class Recipe_Model_UserPreferences extends Recipe_Model_GenericModel
 {
 
 	/**

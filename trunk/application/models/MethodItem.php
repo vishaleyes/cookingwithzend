@@ -1,6 +1,6 @@
 <?php
 
-class MethodItem extends Models_GenericModel {
+class MethodItem extends Recipe_Model_GenericModel {
 	
 	public function getFormElements()
 	{
