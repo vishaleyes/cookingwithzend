@@ -7,6 +7,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->bootstrap('log');
 		if ($this->hasPluginResource('Log'))
 			Zend_Registry::set('log', $this->getResource('Log'));
+		
+		$session = new Zend_Session_Namespace();
+		Zend_Registry::set( 'session', $session );
 	}
 
 	protected function _initView()
@@ -18,12 +21,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 		//$container = new Zend_Navigation($config);
 		//$view->navigation($container);
-	}
-	
-	protected function _initSession()
-	{
-		$session = new Zend_Session_Namespace();
-		Zend_Registry::set( 'session', $session );
 	}
 	
 	public function _initPlugins()

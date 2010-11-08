@@ -27,18 +27,6 @@ abstract class Recipe_Model_Controller extends Zend_Controller_Action
 	protected $_session;
 	
 	/**
-	 * Folder where all pages should be stored
-	 * @var string
-	 */
-	protected $_pagesFolder;
-	
-	/**
-	 * Folder where all temlpates should be stored
-	 * @var string
-	 */
-	protected $_templatesFolder;
-	
-	/**
 	 * Holder for the flash messenger that is used to tell users whats happening
 	 * @var Zend_Controller_Action_Helper_FlashMessenger
 	 */
@@ -122,6 +110,7 @@ abstract class Recipe_Model_Controller extends Zend_Controller_Action
 		$modelClass = self::PREFIX . 'Form_' . $formName;
 		$this->_form = new $modelClass();
 		$this->view->form = $this->_form;
+		return $this->_form;
 	}
 	
 	
@@ -133,8 +122,8 @@ abstract class Recipe_Model_Controller extends Zend_Controller_Action
 	{
 		$modelName = substr(get_class($this), 0, strpos( get_class($this), 'Controller'));
 		$modelClass = self::PREFIX . 'Model_' . $modelName;
-		$model = new $modelClass();
-		return $model;
+		$this->_model = new $modelClass();
+		return $this->_model;
 	}
 	
 	/**

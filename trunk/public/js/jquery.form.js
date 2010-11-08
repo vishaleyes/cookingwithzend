@@ -98,9 +98,9 @@ $.fn.ajaxSubmit = function(options) {
     else
         options.data = q; // data is the query string for 'post'
 
-    var $form = this, callbacks = [];
-    if (options.resetForm) callbacks.push(function() { $form.resetForm(); });
-    if (options.clearForm) callbacks.push(function() { $form.clearForm(); });
+    var $this->_form = this, callbacks = [];
+    if (options.resetForm) callbacks.push(function() { $this->_form.resetForm(); });
+    if (options.clearForm) callbacks.push(function() { $this->_form.clearForm(); });
 
     // perform a load on the target only if dataType is not provided
     if (!options.dataType && options.target) {
@@ -114,7 +114,7 @@ $.fn.ajaxSubmit = function(options) {
 
     options.success = function(data, status) {
         for (var i=0, max=callbacks.length; i < max; i++)
-            callbacks[i](data, status, $form);
+            callbacks[i](data, status, $this->_form);
     };
 
     // are there files to upload?
@@ -143,7 +143,7 @@ $.fn.ajaxSubmit = function(options) {
 
     // private function for handling file uploads (hat tip to YAHOO!)
     function fileUpload() {
-        var form = $form[0];
+        var form = $this->_form[0];
         
         if ($(':input[@name=submit]', form).length) {
             alert('Error: Form elements must not be named "submit".');
@@ -195,8 +195,8 @@ $.fn.ajaxSubmit = function(options) {
         // take a breath so that pending repaints get some cpu time before the upload starts
         setTimeout(function() {
             // make sure form attrs are set
-            var t = $form.attr('target'), a = $form.attr('action');
-            $form.attr({
+            var t = $this->_form.attr('target'), a = $this->_form.attr('action');
+            $this->_form.attr({
                 target:   id,
                 encoding: 'multipart/form-data',
                 enctype:  'multipart/form-data',
@@ -224,8 +224,8 @@ $.fn.ajaxSubmit = function(options) {
             }
             finally {
                 // reset attrs and remove "extra" input elements
-                $form.attr('action', a);
-                t ? $form.attr('target', t) : $form.removeAttr('target');
+                $this->_form.attr('action', a);
+                t ? $this->_form.attr('target', t) : $this->_form.removeAttr('target');
                 $(extraInputs).remove();
             }
         }, 10);
@@ -325,23 +325,23 @@ $.fn.ajaxForm = function(options) {
     }).each(function() {
         // store options in hash
         $(":submit,input:image", this).bind('click.form-plugin',function(e) {
-            var $form = this.form;
-            $form.clk = this;
+            var $this->_form = this.form;
+            $this->_form.clk = this;
             if (this.type == 'image') {
                 if (e.offsetX != undefined) {
-                    $form.clk_x = e.offsetX;
-                    $form.clk_y = e.offsetY;
+                    $this->_form.clk_x = e.offsetX;
+                    $this->_form.clk_y = e.offsetY;
                 } else if (typeof $.fn.offset == 'function') { // try to use dimensions plugin
                     var offset = $(this).offset();
-                    $form.clk_x = e.pageX - offset.left;
-                    $form.clk_y = e.pageY - offset.top;
+                    $this->_form.clk_x = e.pageX - offset.left;
+                    $this->_form.clk_y = e.pageY - offset.top;
                 } else {
-                    $form.clk_x = e.pageX - this.offsetLeft;
-                    $form.clk_y = e.pageY - this.offsetTop;
+                    $this->_form.clk_x = e.pageX - this.offsetLeft;
+                    $this->_form.clk_y = e.pageY - this.offsetTop;
                 }
             }
             // clear form vars
-            setTimeout(function() { $form.clk = $form.clk_x = $form.clk_y = null; }, 10);
+            setTimeout(function() { $this->_form.clk = $this->_form.clk_x = $this->_form.clk_y = null; }, 10);
         });
     });
 };

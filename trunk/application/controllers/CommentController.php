@@ -18,17 +18,17 @@ class CommentController extends Recipe_Model_Controller
 	public function newAction()
 	{
 		$recipe_id = $this->_getParam('recipe_id');
-		$form = $this->_model->getForm('Comment');
-		$form->populate(array('recipe_id' => $recipe_id));
-		$this->view->form = $form;
+		$this->_form = $this->getForm('Comment');
+		$this->_form->populate(array('recipe_id' => $recipe_id));
+		$this->view->form = $this->_form;
 		
 		if ($this->getRequest()->isPost()) {
 
 			// now check to see if the form submitted exists, and
 			// 	if the values passed in are valid for this form
-			if ($form->isValid($this->_request->getPost())) {
+			if ($this->_form->isValid($this->_request->getPost())) {
 				// Get the values from the DB
-				$data = $form->getValues();
+				$data = $this->_form->getValues();
 
 				// Unset the buttons
 				unset( $data['submit'] );

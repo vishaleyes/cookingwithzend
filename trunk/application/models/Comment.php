@@ -5,8 +5,6 @@ class Recipe_Model_Comment extends Recipe_Model_GenericModel implements Zend_Acl
 	
 	var $ownerUserId = null;
 	
-	protected $_data = array();
-	
 	/**
 	 * getResourceId returns the resourceID of the model 
 	 * @see Zend_Acl_Resource_Interface 

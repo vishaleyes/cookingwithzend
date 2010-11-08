@@ -15,7 +15,7 @@ abstract class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
 		$this->bootstrap = array($this, 'appBootstrap');
         parent::setUp();
 		$this->getFrontController()->setParam('bootstrap', $this->_application->getBootstrap());
-		$this->getConnection();
+		// $this->getConnection();
     }
 
 	public function appBootstrap()
@@ -49,7 +49,7 @@ abstract class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
 	protected function getDataSet()
 	{
 		return $this->createFlatXmlDataSet(
-			dirname(__FILE__) . '/_files/seed.xml'
+			dirname(__FILE__) . '/files/seed.xml'
 		);
 	}
 

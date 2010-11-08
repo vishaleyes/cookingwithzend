@@ -58,9 +58,9 @@ class RatingController extends Recipe_Model_Controller
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(true);
 				
-		$form = $this->_model->getForm('Rating');
-		$form->populate($this->_getAllParams());
-		$data = $form->getValues();
+		$this->_form = $this->getForm('Rating');
+		$this->_form->populate($this->_getAllParams());
+		$data = $this->_form->getValues();
 	
 		// Unset the buttons
 		unset( $data['submit'] );

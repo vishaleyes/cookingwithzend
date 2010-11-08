@@ -69,12 +69,11 @@ class RecipeController extends Recipe_Model_Controller
 
 	public function editAction()
 	{
-		$recipe = $this->_getSingleRecipe();
+		$this->_model->getRecipe($this->_id);
 		
-		$this->view->title = 'Editing recipe - '.$recipe->name;
+		$this->view->title = 'Editing recipe - '.$this->_model->name;
 		
-		$this->_form->populate($recipe->toArray());
-		$this->view->_form = $this->_form;
+		$this->_form->populate($this->_model->toArray());
 		
 		if ($this->getRequest()->isPost()) {
 
@@ -109,9 +108,9 @@ class RecipeController extends Recipe_Model_Controller
 		// If this is being viewed by a guest or not by the creator
 		if ( !$this->_acl->isAllowed($this->_identity, $this->_model, 'edit') )
 		{
-			$this->_model->incrementField('view_count');
+			$this->_model['view_count']++;
 			$this->_db->update("recipes", array(
-				"view_count" => $this->_model->__get('view_count')
+				"view_count" => $this->_model['view_count']
 			), "id = " . $this->_id);
 		}
 		
@@ -119,8 +118,8 @@ class RecipeController extends Recipe_Model_Controller
 		// Only do this if we have a logged in user
 		if ( $this->_identity )
 		{
-			$comment_form = $this->_model->getForm('Comment');
-			$rating_form = $this->_model->getForm('Rating');
+			$comment_form = $this->getForm('Comment');
+			$rating_form = $this->getForm('Rating');
 			$comment_form->populate(array('recipe_id' => $this->_id));
 			$rating_form->populate(array('recipe_id' => $this->_id));
 			$this->view->comment_form = $comment_form;

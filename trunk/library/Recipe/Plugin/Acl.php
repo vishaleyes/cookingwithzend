@@ -48,7 +48,8 @@ class Recipe_Plugin_Acl extends Zend_Controller_Plugin_Abstract {
 				// If you have a blank user here it means the user is not logged in and you do not want them to access this
 				if ($user->__get('id') === null)
 					break;
-
+				
+				require_once "Recipe/Acl/CanAmmendAssertion.php";
 				$this->_acl->allow( $user, $resource, $request->getActionName(), new Recipe_Acl_CanAmmendAssertion());
 				break;
 			default:
