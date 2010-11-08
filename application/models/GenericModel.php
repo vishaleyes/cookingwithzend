@@ -3,7 +3,7 @@
 /**
 * 
 */
-abstract class Recipe_Model_GenericModel
+abstract class Recipe_Model_GenericModel implements ArrayAccess
 {
 	/**
 	 * @var $table
@@ -20,14 +20,66 @@ abstract class Recipe_Model_GenericModel
 	 */
 	public $log;
 
+	protected $_data;
+
 	const PREFIX = 'Recipe_Model_';
 
 	public function __construct()
 	{
 		$this->table = $this->_getTable();
-		$this->db = $this->table->getDefaultAdapter();
+		$this->db = Zend_Db_Table::getDefaultAdapter();
 		$this->log = Zend_Registry::get('log');
 	}
+
+	/**
+	 * ArrayAccess functions
+	 */
+
+	/**
+	 *
+	 * @param string $offset
+	 * @param mixed $value
+	 */
+
+	public function offsetSet($offset, $value)
+	{
+		if (is_null($offset))
+			$this->_data[] = $value;
+        else
+			$this->_data[$offset] = $value;
+    }
+
+	/**
+	 *
+	 * @param string $offset
+	 * @return bool
+	 */
+
+	public function offsetExists($offset)
+	{
+		return isset($this->_data[$offset]);
+	}
+
+	/**
+	 *
+	 * @param string $offset
+	 */
+
+	public function offsetUnset($offset)
+	{
+		unset($this->_data[$offset]);
+    }
+
+	/**
+	 *
+	 * @param string $offset
+	 * @return mixed
+	 */
+
+	public function offsetGet($offset)
+	{
+		return isset($this->_data[$offset]) ? $this->_data[$offset] : null;
+    }
 
 	/**
 	 * Derive the table name from the current Model
@@ -51,13 +103,13 @@ abstract class Recipe_Model_GenericModel
 	 * @return $rows Zend_Db_Table_Rowset
 	 */
 
-	public function getByField( $field, $value )
+	public function fetchByField( $field, $value )
 	{
 		$select = $this->table->select()->where( $field . ' = ?', $value );
+
 		$rowSet = $this->table->fetchAll( $select );
-		if ($rowSet)
-			return $rowSet->toArray();
-		return false;
+
+		return $rowSet->toArray();
 	}
 	
 	/**
@@ -69,16 +121,16 @@ abstract class Recipe_Model_GenericModel
 	 * @return array
 	 */
 	
-	public function getSingleByField( $field, $value )
+	public function fetchSingleByField( $field, $value )
 	{
 		$select = $this->table->select()->where( $field . ' = ?', $value );
-
-		if ( !$row = $this->table->fetchRow( $select ))
+		
+		if (! $row = $this->table->fetchRow( $select ))
 			return false;
 	
 		$this->_dataMerge($row);
 
-		return $row;
+		return $row->toArray();
 	}
 
 	/**
@@ -97,40 +149,6 @@ abstract class Recipe_Model_GenericModel
 		if (array_key_exists('user_id', $this->_data))
 			$this->ownerUserId = $this->_data['user_id'];
 	}
-
-	/**
-	 * Runs a fetch all on the table and returns an array
-	 *
-	 * @param Zend_Db_Select|string $select
-	 * @return array
-	 */
-	public function fetchAll($select)
-	{
-		$results = $this->table->fetchAll($select);
-		if ($results)
-			return $results->toArray();
-	}
-	
-	/**
-	 * Find the record we request in the current table
-	 * 
-	 * @param int $id
-	 * @todo This breaks the extended functionality of find but is that a bad thing?
-	 */
-
-	public function fetchSingleByPrimary($id)
-	{
-		// Fetch the recipe being requested
-		$rowSet = $this->table->find( $id );
-		
-		// Couldnt find it?  Oh dear we best throw an error
-		// @todo Move this test to somwhere else when I figure out the best place for it
-		if (!$rowSet)
-			return false;
-		
-		$row = $rowSet->current();
-		return $row;
-	}
 	
 	/**
 	 * Function to return an array of values from the DB to be used in multiSelect
@@ -145,31 +163,10 @@ abstract class Recipe_Model_GenericModel
 		$select = $this->table->select()
 			->from($this->table, array('key' => $key, 'value' => $value));
 		$results = $this->table->fetchAll($select);
-		if ($results)
-			return $results->toArray();
-		return array();
-	}
-
-	/**
-	 * Increments a field (used for db increments)
-	 * @param string $field
-	 */
-
-	public function incrementField( $field )
-	{
-		$this->_data[$field]++;
-	}
-
-	/**
-	 * Returns everything in _data to an array
-	 * @return array
-	 */
-
-	public function toArray()
-	{
-		return $this->_data;
-	}
 	
+		return $results->toArray();
+	}
+
 	/* MAGIC METHODS */
 	
 	/**
@@ -180,19 +177,6 @@ abstract class Recipe_Model_GenericModel
 	public function __sleep()
 	{
 		return array('_data');
-	}
-	
-	/**
-	 * Return the relevant attribute
-	 * @param string $key
-	 */
-	
-	public function __get($key)
-	{
-		if(array_key_exists($key, $this->_data))
-			return $this->_data[$key];
-
-		return false;
 	}
 }
 

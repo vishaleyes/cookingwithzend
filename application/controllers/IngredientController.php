@@ -7,7 +7,7 @@ class IngredientController extends Recipe_Model_Controller
 	{
 		parent::init();
 		$this->_model = $this->getModel();
-		$this->form = $this->_model->getForm('Ingredient');
+		$this->form = $this->getForm('Ingredient');
 		$this->view->form = $this->form;
 	}
 	

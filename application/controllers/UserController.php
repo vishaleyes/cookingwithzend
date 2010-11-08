@@ -25,15 +25,14 @@ class UserController extends Recipe_Model_Controller
 	public function newAction()
 	{
 		$this->view->title = 'Create an account';
-		$form = $this->_model->getForm('UserNew');
-		$this->view->form = $form;
+		$this->_form = $this->getForm('UserNew');
 
 		if ($this->getRequest()->isPost()) {
 			// now check to see if the form submitted exists, and
 			// if the values passed in are valid for this form
-			if ($form->isValid($this->_request->getPost())) {
+			if ($this->_form->isValid($this->_request->getPost())) {
 
-				$values = $form->getValues();
+				$values = $this->_form->getValues();
 				$params = array(
 					'name'       => $values['name'],
 					'email'      => $values['email'],
@@ -74,9 +73,9 @@ class UserController extends Recipe_Model_Controller
 			$this->view->user = $row;
 		}
 		
-		$form = $this->_model->getForm('UserAccount');
-		$form->populate($this->view->user->toArray());
-		$this->view->form = $form;
+		$this->_form = $this->getForm('UserAccount');
+		$this->_form->populate($this->view->user->toArray());
+		$this->view->form = $this->_form;
 	}	
 
 }

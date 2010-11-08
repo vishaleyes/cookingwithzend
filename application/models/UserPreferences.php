@@ -24,7 +24,7 @@ class Recipe_Model_UserPreferences extends Recipe_Model_GenericModel
 	 * @var unknown_type
 	 */
 	
-	private $_data = array();
+	protected $_data = array();
 	
 	/**
 	 * 
