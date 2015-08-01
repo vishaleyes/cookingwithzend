@@ -1,0 +1,5 @@
+I love cooking and I have always been incredibly bad at hanging onto recipes that I like, I currently have a bunch sitting around that I haven't even tried yet.  This was the whole ethos behind this project when it started in Perl about 4 years ago, and pretty much once a year I have changed technologies and re-written the bugger.  This is the LAST time.
+
+I have a massive vision for the project but I have to take baby steps to get there.  I currently have roped one other person I know into the project who is probably learning that I am a bit of a bugger to work with ;)  I so appreciate the help though, no matter how small.
+
+Were using Jquery for the Ajax malarki, but this could be switched to Dojo perhaps just sticking with one for now.  Please get in contact if you are interested in contributing, it might actually make me put together some kind of plan.
